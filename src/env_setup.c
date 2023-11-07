@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/05 18:38:48 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/06 19:22:34 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ t_env *find_node_by_name(t_env **beign_list, const char *name_to_find) {
 
 int main(int argc, char *argv[], char **envp)
 {
-	// Tableau de chaînes de caractères pour simuler des variables d'environnement
 
 	t_env *env = *sget_env(envp); // Initialisation de la liste chaînée
 	builtin_export("bonjour=");

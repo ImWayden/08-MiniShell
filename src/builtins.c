@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/05 18:12:35 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/07 03:20:37 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,5 @@ void builtin_export(char *str) // a remplacer par arg1 trouvé dans le parsing d
 void builtin_unset(char *name)
 {
 	env_remove_if(sget_env(NULL), name, strcmp);
+	refresh_env_tab();
 }
