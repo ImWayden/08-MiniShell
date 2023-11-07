@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/06 19:22:34 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/07 23:23:02 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,10 @@ t_env *find_node_by_name(t_env **beign_list, const char *name_to_find) {
 int main(int argc, char *argv[], char **envp)
 {
 
+	char *input;
+
+	sget_input();
+	t_token **tokens = sget_token();
 	t_env *env = *sget_env(envp); // Initialisation de la liste chaînée
 	builtin_export("bonjour=");
 	builtin_export("bonjour2");
@@ -125,6 +129,7 @@ int main(int argc, char *argv[], char **envp)
 	for (int i = 0; str_array[i] != NULL; i++) {
         printf("Index %d : %s\n", i, str_array[i]);
     }
+	display_token_list(*tokens);
 	builtin_env(env);
 	clean_env();
 	return 0;

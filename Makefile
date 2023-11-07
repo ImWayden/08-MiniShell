@@ -6,7 +6,7 @@
 #    By: wayden <wayden@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/30 16:41:34 by wayden            #+#    #+#              #
-#    Updated: 2023/11/05 01:51:21 by wayden           ###   ########.fr        #
+#    Updated: 2023/11/07 23:23:42 by wayden           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CFLAGS = -g3
 
 FILES = main
 
-FILES_DEBUG = env_setup builtins cleaning utils lst_to_tab
+FILES_DEBUG = env_setup builtins cleaning utils lst_to_tab lexer singletons
 
 DIR = ./src/
 

@@ -6,24 +6,18 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/07 04:38:10 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/07 23:22:16 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-
-
-static t_token *token_last(t_env *env)
+static t_token *token_last(t_env *token)
 {
-	while (env && env->next)
-		env = env->next;
-	return (env);
+	while (token && token->next)
+		token = token->next;
+	return (token);
 }
-
-
-
 
 void token_add_back(t_token **token, t_token *new)
 {
@@ -33,7 +27,6 @@ void token_add_back(t_token **token, t_token *new)
 		*token = new;
 		return;
 	}
-	
 	if (*token && token && new)
 	{
 		prev = token_last(*token);
@@ -42,146 +35,113 @@ void token_add_back(t_token **token, t_token *new)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-t_token *token_new(t_token *new)
+t_token *token_new(char *str, int i, int k, t_token_type token)
 {
-	t_token *new_token = (t_token *)malloc(sizeof(t_token));
-    
-    // Copier les données de la structure new dans le nouveau nœud
-    new_token->content = strdup(new->content);
-    new_token->size = new->size;
-    new_token->token_type = new->token_type;
-    free(new->content);
-    // Ajouter le nouveau nœud à la liste chaînée
-    new_token->next = NULL;
+	t_token *new_token;
+
+	new_token = (t_token *)malloc(sizeof(t_token));
+	new_token->content = ft_substr(str, k, i - k);
+	new_token->size = i - k;
+	new_token->token_type = token;
+
+	new_token->next = NULL;
+	return (new_token);
 }
 
-void token_add(t_token **tk_lst, t_token *new)
+bool is_quote(int *index, char *str, t_token_type *token)
 {
-	token_add_back(tk_lst, token_new(new));
-}
-
-t_env *env_new(char *str)
-{
-	t_env *new_var;
 	int i;
+	char delimiter;
 
-	i = 0;
-	new_var = (t_env *)malloc(sizeof(t_env));
-	if (!new_var)
-		return (NULL);
-	while (str[i] && str[i] != '=')
+	delimiter = str[*index];
+	i = *index + 1;
+	while (str[i] && str[i] != delimiter)
 		i++;
-	new_var->name = (char *)malloc(sizeof(char) * (i + 1));
-	ft_strncpy(new_var->name, str, i);
 	if (str[i])
-		new_var->content = ft_strdup(&str[i + 1]);
+	{
+		if (delimiter == "\'")
+			return (*token = TK_SQUOTE, *index = i, TRUE);
+		if (delimiter == "\"")
+			return (*token = TK_DQUOTE, *index = i, TRUE);
+	}
 	else
-		return (free(new_var->name), free(new_var), NULL);
-	new_var->next = NULL;
-	new_var->full = ft_strdup(str);
-	return (new_var);
+		return FALSE;
 }
 
-
-
-bool is_quote(int *index, char *str, int *token)
+bool handle_token(int *index, char *str, t_token_type *token, int i)
 {
+	if (i == TK_DQUOTE || i == TK_SQUOTE)
+		return (is_quote(index, str, token));
+	else if (i == TK_HEREDOC || i == TK_CONCAT)
+		*index = *index + 1;
+	*token = i;
+	return (TRUE);
+}
+
+bool is_token(t_token **tk_lst, int *start, int *index, t_token_type *token)
+{
+	t_token_type prev;
+	t_token *tokens;
+	char *str;
 	int i;
 
-	i = *index;
-	if (str[i] == '\'' || str[i] == '\"')
+	prev = *token;
+	i = -1;
+	str = sget_input();
+	while (++i < 6)
 	{
-		while (str[i] && str[i] != "\'" && str[i] != "\"")
-			i++;
-		if (str[i] && str[i] != "\'")
-			return (*token = TK_SQUOTE, *index = i, TRUE);
-		else if (str[i] && str[i] != "\'")
-			return (*token = TK_DQUOTE, *index = i, TRUE);
-		else
-			return (FALSE);
+		tokens = sget_tk_spe(i);
+		if (!ft_strncmp(tokens->content, &str[*index], &tokens->size))
+		{
+			if (*token == TK_WORD)
+			{
+				token_add_back(tk_lst, token_new(str, *index, start, token));
+				*start = *index;
+			}
+			return (handle_token(index, str, token, i));
+		}
 	}
 	return (FALSE);
-}
-
-
-void here_doc(int *index, char *str, int *token)
-{
-	int i;
-
-	i = *index;
-	while(!is_space(str[i]))
-		i++;
-
-
-	
-}
-
-
-bool is_redir(int *index, char *str, int *token)
-{
-	int i;
-
-	i = *index;
-	if (str[i] == '<')
-	{
-		if(str[i + 1] && str[i + 1] == '<')
-			return(here_doc(index,str,&token),TRUE);
-		else
-			return(*token = TK_REDIR_ENT, *index = i, TRUE);
-	}
-	if (str[i] == '>')
-	{
-		if(str[i + 1] && str[i + 1] == '>')
-			return(concat(index,str,&token),TRUE);
-		else
-			return(*token = TK_REDIR_EXT, *index = i, TRUE);
-	}
 }
 
 void tokenisateur(t_token **tk_lst, char *str)
 {
 	int i;
-	int k;
-	int token;
+	int token_start;
+	t_token_type token;
 
 	i = 0;
-	k = 0;
+	token_start = 0;
+	token = TK_NOTOKEN;
 	while (str[i])
 	{
-
-		token = TK_NOTOKEN;
-		if (is_quote(&i, str, &token) || is_special(&i, str, &token) 
-				|| is_pipe(&i, str, &token) || is_space(str[i]))
+		if (is_token(&token_start, &i, str, &token))
 		{
-			token_add(tk_lst, (t_token ){ft_substr(str, k, i - k), i - k, token});
-			k = i + 1;
+			token_add_back(tk_lst, token_new(str, i, token_start, token));
+			token_start = i + 1;
+			token = TK_NOTOKEN;
+			i++;
 		}
 		else if (str[i])
+		{
+			token = TK_WORD;
 			i++;
+		}
 	}
 }
 
 t_cmd **sget_cmd_tab()
 {
-	static t_cmd	**cmd;
-	size_t			i;
-	size_t			nb_cmd;
+	static t_cmd **cmd;
+	size_t i;
+	size_t nb_cmd;
 
 	if (!sget_init(CMD, NOP) && sget_init(CMD, SET))
 	{
 		i = -1;
-		nb_cmd = get_nb_cmd(sget_token());// traverse les tokens compte le nombre de token_pipe;
+		nb_cmd = get_nb_cmd(sget_token()); // traverse les tokens compte le nombre de token_pipe;
 		cmd = (t_cmd **)malloc(sizeof(t_cmd *) * nb_cmd);
-		while(++i < nb_cmd)
+		while (++i < nb_cmd)
 			setup_cmd(cmd[i], sget_token());
 	}
 	return (cmd);
@@ -191,20 +151,29 @@ t_token **sget_token()
 {
 	static t_token *token_list = NULL;
 
-	if(!sget_init(TOKEN, NOP) && sget_init(TOKEN, SET))
+	if (!sget_init(TOKEN, NOP) && sget_init(TOKEN, SET))
 	{
 		token_list = NULL;
-		tokenisateur(&token_list, sget_input(FALSE));
+		tokenisateur(&token_list, sget_input());
 	}
-	return(&token_list);
+	return (&token_list);
 }
 
 bool sget_init(t_init index, bool set)
 {
 	static bool init_tab[5] = {FALSE, FALSE, FALSE, FALSE, FALSE};
-	if(set == REFRESH)
+	if (set == REFRESH)
 		init_tab[index] = FALSE;
-	else if(set == SET)
+	else if (set == SET)
 		init_tab[index] = TRUE;
-	return(init_tab[index]);
+	return (init_tab[index]);
 }
+
+void display_token_list(t_token *token_list) {
+    t_token *current = token_list;
+    while (current) {
+        printf("Content: %s, Size: %d, Token Type: %d\n", current->content, current->size, current->token_type);
+        current = current->next;
+    }
+}
+

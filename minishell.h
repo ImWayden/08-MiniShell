@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/07 04:26:13 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/07 23:14:58 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,16 @@ typedef enum s_refresh
 // } t_utils;
 typedef enum e_token_type
 {
-	TK_NOTOKEN,
-	TK_WORD,
+	TK_HEREDOC,
+	TK_CONCAT,
+	TK_REDIR_ENT,
+	TK_REDIR_EXT,
+	TK_SPACE,
+	TK_PIPE,
 	TK_SQUOTE,
 	TK_DQUOTE,
-	TK_PIPE,
-	TK_REDIR_EXT,
-	TK_REDIR_ENT,
-	TK_HEREDOC,
-	TK_CONCAT
+	TK_NOTOKEN,
+	TK_WORD
 }	t_token_type;
 
 typedef enum e_init
@@ -140,6 +141,10 @@ void env_delone(t_env *var);
 char **sget_env_tab(t_refresh refresh);
 void env_remove_if(t_env **begin_list, char *name, int (*cmp)());
 void refresh_env_tab(void);
+
+
+t_token	*sget_tk_spe(int i);
+char *sget_input();
 
 void builtin_env(t_env *env);
 
