@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/07 23:23:02 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/07 23:38:04 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int main(int argc, char *argv[], char **envp)
 
 	char *input;
 
+	sget_init(0,REFRESH);
 	sget_input();
 	t_token **tokens = sget_token();
 	t_env *env = *sget_env(envp); // Initialisation de la liste chaînée
@@ -126,11 +127,11 @@ int main(int argc, char *argv[], char **envp)
 	builtin_export("bonjour2");
 	builtin_export("bonjour3=");
 	char **str_array = sget_env_tab(NOP);
-	for (int i = 0; str_array[i] != NULL; i++) {
-        printf("Index %d : %s\n", i, str_array[i]);
-    }
+	// for (int i = 0; str_array[i] != NULL; i++) {
+    //     printf("Index %d : %s\n", i, str_array[i]);
+    // }
 	display_token_list(*tokens);
-	builtin_env(env);
+	//builtin_env(env);
 	clean_env();
 	return 0;
 }

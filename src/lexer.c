@@ -6,13 +6,13 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/07 23:22:16 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/07 23:44:47 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_token *token_last(t_env *token)
+static t_token *token_last(t_token *token)
 {
 	while (token && token->next)
 		token = token->next;
@@ -59,9 +59,9 @@ bool is_quote(int *index, char *str, t_token_type *token)
 		i++;
 	if (str[i])
 	{
-		if (delimiter == "\'")
+		if (delimiter == '\'')
 			return (*token = TK_SQUOTE, *index = i, TRUE);
-		if (delimiter == "\"")
+		if (delimiter == '\"')
 			return (*token = TK_DQUOTE, *index = i, TRUE);
 	}
 	else
@@ -81,7 +81,7 @@ bool handle_token(int *index, char *str, t_token_type *token, int i)
 bool is_token(t_token **tk_lst, int *start, int *index, t_token_type *token)
 {
 	t_token_type prev;
-	t_token *tokens;
+	t_token tokens;
 	char *str;
 	int i;
 
@@ -91,11 +91,11 @@ bool is_token(t_token **tk_lst, int *start, int *index, t_token_type *token)
 	while (++i < 6)
 	{
 		tokens = sget_tk_spe(i);
-		if (!ft_strncmp(tokens->content, &str[*index], &tokens->size))
+		if (!ft_strncmp(tokens.content, &str[*index], tokens.size))
 		{
 			if (*token == TK_WORD)
 			{
-				token_add_back(tk_lst, token_new(str, *index, start, token));
+				token_add_back(tk_lst, token_new(str, *index, *start, *token));
 				*start = *index;
 			}
 			return (handle_token(index, str, token, i));
@@ -115,7 +115,7 @@ void tokenisateur(t_token **tk_lst, char *str)
 	token = TK_NOTOKEN;
 	while (str[i])
 	{
-		if (is_token(&token_start, &i, str, &token))
+		if (is_token(tk_lst, &token_start, &i, &token))
 		{
 			token_add_back(tk_lst, token_new(str, i, token_start, token));
 			token_start = i + 1;
@@ -130,22 +130,22 @@ void tokenisateur(t_token **tk_lst, char *str)
 	}
 }
 
-t_cmd **sget_cmd_tab()
-{
-	static t_cmd **cmd;
-	size_t i;
-	size_t nb_cmd;
+// t_cmd **sget_cmd_tab()
+// {
+// 	static t_cmd **cmd;
+// 	size_t i;
+// 	size_t nb_cmd;
 
-	if (!sget_init(CMD, NOP) && sget_init(CMD, SET))
-	{
-		i = -1;
-		nb_cmd = get_nb_cmd(sget_token()); // traverse les tokens compte le nombre de token_pipe;
-		cmd = (t_cmd **)malloc(sizeof(t_cmd *) * nb_cmd);
-		while (++i < nb_cmd)
-			setup_cmd(cmd[i], sget_token());
-	}
-	return (cmd);
-}
+// 	if (!sget_init(CMD, NOP) && sget_init(CMD, SET))
+// 	{
+// 		i = -1;
+// 		nb_cmd = get_nb_cmd(sget_token()); // traverse les tokens compte le nombre de token_pipe;
+// 		cmd = (t_cmd **)malloc(sizeof(t_cmd *) * nb_cmd);
+// 		while (++i < nb_cmd)
+// 			setup_cmd(cmd[i], sget_token());
+// 	}
+// 	return (cmd);
+// }
 
 t_token **sget_token()
 {
@@ -153,26 +153,19 @@ t_token **sget_token()
 
 	if (!sget_init(TOKEN, NOP) && sget_init(TOKEN, SET))
 	{
+		printf("imhere\n");
 		token_list = NULL;
 		tokenisateur(&token_list, sget_input());
 	}
 	return (&token_list);
 }
 
-bool sget_init(t_init index, bool set)
-{
-	static bool init_tab[5] = {FALSE, FALSE, FALSE, FALSE, FALSE};
-	if (set == REFRESH)
-		init_tab[index] = FALSE;
-	else if (set == SET)
-		init_tab[index] = TRUE;
-	return (init_tab[index]);
-}
+
 
 void display_token_list(t_token *token_list) {
     t_token *current = token_list;
     while (current) {
-        printf("Content: %s, Size: %d, Token Type: %d\n", current->content, current->size, current->token_type);
+        printf("Content: %s, Size: %ld, Token Type: %d\n", current->content, current->size, current->token_type);
         current = current->next;
     }
 }

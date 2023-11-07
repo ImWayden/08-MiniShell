@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/07 23:14:58 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/07 23:43:23 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,10 @@ void env_delone(t_env *var);
 char **sget_env_tab(t_refresh refresh);
 void env_remove_if(t_env **begin_list, char *name, int (*cmp)());
 void refresh_env_tab(void);
-
-
-t_token	*sget_tk_spe(int i);
+t_token **sget_token();
+bool sget_init(t_init index, int set);
+void display_token_list(t_token *token_list);
+t_token	sget_tk_spe(int i);
 char *sget_input();
 
 void builtin_env(t_env *env);
