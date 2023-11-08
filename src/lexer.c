@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/07 23:44:47 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/08 03:17:05 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,14 @@ bool is_token(t_token **tk_lst, int *start, int *index, t_token_type *token)
 	prev = *token;
 	i = -1;
 	str = sget_input();
-	while (++i < 6)
+	while (++i < 8)
 	{
 		tokens = sget_tk_spe(i);
 		if (!ft_strncmp(tokens.content, &str[*index], tokens.size))
 		{
 			if (*token == TK_WORD)
 			{
-				token_add_back(tk_lst, token_new(str, *index, *start, *token));
+				token_add_back(tk_lst, token_new(str, *index - 1, *start, *token));
 				*start = *index;
 			}
 			return (handle_token(index, str, token, i));
@@ -162,11 +162,27 @@ t_token **sget_token()
 
 
 
-void display_token_list(t_token *token_list) {
-    t_token *current = token_list;
-    while (current) {
-        printf("Content: %s, Size: %ld, Token Type: %d\n", current->content, current->size, current->token_type);
-        current = current->next;
+const char *token_type_to_string(t_token_type type) {
+    switch (type) {
+        case TK_HEREDOC: return "TK_HEREDOC";
+        case TK_CONCAT: return "TK_CONCAT";
+        case TK_REDIR_ENT: return "TK_REDIR_ENT";
+        case TK_REDIR_EXT: return "TK_REDIR_EXT";
+        case TK_SPACE: return "TK_SPACE";
+        case TK_PIPE: return "TK_PIPE";
+        case TK_SQUOTE: return "TK_SQUOTE";
+        case TK_DQUOTE: return "TK_DQUOTE";
+        case TK_NOTOKEN: return "TK_NOTOKEN";
+        case TK_WORD: return "TK_WORD";
+        default: return "Unknown";
     }
 }
 
+// Fonction pour afficher une liste chaînée de tokens avec des noms de token en chaîne
+void display_token_list(t_token *token_list) {
+    t_token *current = token_list;
+    while (current) {
+        printf("Content: %s, Size: %ld, Token Type: %s\n", current->content, current->size, token_type_to_string(current->token_type));
+        current = current->next;
+    }
+}
