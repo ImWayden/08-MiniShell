@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/08 03:17:05 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/08 03:45:51 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ bool is_token(t_token **tk_lst, int *start, int *index, t_token_type *token)
 		{
 			if (*token == TK_WORD)
 			{
-				token_add_back(tk_lst, token_new(str, *index - 1, *start, *token));
+				token_add_back(tk_lst, token_new(str, *index, *start, *token));
 				*start = *index;
 			}
 			return (handle_token(index, str, token, i));
@@ -117,7 +117,7 @@ void tokenisateur(t_token **tk_lst, char *str)
 	{
 		if (is_token(tk_lst, &token_start, &i, &token))
 		{
-			token_add_back(tk_lst, token_new(str, i, token_start, token));
+			token_add_back(tk_lst, token_new(str, i+1, token_start, token));
 			token_start = i + 1;
 			token = TK_NOTOKEN;
 			i++;
@@ -153,7 +153,6 @@ t_token **sget_token()
 
 	if (!sget_init(TOKEN, NOP) && sget_init(TOKEN, SET))
 	{
-		printf("imhere\n");
 		token_list = NULL;
 		tokenisateur(&token_list, sget_input());
 	}
