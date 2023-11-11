@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 04:07:57 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 17:13:29 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,11 @@ int main(int argc, char *argv[], char **envp)
 	builtin_export("bonjour2");
 	builtin_export("bonjour3=");
 	char **str_array = sget_env_tab(NOP);
+	printf("%s\n",sget_input());
 	// for (int i = 0; str_array[i] != NULL; i++) {
     //     printf("Index %d : %s\n", i, str_array[i]);
     // }
-	expender(tokens);
+	sget_cmd_tab();
 	display_token_list(*tokens);
 	//builtin_env(env);
 	clean_env();

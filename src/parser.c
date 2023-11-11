@@ -6,32 +6,59 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 04:44:42 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 18:21:01 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 void token_merge(t_token *token, t_token *next)
 {
 	char *str;
-	
-	
+	size_t size;
+
+	if (token->token_type == TK_SPACE)
+	{
+		str = ft_strdup("");
+		token->size = 0;
+	}
+	else
+	{
+		str = ft_strjoin(token->content, next->content);
+		token->size += next->size;
+	}
+	token->next = next->next;
+	token->token_type = TK_WORD;
+	free(token->content);
+	token_delone(token->next);
+	token->content = str;
 }
 
 void handle_space(t_token **tokens)
 {
 	t_token *token;
+	t_token *tmp;
 
 	token = *tokens;
 	while (token->next)
 	{
-		if ((token->token_type <= TK_SQUOTE && token->token_type <= TK_WORD) 
-			&& (token->next->token_type <= TK_SQUOTE && token->next->token_type >= TK_WORD))
+		if ((token->token_type >= TK_SQUOTE && token->token_type <= TK_WORD) && (token->next->token_type >= TK_SQUOTE && token->next->token_type <= TK_WORD))
+			token_merge(token, token->next);
+		else if (token->token_type == TK_SPACE && token->next->token_type == TK_SPACE)
 			token_merge(token, token->next);
 		else
 			token = token->next;
+	}
+	token = *tokens;
+	while (token->next)
+	{
+		if (token->next->token_type == TK_SPACE)
+		{
+			tmp = token->next->next;
+			token_delone(token->next);
+			token->next = tmp;
+		}
+		token = token->next;
 	}
 }
 
@@ -63,8 +90,7 @@ void expand_var(int *index, t_token *token)
 	free(s.part3);
 }
 
-
-//expand exitcode todo
+// expand exitcode todo
 //___________________________________________________________
 /*                                                           *\
 **															 **
@@ -73,7 +99,6 @@ void expand_var(int *index, t_token *token)
 **    														 **
 **															 **
 \*___________________________________________________________*/
-
 
 void expand(t_token *token)
 {
@@ -89,8 +114,8 @@ void expand(t_token *token)
 		{
 			if (ft_isalnum(str[i + 1]))
 				expand_var(&i, token);
-			else if (str[i + 1] == '?')
-				expand_exitcode(&i, token);
+			// else if (str[i + 1] == '?')
+			// 	expand_exitcode(&i, token);
 		}
 		i++;
 	}
@@ -113,13 +138,6 @@ void parser(t_cmd *cmd, t_token **tokens)
 {
 	bool is_first_token;
 	t_token *token;
-
-	expender(tokens);
-	handle_space(tokens);
-	while (token)
-	{
-		token = token->next;
-	}
 }
 
 int get_nb_cmd(t_token **tokens)
@@ -140,19 +158,24 @@ int get_nb_cmd(t_token **tokens)
 	return (nb_cmd);
 }
 
-t_cmd **sget_cmd_tab()
+t_cmd **sget_cmd_tab(void)
 {
 	static t_cmd **cmd;
 	size_t i;
+	t_token **token_list;
 	int nb_cmd;
 
+	token_list = sget_token();
 	if (!sget_init(CMD, NOP) && sget_init(CMD, SET))
 	{
 		i = -1;
-		nb_cmd = get_nb_cmd(sget_token()); // traverse les tokens compte le nombre de token_pipe;
+		nb_cmd = get_nb_cmd(token_list); // traverse les tokens compte le nombre de token_pipe;
 		cmd = (t_cmd **)malloc(sizeof(t_cmd *) * nb_cmd);
+		clean_quote(token_list);
+		expender(token_list);
+		handle_space(token_list);
 		while (++i < nb_cmd)
-			parser(cmd[i], sget_token());
+			parser(cmd[i], token_list);
 	}
 	return (cmd);
 }

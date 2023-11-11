@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 04:42:20 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 18:21:27 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void token_add_back(t_token **token, t_token *new)
 	{
 		prev = token_last(*token);
 		prev->next = new;
-		new->prev = prev;
 	}
 }
 
@@ -144,8 +143,25 @@ void tokenisateur(t_token **tk_lst, char *str)
 }
 
 
+void clean_quote(t_token **tokens)
+{
+	t_token *cur;
+	char *tmp;
+	
+	cur = *tokens;
+	while(cur)
+	{
+		if(cur->token_type == TK_SQUOTE || cur->token_type == TK_DQUOTE)
+		{
+			tmp = ft_substr(cur->content, 1, ft_strlen(cur->content) - 2);
+			free(cur->content);
+			cur->content = tmp;		
+		}
+		cur = cur->next;
+	}
+}
 
-t_token **sget_token()
+t_token **sget_token(void)
 {
 	static t_token *token_list = NULL;
 

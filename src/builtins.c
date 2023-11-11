@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/07 03:20:37 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 18:21:55 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 **
 **
 */
-void builtin_env(t_env *env){
+void builtin_env(t_env *env)
+{
     while (env != NULL) {
         printf("%s=%s\n", env->name, env->content);
         env = env->next;

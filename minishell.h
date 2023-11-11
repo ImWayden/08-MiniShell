@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 04:40:08 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 18:08:17 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ struct s_token
 	size_t size;
 	t_token_type token_type;
 	t_token *next;
-	t_token *prev;
 };
 
 typedef struct s_env t_env;
@@ -151,8 +150,10 @@ void token_delone(t_token *node);
 void builtin_env(t_env *env);
 
 t_cmd **sget_cmd_tab();
-void expender(t_token **tokens);
 
+void expender(t_token **tokens);
+void clean_quote(t_token **tokens);
+void handle_space(t_token **tokens);
 
 void clean_env(void);
 void clean_tokens(void);
