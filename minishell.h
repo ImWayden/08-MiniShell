@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 04:07:05 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 04:40:08 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,8 @@ typedef enum e_token_type
 	TK_PIPE,
 	TK_SQUOTE,
 	TK_DQUOTE,
-	TK_END,
-	TK_NOTOKEN,
-	TK_WORD
+	TK_WORD,
+	TK_NOTOKEN
 } t_token_type;
 
 typedef enum e_init

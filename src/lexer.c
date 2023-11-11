@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/08 18:52:12 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 04:42:20 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ bool is_token(t_token **tk_lst, int *start, int *index, t_token_type *token)
 	prev = *token;
 	i = -1;
 	str = sget_input();
-	while (++i < 9)
+	while (++i < 8)
 	{
 		tokens = sget_tk_spe(i);
 		if (!ft_strncmp(tokens.content, &str[*index], tokens.size))
@@ -171,7 +171,6 @@ const char *token_type_to_string(t_token_type type) {
         case TK_DQUOTE: return "TK_DQUOTE";
         case TK_NOTOKEN: return "TK_NOTOKEN";
         case TK_WORD: return "TK_WORD";
-		case TK_END: return "TK_END";
         default: return "Unknown";
     }
 }

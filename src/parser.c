@@ -6,25 +6,34 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 04:26:31 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 04:44:42 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void handle_space(t_token **tokens)
-// {
-// 	t_token *token;
 
-// 	token = *tokens;
-// 	while (token->next)
-// 	{
-// 		if (token->token_type == TK_WORD && (token->next->token_type == TK_SQUOTE || token->next->token_type == TK_DQUOTE))
-// 			token_merge(token, token->next);
-// 		else
-// 			token = token->next;
-// 	}
-// }
+void token_merge(t_token *token, t_token *next)
+{
+	char *str;
+	
+	
+}
+
+void handle_space(t_token **tokens)
+{
+	t_token *token;
+
+	token = *tokens;
+	while (token->next)
+	{
+		if ((token->token_type <= TK_SQUOTE && token->token_type <= TK_WORD) 
+			&& (token->next->token_type <= TK_SQUOTE && token->next->token_type >= TK_WORD))
+			token_merge(token, token->next);
+		else
+			token = token->next;
+	}
+}
 
 void expand_var(int *index, t_token *token)
 {
@@ -54,8 +63,17 @@ void expand_var(int *index, t_token *token)
 	free(s.part3);
 }
 
-// if (s.str[i] == '?')
-// 	s.part2 = ft_strjoin(s.part1, sget_exitcode());
+
+//expand exitcode todo
+//___________________________________________________________
+/*                                                           *\
+**															 **
+** // if (s.str[i] == '?')									 **
+** // 	s.part2 = ft_strjoin(s.part1, sget_exitcode());      **
+**    														 **
+**															 **
+\*___________________________________________________________*/
+
 
 void expand(t_token *token)
 {
@@ -71,8 +89,8 @@ void expand(t_token *token)
 		{
 			if (ft_isalnum(str[i + 1]))
 				expand_var(&i, token);
-			// else if (str[i + 1] == '?')
-			// 	expand_exitcode(&i, token);
+			else if (str[i + 1] == '?')
+				expand_exitcode(&i, token);
 		}
 		i++;
 	}
@@ -91,50 +109,50 @@ void expender(t_token **tokens)
 	}
 }
 
-// void parser(t_cmd *cmd, t_token **tokens)
-// {
-// 	bool is_first_token;
-// 	t_token *token;
+void parser(t_cmd *cmd, t_token **tokens)
+{
+	bool is_first_token;
+	t_token *token;
 
-// 	expender(tokens);
-// 	// handle_space(tokens);
-// 	// while (token)
-// 	// {
-// 	// 	token = token->next;
-// 	// }
-// }
+	expender(tokens);
+	handle_space(tokens);
+	while (token)
+	{
+		token = token->next;
+	}
+}
 
-// int get_nb_cmd(t_token **tokens)
-// {
-// 	t_token *start;
-// 	int nb_cmd;
+int get_nb_cmd(t_token **tokens)
+{
+	t_token *start;
+	int nb_cmd;
 
-// 	start = *tokens;
-// 	if (!start)
-// 		return (0);
-// 	nb_cmd = 1;
-// 	while (start)
-// 	{
-// 		if (start->token_type == TK_PIPE)
-// 			nb_cmd++;
-// 		start = start->next;
-// 	}
-// 	return (nb_cmd);
-// }
+	start = *tokens;
+	if (!start)
+		return (0);
+	nb_cmd = 1;
+	while (start)
+	{
+		if (start->token_type == TK_PIPE)
+			nb_cmd++;
+		start = start->next;
+	}
+	return (nb_cmd);
+}
 
-// t_cmd **sget_cmd_tab()
-// {
-// 	static t_cmd **cmd;
-// 	size_t i;
-// 	int nb_cmd;
+t_cmd **sget_cmd_tab()
+{
+	static t_cmd **cmd;
+	size_t i;
+	int nb_cmd;
 
-// 	if (!sget_init(CMD, NOP) && sget_init(CMD, SET))
-// 	{
-// 		i = -1;
-// 		nb_cmd = get_nb_cmd(sget_token()); // traverse les tokens compte le nombre de token_pipe;
-// 		cmd = (t_cmd **)malloc(sizeof(t_cmd *) * nb_cmd);
-// 		while (++i < nb_cmd)
-// 			parser(&cmd[i], sget_token());
-// 	}
-// 	return (cmd);
-// }
+	if (!sget_init(CMD, NOP) && sget_init(CMD, SET))
+	{
+		i = -1;
+		nb_cmd = get_nb_cmd(sget_token()); // traverse les tokens compte le nombre de token_pipe;
+		cmd = (t_cmd **)malloc(sizeof(t_cmd *) * nb_cmd);
+		while (++i < nb_cmd)
+			parser(cmd[i], sget_token());
+	}
+	return (cmd);
+}
