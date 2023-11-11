@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:24:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/05 18:40:17 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/08 18:47:03 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 void clean_env(void)
 {
-	t_env *env = *sget_env(NULL);
+	t_env *env;
 	t_env *temp;
-
+		
+	env = *sget_env(NULL);
 	while (env != NULL)
 	{
 		temp = env;
@@ -24,4 +25,19 @@ void clean_env(void)
 		env_delone(temp);
 	}
 	free(sget_env_tab(NOP));
+}
+
+void clean_tokens(void)
+{
+	t_token *token;
+	t_token *temp;
+
+	token = *sget_token();
+	while (token != NULL)
+	{
+		temp = token;
+		token = token->next;
+		token_delone(temp);
+	}
+	sget_init(TOKEN, REFRESH);
 }

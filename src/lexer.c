@@ -6,11 +6,22 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/08 03:45:51 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/08 18:52:12 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+void token_delone(t_token *node) 
+{
+    if (node) {
+        free(node->content);
+        free(node);
+    }
+}
+
+
 
 static t_token *token_last(t_token *token)
 {
@@ -88,7 +99,7 @@ bool is_token(t_token **tk_lst, int *start, int *index, t_token_type *token)
 	prev = *token;
 	i = -1;
 	str = sget_input();
-	while (++i < 8)
+	while (++i < 9)
 	{
 		tokens = sget_tk_spe(i);
 		if (!ft_strncmp(tokens.content, &str[*index], tokens.size))
@@ -122,30 +133,17 @@ void tokenisateur(t_token **tk_lst, char *str)
 			token = TK_NOTOKEN;
 			i++;
 		}
-		else if (str[i])
+		else
 		{
 			token = TK_WORD;
 			i++;
 		}
 	}
+	if(token == TK_WORD)
+		token_add_back(tk_lst, token_new(str, i+1, token_start, token));
 }
 
-// t_cmd **sget_cmd_tab()
-// {
-// 	static t_cmd **cmd;
-// 	size_t i;
-// 	size_t nb_cmd;
 
-// 	if (!sget_init(CMD, NOP) && sget_init(CMD, SET))
-// 	{
-// 		i = -1;
-// 		nb_cmd = get_nb_cmd(sget_token()); // traverse les tokens compte le nombre de token_pipe;
-// 		cmd = (t_cmd **)malloc(sizeof(t_cmd *) * nb_cmd);
-// 		while (++i < nb_cmd)
-// 			setup_cmd(cmd[i], sget_token());
-// 	}
-// 	return (cmd);
-// }
 
 t_token **sget_token()
 {
@@ -173,6 +171,7 @@ const char *token_type_to_string(t_token_type type) {
         case TK_DQUOTE: return "TK_DQUOTE";
         case TK_NOTOKEN: return "TK_NOTOKEN";
         case TK_WORD: return "TK_WORD";
+		case TK_END: return "TK_END";
         default: return "Unknown";
     }
 }

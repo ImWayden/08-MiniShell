@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:35:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/08 00:10:35 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 04:14:31 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 char *sget_input()
 {
-	static char *input;
+	static char *input = "dsdsd < sdsdsd > | sdsd $HOME \"$HOME\" \'$HOME\' $ ezez | \" | \"sdsd <<sdsds >>sds d";
 	// printf("%d",(!sget_init(INPUT, NOP)));
 	// printf("%d", sget_init(INPUT, SET));
-	if(!sget_init(INPUT, NOP) && sget_init(INPUT, SET))
+	if(sget_init(INPUT, NOP) && sget_init(INPUT, SET))
 		input = readline(RED "minishell:>" RESET);
 	return (input);
 }
@@ -34,9 +34,9 @@ bool sget_init(t_init index, int set)
 
 t_token sget_tk_spe(int i)
 {
-	static const t_token	tokens[8] = {{"<<", 2, TK_HEREDOC},\
+	static const t_token	tokens[9] = {{"<<", 2, TK_HEREDOC},\
 	{">>", 2, TK_CONCAT}, {"<", 1, TK_REDIR_ENT}, {">", 1, TK_REDIR_EXT},\
 		{" ", 1, TK_SPACE}, {"|", 1, TK_PIPE}, {"\'", 1, TK_SQUOTE},\
-		{"\"", 1, TK_DQUOTE}};
+		{"\"", 1, TK_DQUOTE}, {"\0", 1, TK_END}};
 	return(tokens[i]);
 }
