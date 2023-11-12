@@ -6,22 +6,20 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 18:21:27 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 22:33:06 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-void token_delone(t_token *node) 
+void token_delone(t_token *node)
 {
-    if (node) {
-        free(node->content);
-        free(node);
-    }
+	if (node)
+	{
+		free(node->content);
+		free(node);
+	}
 }
-
-
 
 static t_token *token_last(t_token *token)
 {
@@ -52,7 +50,7 @@ t_token *token_new(char *str, int i, int k, t_token_type token)
 	new_token = (t_token *)malloc(sizeof(t_token));
 	new_token->content = ft_substr(str, k, i - k);
 	new_token->size = i - k;
-	new_token->token_type = token;
+	new_token->type = token;
 
 	new_token->next = NULL;
 	return (new_token);
@@ -127,7 +125,7 @@ void tokenisateur(t_token **tk_lst, char *str)
 	{
 		if (is_token(tk_lst, &token_start, &i, &token))
 		{
-			token_add_back(tk_lst, token_new(str, i+1, token_start, token));
+			token_add_back(tk_lst, token_new(str, i + 1, token_start, token));
 			token_start = i + 1;
 			token = TK_NOTOKEN;
 			i++;
@@ -138,24 +136,23 @@ void tokenisateur(t_token **tk_lst, char *str)
 			i++;
 		}
 	}
-	if(token == TK_WORD)
-		token_add_back(tk_lst, token_new(str, i+1, token_start, token));
+	if (token == TK_WORD)
+		token_add_back(tk_lst, token_new(str, i + 1, token_start, token));
 }
-
 
 void clean_quote(t_token **tokens)
 {
 	t_token *cur;
 	char *tmp;
-	
+
 	cur = *tokens;
-	while(cur)
+	while (cur)
 	{
-		if(cur->token_type == TK_SQUOTE || cur->token_type == TK_DQUOTE)
+		if (cur->type == TK_SQUOTE || cur->type == TK_DQUOTE)
 		{
 			tmp = ft_substr(cur->content, 1, ft_strlen(cur->content) - 2);
 			free(cur->content);
-			cur->content = tmp;		
+			cur->content = tmp;
 		}
 		cur = cur->next;
 	}
@@ -173,29 +170,42 @@ t_token **sget_token(void)
 	return (&token_list);
 }
 
-
-
-const char *token_type_to_string(t_token_type type) {
-    switch (type) {
-        case TK_HEREDOC: return "TK_HEREDOC";
-        case TK_CONCAT: return "TK_CONCAT";
-        case TK_REDIR_ENT: return "TK_REDIR_ENT";
-        case TK_REDIR_EXT: return "TK_REDIR_EXT";
-        case TK_SPACE: return "TK_SPACE";
-        case TK_PIPE: return "TK_PIPE";
-        case TK_SQUOTE: return "TK_SQUOTE";
-        case TK_DQUOTE: return "TK_DQUOTE";
-        case TK_NOTOKEN: return "TK_NOTOKEN";
-        case TK_WORD: return "TK_WORD";
-        default: return "Unknown";
-    }
+const char *token_type_to_string(t_token_type type)
+{
+	switch (type)
+	{
+	case TK_HEREDOC:
+		return "TK_HEREDOC";
+	case TK_CONCAT:
+		return "TK_CONCAT";
+	case TK_REDIR_ENT:
+		return "TK_REDIR_ENT";
+	case TK_REDIR_EXT:
+		return "TK_REDIR_EXT";
+	case TK_SPACE:
+		return "TK_SPACE";
+	case TK_PIPE:
+		return "TK_PIPE";
+	case TK_SQUOTE:
+		return "TK_SQUOTE";
+	case TK_DQUOTE:
+		return "TK_DQUOTE";
+	case TK_NOTOKEN:
+		return "TK_NOTOKEN";
+	case TK_WORD:
+		return "TK_WORD";
+	default:
+		return "Unknown";
+	}
 }
 
 // Fonction pour afficher une liste chaînée de tokens avec des noms de token en chaîne
-void display_token_list(t_token *token_list) {
-    t_token *current = token_list;
-    while (current) {
-        printf("Content: %s, Size: %ld, Token Type: %s\n", current->content, current->size, token_type_to_string(current->token_type));
-        current = current->next;
-    }
+void display_token_list(t_token *token_list)
+{
+	t_token *current = token_list;
+	while (current)
+	{
+		printf("Content: %s, Size: %ld, Token Type: %s\n", current->content, current->size, token_type_to_string(current->type));
+		current = current->next;
+	}
 }

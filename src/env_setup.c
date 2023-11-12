@@ -6,20 +6,21 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 17:13:29 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 22:33:58 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
-void env_delone(t_env *node) {
-    if (node) {
-        free(node->name);
-        free(node->content);
-        free(node->full);
-        free(node);
-    }
+void env_delone(t_env *node)
+{
+	if (node)
+	{
+		free(node->name);
+		free(node->content);
+		free(node->full);
+		free(node);
+	}
 }
 
 void env_remove_if(t_env **begin_list, char *name, int (*cmp)())
@@ -28,7 +29,7 @@ void env_remove_if(t_env **begin_list, char *name, int (*cmp)())
 
 	if (begin_list == NULL || *begin_list == NULL)
 		return;
-	
+
 	if (!cmp(cur->name, name))
 	{
 		*begin_list = cur->next;
@@ -38,8 +39,6 @@ void env_remove_if(t_env **begin_list, char *name, int (*cmp)())
 	cur = *begin_list;
 	env_remove_if(&cur->next, name, cmp);
 }
-
-
 
 static t_env *env_last(t_env *env)
 {
@@ -83,35 +82,33 @@ t_env *env_new(char *str)
 
 t_env **sget_env(char **envp)
 {
-	static t_env *env = NULL; // Utilisez un simple pointeur ici
+	static t_env *env = NULL;
 	static bool initialized = FALSE;
 	int i;
 
 	if (!initialized)
 	{
 		i = -1;
-		env = NULL; // Initialisation de env à NULL
+		env = NULL;
 		while (envp[++i])
-			env_add_back(&env, env_new(envp[i])); // Passer un pointeur vers env
+			env_add_back(&env, env_new(envp[i]));
 		initialized = TRUE;
 	}
 
-	return &env; // Retourner un pointeur vers env
+	return &env;
 }
 
-t_env *find_node_by_name(t_env **beign_list, const char *name_to_find) {
-    t_env *current = *beign_list;
+t_env *find_node_by_name(t_env **beign_list, const char *name_to_find)
+{
+	t_env *current = *beign_list;
 
-    while (current != NULL) {
-        if (strcmp(current->name, name_to_find) == 0) {
-            // La chaîne a été trouvée, renvoyer la node correspondante
-            return current;
-        }
-        current = current->next;
-    }
-
-    // La chaîne n'a pas été trouvée, renvoyer NULL
-    return NULL;
+	while (current != NULL)
+	{
+		if (strcmp(current->name, name_to_find) == 0)
+			return current;
+		current = current->next;
+	}
+	return NULL;
 }
 
 int main(int argc, char *argv[], char **envp)
@@ -119,21 +116,21 @@ int main(int argc, char *argv[], char **envp)
 
 	char *input;
 
-	sget_init(0,REFRESH);
+	sget_init(0, REFRESH);
 	sget_input();
 	t_token **tokens = sget_token();
-	t_env *env = *sget_env(envp); // Initialisation de la liste chaînée
+	t_env *env = *sget_env(envp);
 	builtin_export("bonjour=");
 	builtin_export("bonjour2");
 	builtin_export("bonjour3=");
 	char **str_array = sget_env_tab(NOP);
-	printf("%s\n",sget_input());
+	printf("%s\n", sget_input());
 	// for (int i = 0; str_array[i] != NULL; i++) {
-    //     printf("Index %d : %s\n", i, str_array[i]);
-    // }
+	//     printf("Index %d : %s\n", i, str_array[i]);
+	// }
 	sget_cmd_tab();
 	display_token_list(*tokens);
-	//builtin_env(env);
+	// builtin_env(env);
 	clean_env();
 	clean_tokens();
 	return 0;

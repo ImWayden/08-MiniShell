@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:24:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/08 18:47:03 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/11 22:18:28 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,17 @@ void clean_tokens(void)
 		token_delone(temp);
 	}
 	sget_init(TOKEN, REFRESH);
+}
+
+void clean_cmds(void)
+{
+	t_cmd	**cmds;
+	int		i;
+
+	i = 0;
+	while(cmds[i])
+	{
+		
+		
+	}
 }
