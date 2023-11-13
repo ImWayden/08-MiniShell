@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/12 01:31:46 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/13 02:52:28 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ void token_delone(t_token *node);
 void builtin_env(t_env *env);
 
 t_cmd *sget_cmd_tab(void);
+int	*sget_exitcode(void);
 
 void expender(t_token **tokens);
 void clean_quote(t_token **tokens);

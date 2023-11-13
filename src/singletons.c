@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:35:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 18:21:15 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/13 02:52:12 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,11 @@ t_token sget_tk_spe(int i)
 		{" ", 1, TK_SPACE}, {"|", 1, TK_PIPE}, {"\'", 1, TK_SQUOTE},\
 		{"\"", 1, TK_DQUOTE}};
 	return(tokens[i]);
+}
+
+
+int	*sget_exitcode(void)
+{
+	static int exitcode = 0;
+	return(&exitcode);
 }
