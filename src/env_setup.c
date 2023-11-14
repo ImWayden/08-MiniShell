@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 22:33:58 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/14 06:37:55 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void env_delone(t_env *node)
 {
 	if (node)
 	{
-		free(node->name);
-		free(node->content);
-		free(node->full);
-		free(node);
+		p_free((void **)&node->name);
+		p_free((void **)&node->content);
+		p_free((void **)&node->full);
+		p_free((void **)&node);
 	}
 }
 
@@ -64,12 +64,12 @@ t_env *env_new(char *str)
 	int i;
 
 	i = 0;
-	new_var = (t_env *)malloc(sizeof(t_env));
+	new_var = (t_env *)p_malloc(sizeof(t_env));
 	if (!new_var)
 		return (NULL);
 	while (str[i] && str[i] != '=')
 		i++;
-	new_var->name = (char *)malloc(sizeof(char) * (i + 1));
+	new_var->name = (char *)p_malloc(sizeof(char) * (i + 1));
 	ft_strncpy(new_var->name, str, i);
 	if (str[i])
 		new_var->content = ft_strdup(&str[i + 1]);
@@ -111,6 +111,38 @@ t_env *find_node_by_name(t_env **beign_list, const char *name_to_find)
 	return NULL;
 }
 
+
+void print_cmd(t_cmd *cmd) {
+    if (cmd == NULL) {
+        printf("Structure de commande NULL\n");
+        return;
+    }
+	t_cmd current;
+	current = cmd[0];
+	int i = 0;
+	int nb_cmd = get_nb_cmd(sget_token());
+	while(i < nb_cmd)
+	{
+		printf("Commande: %s\n", current.cmd);
+		printf("Arguments:\n");
+		char **arg = current.args;
+		while (arg && *arg != NULL) {
+			printf("  %s\n", *arg);
+			arg++;
+		}
+		printf("Entrée: %s\n", current.input);
+		printf("Sortie: %s\n", current.output);
+		printf("Here_doc: %s\n", current.here_doc);
+		printf("Concat: %s\n", current.concat);
+		printf("Builtin: %d\n", current.is_builtin);
+		i++;
+		current = cmd[i];
+	}
+		// Vous pouvez également appeler récursivement print_cmd pour afficher la structure suivante
+
+}
+
+
 int main(int argc, char *argv[], char **envp)
 {
 
@@ -118,8 +150,10 @@ int main(int argc, char *argv[], char **envp)
 
 	sget_init(0, REFRESH);
 	sget_input();
-	t_token **tokens = sget_token();
 	t_env *env = *sget_env(envp);
+	sget_location_flag(ERR_ENV);
+	t_token **tokens = sget_token();
+	sget_location_flag(ERR_TOKEN);
 	builtin_export("bonjour=");
 	builtin_export("bonjour2");
 	builtin_export("bonjour3=");
@@ -128,7 +162,8 @@ int main(int argc, char *argv[], char **envp)
 	// for (int i = 0; str_array[i] != NULL; i++) {
 	//     printf("Index %d : %s\n", i, str_array[i]);
 	// }
-	sget_cmd_tab();
+	print_cmd(sget_cmd_tab());
+	sget_location_flag(ERR_PARSER);
 	display_token_list(*tokens);
 	// builtin_env(env);
 	clean_env();

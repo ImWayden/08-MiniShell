@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/05 01:05:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/05 02:06:59 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/14 05:32:24 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char **env_to_tab(t_env **lst)
 		i++;
 		elem = elem->next;
 	}
-	tab = (char **)malloc(sizeof(char *) * (i + 1));
+	tab = (char **)p_malloc(sizeof(char *) * (i + 1));
 	if(!tab)
 		return(NULL);
 	elem = *lst;
@@ -59,6 +59,6 @@ void refresh_env_tab(void)
 	t_env	**env;
 
 	env_tab = sget_env_tab(NOP);
-	free(env_tab);
+	p_free((void **)&env_tab);
 	sget_env_tab(REFRESH);
 }

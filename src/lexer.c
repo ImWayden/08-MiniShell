@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/11 22:33:06 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/14 05:47:37 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void token_delone(t_token *node)
 {
 	if (node)
 	{
-		free(node->content);
-		free(node);
+		p_free((void **)&node->content);
+		p_free((void **)&node);
 	}
 }
 
@@ -47,7 +47,7 @@ t_token *token_new(char *str, int i, int k, t_token_type token)
 {
 	t_token *new_token;
 
-	new_token = (t_token *)malloc(sizeof(t_token));
+	new_token = (t_token *)p_malloc(sizeof(t_token));
 	new_token->content = ft_substr(str, k, i - k);
 	new_token->size = i - k;
 	new_token->type = token;

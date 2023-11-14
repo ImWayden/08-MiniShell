@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/13 02:52:28 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/14 06:38:22 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,34 @@
 # define CYAN "\033[1;36m"
 # define WHITE "\033[1;37m"
 
+# define ERR_ENV 0b01
+# define ERR_ENV2 0b011
+# define ERR_TOKEN 0b0111
+# define ERR_PARSER 0b01111
+# define ERR_CLOSE 0x10
+# define ERR_OPEN 0x20
+# define ERR_MALLOC 0x40
+# define ERR_REDIR_IN 0x80
+# define ERR_REDIR_OUT 0x100
+# define ERR_HEREDOC 0x200
+# define ERR_CONCAT 0x400
+# define ERR_ACCESS 0x800
+# define ERR_PIPE 0x1000
+
+# define ERR_MSG_ENV "env chained list setup"
+# define ERR_MSG_ENV2 "env tab setup"
+# define ERR_MSG_TOKEN "tokenisateur"
+# define ERR_MSG_PARSER "parser"
+# define ERR_MSG_MALLOC "malloc"
+# define ERR_MSG_OPEN	"open : can't open file"
+# define ERR_MSG_CLOSE	"close : can't close file"
+# define ERR_MSG_REDIR_IN "error next to \'<\'"
+# define ERR_MSG_REDIR_OUT "error next to \'>\'"
+# define ERR_MSG_HEREDOC "syntax error near unexpected token \'<<\'"
+# define ERR_MSG_CONCAT "syntax error near unexpected token \'>>\'"
+# define ERR_MSG_ACCESS "permission denied"
+# define ERR_MSG_ACCESS_EXIST "file does not exist"
+# define ERR_MSG_PIPE "error near \'|\'"
 typedef enum s_refresh
 {
 	NOP,
@@ -72,6 +100,8 @@ typedef enum e_token_type
 	TK_WORD,
 	TK_NOTOKEN
 } t_token_type;
+
+typedef int t_error;
 
 typedef enum e_init
 {
@@ -112,6 +142,16 @@ typedef struct s_concat
 
 } t_concat;
 
+
+typedef struct s_errorscode
+{
+	const char	*from;
+	const char	*msg;
+	t_error		code;
+	
+}	t_errorcode;
+
+
 typedef struct s_cmd t_cmd;
 
 struct s_cmd
@@ -123,7 +163,6 @@ struct s_cmd
 	char *here_doc;
 	char *concat;
 	bool is_builtin;
-	t_cmd *next;
 };
 
 typedef struct s_minishell_args t_mshellargs;
@@ -134,6 +173,9 @@ struct s_minishell_args
 	t_mshellargs *next;
 };
 
+/*
+** env related function
+*/
 t_env **sget_env(char **envp);
 t_env *env_new(char *str);
 void env_add_back(t_env **env, t_env *new);
@@ -141,28 +183,50 @@ void env_delone(t_env *var);
 char **sget_env_tab(t_refresh refresh);
 void env_remove_if(t_env **begin_list, char *name, int (*cmp)());
 void refresh_env_tab(void);
-t_token **sget_token();
+t_env *find_node_by_name(t_env **beign_list, const char *name_to_find);
+/*
+** token related function
+*/
 bool sget_init(t_init index, int set);
 void display_token_list(t_token *token_list);
-t_token sget_tk_spe(int i);
-char *sget_input();
 void token_delone(t_token *node);
-void builtin_env(t_env *env);
-
-t_cmd *sget_cmd_tab(void);
-int	*sget_exitcode(void);
-
 void expender(t_token **tokens);
 void clean_quote(t_token **tokens);
 void handle_space(t_token **tokens);
-
+/*
+** singletons
+*/
+t_token sget_tk_spe(int i);
+char *sget_input();
+t_token **sget_token();
+t_cmd *sget_cmd_tab(void);
+int	*sget_exitcode(void);
+/*
+** cleaning functions
+*/
 void clean_env(void);
 void clean_tokens(void);
-
-t_env *find_node_by_name(t_env **beign_list, const char *name_to_find);
-
+/*
+** Utils
+*/
+int get_nb_cmd(t_token **tokens);
 char *ft_strncpy(char *s1, char *s2, int n);
-
+/*
+** Builtins
+*/
 void builtin_export(char *str);
+void builtin_env(t_env *env);
+/*
+**	Error manager
+*/
+t_error *sget_location_flag(t_error replace);
+void handle_error(const char *msg, const char *file ,t_error errorcode);
+/*
+**	protected functions
+*/
+int p_open(const char *file, int flags);
+int p_access(const char *file, int flags);
+void *p_malloc(size_t size);
+void p_free(void **ptr);
 
 #endif

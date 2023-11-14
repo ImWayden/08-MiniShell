@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/13 03:54:12 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/14 06:26:06 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ void insert_args_in_tab(char **tab, char *str)
 	size = 0;
 	if(!tab)
 	{
-		tab = (char **)malloc(sizeof(char *) * 2);
+		tab = (char **)p_malloc(sizeof(char *) * 2);
 		tab[0] = str;
 		tab[1] = NULL;
 	}
 	while(tab[size] != NULL)
 		size++;
-	new_array = (char **)malloc(sizeof(char *) * (size + 2));
+	new_array = (char **)p_malloc(sizeof(char *) * (size + 2));
 	new_array[size + 2] = NULL;
 	new_array[size + 1] = str;
 	while (--size >= 0)
@@ -63,7 +63,7 @@ void remove_spaces(t_token **tokens)
 	t_token *tmp;
 
 	token = *tokens;
-	while (token->next)
+	while (token && token->next)
 	{
 		if (token->next->type == TK_SPACE)
 		{
@@ -93,9 +93,8 @@ void merge_quotes(t_token **tokens)
 t_token *parser_handle_redir_in(t_token *token, t_cmd *cmd)
 {
 	if (!token->next || token->next->type != TK_WORD)
-		return (handle_error()); // need to change to a real error manager
-	if (access(token->next->content, F_OK | R_OK) == -1);
-		return (handle_error());
+		handle_error(ERR_MSG_REDIR_IN, NULL, ERR_REDIR_IN); // need to change to a real error manager
+	p_access(token->next->content, F_OK | R_OK);
 	cmd->input = NULL;
 	cmd->input = token->next->content;
 	token = token->next;
@@ -105,14 +104,11 @@ t_token *parser_handle_redir_in(t_token *token, t_cmd *cmd)
 t_token *parser_handle_redir_out(t_token *token, t_cmd *cmd)
 {
 	int file;
-	
+	char *name;
 	if (!token->next || token->next->type != TK_WORD)
-		return (handle_error()); // need to change to a real error manager
-	file = open(token->next->content, O_CREAT | O_WRONLY | O_TRUNC);
-	if (file = -1)
-		return (handle_error());
-	if (acces(token->next->content, F_OK | W_OK) == -1);
-		return (handle_error());
+		handle_error(ERR_MSG_REDIR_OUT, NULL, ERR_REDIR_OUT); // need to change to a real error manager
+	file = p_open(token->next->content, O_CREAT | O_WRONLY | O_TRUNC);
+	p_access(name, F_OK | W_OK);
 	close(file);
 	cmd->output = NULL;
 	cmd->output = token->next->content;
@@ -126,7 +122,7 @@ t_token *parser_handle_heredoc(t_token *token, t_cmd *cmd)
 	char *delimiter;
 
 	if (!token->next || token->next->type != TK_WORD)
-		return (handle_error());
+		handle_error(ERR_MSG_HEREDOC, NULL, ERR_HEREDOC);
 	delimiter = token->next->content;
 	s.str = readline("here_doc>");
 	while(strcmp(delimiter, s.str) != 0)//replace with my ft_strcmp
@@ -149,12 +145,9 @@ t_token *parser_handle_concat(t_token *token, t_cmd *cmd)
 	int file;
 	
 	if (!token->next || token->next->type != TK_WORD)
-		return (handle_error());
-	file = open(token->next->content, O_CREAT | O_WRONLY | O_APPEND);
-	if (file = -1)
-		return (handle_error());
-	if (acces(token->next->content, F_OK | W_OK) == -1);
-		return (handle_error());
+		handle_error(ERR_MSG_CONCAT, NULL, ERR_CONCAT);
+	file = p_open(token->next->content, O_CREAT | O_WRONLY | O_APPEND);
+	p_access(token->next->content, F_OK | W_OK);
 	close(file);
 	cmd->output = NULL;
 	cmd->concat = token->content;
@@ -178,11 +171,11 @@ t_token *parser_handle_special(t_token *token, t_cmd *cmd)
 t_token **parser(t_cmd *cmd, t_token **tokens)
 {
 	bool has_cmd_been_found;
-	t_token *token;
+	static t_token *token;
 
 	token = *tokens;
 	has_cmd_been_found = FALSE;
-	if (token->type == TK_PIPE)
+	if (token && token->type == TK_PIPE)
 		token = token->next;
 	while (token && token->type != TK_PIPE)
 	{
@@ -198,8 +191,9 @@ t_token **parser(t_cmd *cmd, t_token **tokens)
 		token = token->next;
 	}
 	if (token && token->type == TK_PIPE && !token->next)
-		return (handle_error());
-	token = token->next;
+		handle_error(ERR_MSG_PIPE, NULL, ERR_PIPE);
+	if(token && token->next)
+		token = token->next;
 	return (&token);
 }
 
@@ -241,9 +235,9 @@ t_cmd *sget_cmd_tab(void)
 	{
 		i = -1;
 		nb_cmd = get_nb_cmd(token_list);
-		cmd = (t_cmd *)malloc(sizeof(t_cmd) * nb_cmd);
+		cmd = (t_cmd *)p_malloc(sizeof(t_cmd) * (nb_cmd + 1));
 		correct_tokenlist(token_list);
-		while (++i < nb_cmd)
+		while (++i < nb_cmd + 1)
 			token_list = parser(&cmd[i], token_list);
 	}
 	return (cmd);
