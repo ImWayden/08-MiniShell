@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:24:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 03:22:51 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 03:27:48 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,5 @@ void clean_cmds(void)
 		i++;
 	}
 	p_free((void **)&cmds);
+	sget_init(CMD, REFRESH);
 }

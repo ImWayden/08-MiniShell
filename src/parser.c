@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 03:20:43 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 04:24:45 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,21 @@ char **insert_args_in_tab(char **tab, char *str)
 	size = 0;
 	if(!tab || !*tab)
 	{
-		tab = (char **)p_malloc(sizeof(char *) * 2);
-		tab[0] = str;
-		tab[1] = NULL;
+		new_array = (char **)p_malloc(sizeof(char *) * 2);
+		new_array[0] = str;
+		new_array[1] = NULL;
 	}
-	while(tab[size] != NULL)
-		size++;
-	new_array = (char **)p_malloc(sizeof(char *) * (size + 2));
-	new_array[size + 1] = NULL;
-	new_array[size] = str;
-	while (--size >= 0)
-		new_array[size] = tab[size];
-	free(tab);
+	else
+	{
+		while(tab[size] != NULL)
+			size++;
+		new_array = (char **)p_malloc(sizeof(char *) * (size + 2));
+		new_array[size + 1] = NULL;
+		new_array[size] = str;
+		while (--size >= 0)
+			new_array[size] = tab[size];
+		free(tab);
+	}
 	return(new_array);
 }
 
@@ -104,12 +107,11 @@ t_token *parser_handle_redir_in(t_token *token, t_cmd *cmd)
 t_token *parser_handle_redir_out(t_token *token, t_cmd *cmd)
 {
 	int file;
-	char *name;
 	if (!token->next || token->next->type != TK_WORD)
 		handle_error(ERR_MSG_REDIR_OUT, NULL, ERR_REDIR_OUT); // need to change to a real error manager
-	file = p_open(token->next->content, O_CREAT | O_WRONLY | O_TRUNC);
-	p_access(name, F_OK | W_OK);
+	file = p_open(token->next->content, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 	close(file);
+	p_access(token->next->content, F_OK | W_OK);
 	cmd->output = NULL;
 	cmd->output = token->next->content;
 	token = token->next;
@@ -146,11 +148,11 @@ t_token *parser_handle_concat(t_token *token, t_cmd *cmd)
 	
 	if (!token->next || token->next->type != TK_WORD)
 		handle_error(ERR_MSG_CONCAT, NULL, ERR_CONCAT);
-	file = p_open(token->next->content, O_CREAT | O_WRONLY | O_APPEND);
+	file = p_open(token->next->content, O_CREAT | O_WRONLY | O_APPEND, 0666);
 	p_access(token->next->content, F_OK | W_OK);
 	close(file);
 	cmd->output = NULL;
-	cmd->concat = token->content;
+	cmd->concat = token->next->content;
 	token = token->next;
 	return (token);
 }
@@ -173,7 +175,6 @@ t_token **parser(t_cmd *cmd, t_token **tokens)
 	bool has_cmd_been_found;
 	static t_token *token;
 
-	cmd->args = NULL;
 	token = *tokens;
 	has_cmd_been_found = FALSE;
 	if (token && token->type == TK_PIPE)
@@ -188,7 +189,7 @@ t_token **parser(t_cmd *cmd, t_token **tokens)
 		else if (token->type == TK_WORD)
 			cmd->args = insert_args_in_tab(cmd->args, token->content);
 		else
-			parser_handle_special(token, cmd);
+			token = parser_handle_special(token, cmd);
 		token = token->next;
 	}
 	if (token && token->type == TK_PIPE && !token->next)
@@ -231,16 +232,25 @@ t_cmd *sget_cmd_tab(void)
 	t_token **token_list;
 	int nb_cmd;
 
-	token_list = sget_token();
 	if (!sget_init(CMD, NOP) && sget_init(CMD, SET))
 	{
 		i = -1;
+		token_list = sget_token();
 		nb_cmd = get_nb_cmd(token_list);
-		cmd = (t_cmd *)p_malloc(sizeof(t_cmd) * (nb_cmd + 1));
-		cmd->nb_cmd = nb_cmd;
 		correct_tokenlist(token_list);
-		while (++i < nb_cmd + 1)
+		cmd = (t_cmd *)p_malloc(sizeof(t_cmd) * (nb_cmd));
+		cmd->nb_cmd = nb_cmd;
+		while (++i < nb_cmd)
+		{
+			cmd[i].here_doc = NULL;
+			cmd[i].concat = NULL;
+			cmd[i].args = NULL;
+			cmd[i].input = NULL;
+			cmd[i].output = NULL;
+			cmd[i].cmd = NULL;
+			cmd[i].is_builtin = FALSE;
 			token_list = parser(&cmd[i], token_list);
+		}
 	}
 	return (cmd);
 }

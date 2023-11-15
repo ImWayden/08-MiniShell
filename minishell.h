@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 03:08:11 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 03:55:47 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ void handle_error(const char *msg, const char *file ,t_error errorcode);
 /*
 **	protected functions
 */
-int p_open(const char *file, int flags);
+int p_open(const char *file, int flags, mode_t test);
 int p_access(const char *file, int flags);
 void *p_malloc(size_t size);
 void p_free(void **ptr);

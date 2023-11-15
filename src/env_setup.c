@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 02:25:29 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 04:27:47 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void print_cmd(t_cmd *cmd) {
 	t_cmd current;
 	current = cmd[0];
 	int i = 0;
-	int nb_cmd = get_nb_cmd(sget_token());
+	int nb_cmd = cmd[0].nb_cmd;
 	while(i < nb_cmd)
 	{
 		printf("Commande: %s\n", current.cmd);
@@ -136,7 +136,8 @@ void print_cmd(t_cmd *cmd) {
 		printf("Concat: %s\n", current.concat);
 		printf("Builtin: %d\n", current.is_builtin);
 		i++;
-		current = cmd[i];
+		if(i < nb_cmd)
+			current = cmd[i];
 	}
 		// Vous pouvez également appeler récursivement print_cmd pour afficher la structure suivante
 
@@ -166,7 +167,8 @@ int main(int argc, char *argv[], char **envp)
 	sget_location_flag(ERR_PARSER);
 	display_token_list(*tokens);
 	// builtin_env(env);
-	clean_env();
+	clean_cmds();
 	clean_tokens();
+	clean_env();
 	return 0;
 }

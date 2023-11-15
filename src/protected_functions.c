@@ -6,17 +6,17 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 04:39:18 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 02:25:50 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 04:00:09 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int p_open(const char *file, int flags)
+int p_open(const char *file, int flags, mode_t rights)
 {
 	int ret;
 	
-	ret = open(file, flags);
+	ret = open(file, flags, rights);
 	if (ret == -1)
 		handle_error(ERR_MSG_OPEN, file, ERR_OPEN);
 	return(ret);
