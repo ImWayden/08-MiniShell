@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 03:39:43 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 04:35:18 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void cleanhub()
 	flag = *sget_location_flag(0);
 	if(flag & ERR_ENV)
 		clean_env();
-	// if(flag & ERR_ENV2)
-	// 	(void)((free(sget_env_tab(NOP)), 1) && (msg = ERR_MSG_ENV2, 1));
 	if(flag & ERR_TOKEN)
 		clean_tokens();
 	if(flag & ERR_PARSER)

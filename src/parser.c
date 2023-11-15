@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 04:24:45 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 04:34:10 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,13 +242,7 @@ t_cmd *sget_cmd_tab(void)
 		cmd->nb_cmd = nb_cmd;
 		while (++i < nb_cmd)
 		{
-			cmd[i].here_doc = NULL;
-			cmd[i].concat = NULL;
-			cmd[i].args = NULL;
-			cmd[i].input = NULL;
-			cmd[i].output = NULL;
-			cmd[i].cmd = NULL;
-			cmd[i].is_builtin = FALSE;
+			ft_memset(&cmd[i], 0, sizeof(t_cmd) - sizeof(cmd->nb_cmd));
 			token_list = parser(&cmd[i], token_list);
 		}
 	}
