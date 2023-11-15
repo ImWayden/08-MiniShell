@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/14 06:47:03 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 03:00:09 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ char *manage_location()
 	char	*msg;
 	
 	flag = *sget_location_flag(0);
-	if(flag & ERR_ENV)
-		(void)((clean_env(), 1) && (msg = ERR_MSG_ENV, 1));
-	// if(flag & ERR_ENV2)
-	// 	(void)((free(sget_env_tab(NOP)), 1) && (msg = ERR_MSG_ENV2, 1));
+	if(flag & ERR_PARSER)
+		(void)((clean_cmds(), 1) && (msg = ERR_MSG_PARSER, 1));
 	if(flag & ERR_TOKEN)
 		(void)((clean_tokens(), 1) && (msg = ERR_MSG_TOKEN, 1));
-	if(flag & ERR_PARSER)
-		(void)((free(sget_cmd_tab()), 1) && (msg = ERR_MSG_PARSER, 1));
+	// if(flag & ERR_ENV2)
+	// 	(void)((free(sget_env_tab(NOP)), 1) && (msg = ERR_MSG_ENV2, 1));
+	if(flag & ERR_ENV)
+		(void)((clean_env(), 1) && (msg = ERR_MSG_ENV, 1));
 	return(msg);
 }
 

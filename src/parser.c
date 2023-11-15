@@ -6,19 +6,19 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/14 06:26:06 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 03:20:43 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void insert_args_in_tab(char **tab, char *str)
+char **insert_args_in_tab(char **tab, char *str)
 {
 	int size;
 	char **new_array;
 	
 	size = 0;
-	if(!tab)
+	if(!tab || !*tab)
 	{
 		tab = (char **)p_malloc(sizeof(char *) * 2);
 		tab[0] = str;
@@ -27,12 +27,12 @@ void insert_args_in_tab(char **tab, char *str)
 	while(tab[size] != NULL)
 		size++;
 	new_array = (char **)p_malloc(sizeof(char *) * (size + 2));
-	new_array[size + 2] = NULL;
-	new_array[size + 1] = str;
+	new_array[size + 1] = NULL;
+	new_array[size] = str;
 	while (--size >= 0)
 		new_array[size] = tab[size];
 	free(tab);
-	tab = new_array;
+	return(new_array);
 }
 
 void token_merge(t_token *token, t_token *next)
@@ -173,6 +173,7 @@ t_token **parser(t_cmd *cmd, t_token **tokens)
 	bool has_cmd_been_found;
 	static t_token *token;
 
+	cmd->args = NULL;
 	token = *tokens;
 	has_cmd_been_found = FALSE;
 	if (token && token->type == TK_PIPE)
@@ -185,7 +186,7 @@ t_token **parser(t_cmd *cmd, t_token **tokens)
 			cmd->cmd = token->content;
 		}
 		else if (token->type == TK_WORD)
-			insert_args_in_tab(cmd->args, token->content);
+			cmd->args = insert_args_in_tab(cmd->args, token->content);
 		else
 			parser_handle_special(token, cmd);
 		token = token->next;
@@ -236,6 +237,7 @@ t_cmd *sget_cmd_tab(void)
 		i = -1;
 		nb_cmd = get_nb_cmd(token_list);
 		cmd = (t_cmd *)p_malloc(sizeof(t_cmd) * (nb_cmd + 1));
+		cmd->nb_cmd = nb_cmd;
 		correct_tokenlist(token_list);
 		while (++i < nb_cmd + 1)
 			token_list = parser(&cmd[i], token_list);

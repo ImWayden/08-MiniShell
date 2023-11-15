@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:35:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/14 06:49:51 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 02:12:11 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char *sget_input(void)
 {
-	static char *input = "test2 < test2";
+	static char *input = "cmd arg1 < redir_in > redir_out << here_doc >> concat";
 	// printf("%d",(!sget_init(INPUT, NOP)));
 	// printf("%d", sget_init(INPUT, SET));
 	if(sget_init(INPUT, NOP) && sget_init(INPUT, SET))

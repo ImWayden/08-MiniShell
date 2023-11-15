@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:24:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/14 05:45:24 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 03:22:51 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,15 @@ void clean_tokens(void)
 
 void clean_cmds(void)
 {
-	t_cmd	**cmds;
+	t_cmd	*cmds;
 	int		i;
 
 	i = 0;
-	while(cmds && cmds[i])
+	cmds = sget_cmd_tab();
+	while(cmds && cmds->nb_cmd > i)
 	{
-		
-		
+		p_free((void **)&cmds[i].args);
+		i++;
 	}
 	p_free((void **)&cmds);
 }

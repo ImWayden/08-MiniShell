@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/14 06:38:22 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/15 03:08:11 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ struct s_cmd
 	char *here_doc;
 	char *concat;
 	bool is_builtin;
+	int	nb_cmd; //peut potentiellement etre séparé dans une struct state séparer
 };
 
 typedef struct s_minishell_args t_mshellargs;
@@ -206,6 +207,7 @@ int	*sget_exitcode(void);
 */
 void clean_env(void);
 void clean_tokens(void);
+void clean_cmds(void);
 /*
 ** Utils
 */
