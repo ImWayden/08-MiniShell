@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 03:55:47 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/16 05:52:22 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@
 # define ERR_CONCAT 0x400
 # define ERR_ACCESS 0x800
 # define ERR_PIPE 0x1000
+# define ERR_READL 0x2000
 
 # define ERR_MSG_ENV "env chained list setup"
 # define ERR_MSG_ENV2 "env tab setup"
@@ -74,6 +75,8 @@
 # define ERR_MSG_ACCESS "permission denied"
 # define ERR_MSG_ACCESS_EXIST "file does not exist"
 # define ERR_MSG_PIPE "error near \'|\'"
+# define ERR_MSG_READL "can\'t read input"
+
 typedef enum s_refresh
 {
 	NOP,

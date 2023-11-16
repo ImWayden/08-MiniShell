@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 04:34:10 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/16 19:54:09 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,18 +126,22 @@ t_token *parser_handle_heredoc(t_token *token, t_cmd *cmd)
 	if (!token->next || token->next->type != TK_WORD)
 		handle_error(ERR_MSG_HEREDOC, NULL, ERR_HEREDOC);
 	delimiter = token->next->content;
-	s.str = readline("here_doc>");
+	//printf("delimiter  = %s",delimiter); //debug
+	s.str = readline("here_doc >");
+	cmd->here_doc = ft_strdup(s.str);
 	while(strcmp(delimiter, s.str) != 0)//replace with my ft_strcmp
 	{
-		s.part1 = ft_strjoin(s.str, "\n");
-		free(s.str);
-		s.part2 = readline("here_doc>");
-		s.str = ft_strjoin(s.part1, s.part2);
+		s.part1 = cmd->here_doc;
+		cmd->here_doc = ft_strjoin(cmd->here_doc, "\n");
 		free(s.part1);
-		free(s.part2);
+		free(s.str);
+		s.str = readline("here_doc >");
+		s.part1 = cmd->here_doc;
+		cmd->here_doc = ft_strjoin(cmd->here_doc, s.str);
+		free(s.part1);
 	}
+	free(s.str);
 	cmd->input = NULL;
-	cmd->here_doc = s.str;
 	token = token->next;
 	return (token);
 }

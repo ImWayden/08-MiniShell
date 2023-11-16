@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:35:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 04:14:54 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/16 05:54:26 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 char *sget_input(void)
 {
-	static char *input = "cmd arg1 < redir_in > redir_out >> concat";
+	static char *input = "cmd arg1 < redir_in > redir_out | test";
 	// printf("%d",(!sget_init(INPUT, NOP)));
 	// printf("%d", sget_init(INPUT, SET));
-	if(sget_init(INPUT, NOP) && sget_init(INPUT, SET))
+	if(!sget_init(INPUT, NOP) && sget_init(INPUT, SET))
 		input = readline(RED "minishell:>" RESET);
 	return (input);
 }

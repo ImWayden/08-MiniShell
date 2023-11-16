@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 04:27:47 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/16 19:52:49 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,12 @@ t_env *find_node_by_name(t_env **beign_list, const char *name_to_find)
 }
 
 
+/*
+**
+** testing parts
+** 
+*/
+
 void print_cmd(t_cmd *cmd) {
     if (cmd == NULL) {
         printf("Structure de commande NULL\n");
@@ -143,7 +149,6 @@ void print_cmd(t_cmd *cmd) {
 
 }
 
-
 int main(int argc, char *argv[], char **envp)
 {
 
@@ -159,13 +164,13 @@ int main(int argc, char *argv[], char **envp)
 	builtin_export("bonjour2");
 	builtin_export("bonjour3=");
 	char **str_array = sget_env_tab(NOP);
-	printf("%s\n", sget_input());
+	//printf("%s\n", sget_input());
 	// for (int i = 0; str_array[i] != NULL; i++) {
 	//     printf("Index %d : %s\n", i, str_array[i]);
 	// }
 	print_cmd(sget_cmd_tab());
 	sget_location_flag(ERR_PARSER);
-	display_token_list(*tokens);
+	//display_token_list(*tokens);
 	// builtin_env(env);
 	clean_cmds();
 	clean_tokens();
