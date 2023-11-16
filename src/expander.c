@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 02:57:50 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 03:07:52 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/16 22:51:27 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void expand_var(int *index, t_token *token)
 	if (--k >= i)
 	{
 		s.tmp = ft_substr(s.str, i, k - i + 1);
-		s.part2 = (char *)(find_node_by_name(sget_env(NULL), s.tmp)->content);
+		s.part2 = (char *)(p_find_node_by_name(sget_env(NULL), s.tmp));
 		s.part2 = ft_strjoin(s.part1, s.part2);
 		free(token->content);
 		token->content = ft_strjoin(s.part2, s.part3);

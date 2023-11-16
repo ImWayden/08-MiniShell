@@ -6,11 +6,23 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 04:39:18 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 04:00:09 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/16 22:56:28 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+char	*p_find_node_by_name(t_env **beign_list, const char *name_to_find)
+{
+	t_env	*env;
+
+	env = find_node_by_name(beign_list, name_to_find);
+	if (env)
+		return(env->content);
+	else
+		return(ft_strdup(""));
+}
 
 int p_open(const char *file, int flags, mode_t rights)
 {
@@ -50,7 +62,7 @@ void p_free(void **ptr)
         free(*ptr);
         *ptr = NULL;
     } else {
-		printf("Tentative de double free détectée.");
+		printf("Tentative de double free détectée.");// a suppr actuellemnt util uniquement pour check si ca arrive
         // Gestion de l'erreur (double free détecté)
         //handle_error("Tentative de double free détectée.", NULL, ERR_DOUBLE_FREE);
 	}
