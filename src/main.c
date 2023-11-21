@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 03:48:20 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 04:49:56 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int command_handler()
 	sget_cmd_tab();
 	//print_cmd(sget_cmd_tab());//debug
 	sget_location_flag(ERR_PARSER);
-	builtin_env(*sget_env(NULL));
+	verify_commands(sget_cmd_tab());
+	main_executor(sget_cmd_tab(), sget_env_tab(NOP));
 	clean_env();
 	clean_tokens();
 	clean_cmds();

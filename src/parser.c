@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/16 19:54:09 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 05:47:32 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,17 +185,13 @@ t_token **parser(t_cmd *cmd, t_token **tokens)
 		token = token->next;
 	while (token && token->type != TK_PIPE)
 	{
-		if (token->type == TK_WORD && !has_cmd_been_found)
-		{
-			has_cmd_been_found = TRUE;
-			cmd->cmd = token->content;
-		}
-		else if (token->type == TK_WORD)
+		if (token->type == TK_WORD)
 			cmd->args = insert_args_in_tab(cmd->args, token->content);
 		else
 			token = parser_handle_special(token, cmd);
 		token = token->next;
 	}
+	cmd->cmd = cmd->args[0];
 	if (token && token->type == TK_PIPE && !token->next)
 		handle_error(ERR_MSG_PIPE, NULL, ERR_PIPE);
 	if(token && token->next)

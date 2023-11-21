@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/20 23:54:41 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 04:50:15 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@
 # define ERR_PIPE 0x1000
 # define ERR_READL 0x2000
 # define ERR_CMD_NOT 0x4000
+# define ERR_DUP2 0x8000
 
 # define ERR_MSG_ENV "env chained list setup"
 # define ERR_MSG_ENV2 "env tab setup"
@@ -79,7 +80,7 @@
 # define ERR_MSG_PIPE "error near \'|\'"
 # define ERR_MSG_READL "can\'t read input"
 # define ERR_MSG_CMD_NOT "Command not found"
-
+# define ERR_MSG_DUP2 "dup can't dup"
 typedef enum s_refresh
 {
 	NOP,
@@ -239,5 +240,9 @@ int p_open(const char *file, int flags, mode_t test);
 int p_access(const char *file, int flags);
 void *p_malloc(size_t size);
 void p_free(void **ptr);
-
+/*
+** executor
+*/
+int main_executor(t_cmd *cmds, char **envp);
+int verify_commands(t_cmd *cmds);
 #endif
