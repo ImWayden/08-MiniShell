@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/16 22:51:50 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/20 23:54:41 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # include <fcntl.h>				   // Pour dup, dup2, pipe
 # include "My_Libft/header/libft.h" //libft_functions
 
+# define _XOPEN_SOURCE 700
 # define RESET "\033[0m"
 # define RED "\033[1;31m"
 # define GREEN "\033[1;32m"
@@ -60,6 +61,7 @@
 # define ERR_ACCESS 0x800
 # define ERR_PIPE 0x1000
 # define ERR_READL 0x2000
+# define ERR_CMD_NOT 0x4000
 
 # define ERR_MSG_ENV "env chained list setup"
 # define ERR_MSG_ENV2 "env tab setup"
@@ -76,12 +78,14 @@
 # define ERR_MSG_ACCESS_EXIST "file does not exist"
 # define ERR_MSG_PIPE "error near \'|\'"
 # define ERR_MSG_READL "can\'t read input"
+# define ERR_MSG_CMD_NOT "Command not found"
 
 typedef enum s_refresh
 {
 	NOP,
 	REFRESH,
-	SET
+	SET,
+	REFRESHALL
 } t_refresh;
 
 // typedef struct s_utils
@@ -211,6 +215,7 @@ int	*sget_exitcode(void);
 void clean_env(void);
 void clean_tokens(void);
 void clean_cmds(void);
+void clean_all(void);
 /*
 ** Utils
 */

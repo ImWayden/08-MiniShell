@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:35:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/16 05:54:26 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 00:50:35 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,25 @@ char *sget_input(void)
 	// printf("%d",(!sget_init(INPUT, NOP)));
 	// printf("%d", sget_init(INPUT, SET));
 	if(!sget_init(INPUT, NOP) && sget_init(INPUT, SET))
+	{
 		input = readline(RED "minishell:>" RESET);
+		add_history(input);
+	}
 	return (input);
 }
 
 bool sget_init(t_init index, int set)
 {
 	static bool init_tab[5] = {FALSE, FALSE, FALSE, FALSE, FALSE};
+	int			i;
+
+	i = 0;
 	if (set == REFRESH)
 		init_tab[index] = FALSE;
 	else if (set == SET)
 		init_tab[index] = TRUE;
+	else if (set == REFRESHALL)
+		ft_memset(&init_tab,FALSE,sizeof(bool) * 5);
 	return (init_tab[index]);
 }
 

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:24:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/16 19:47:10 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 00:15:10 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,14 @@ void clean_env(void)
 	char	**env_tab;
 	
 	env = *sget_env(NULL);
-	env_tab = sget_env_tab(NOP);
 	while (env != NULL)
 	{
 		temp = env;
 		env = env->next;
 		env_delone(temp);
 	}
+	env_tab = sget_env_tab(NOP);
+	p_free((void **)&env);
 	p_free((void **)&env_tab);
 }
 
@@ -59,4 +60,13 @@ void clean_cmds(void)
 	}
 	p_free((void **)&cmds);
 	sget_init(CMD, REFRESH);
+}
+
+void clean_all(void)
+{
+	char *input;
+
+	input = sget_input();
+	clean_env();
+	//p_free((void **)&input);
 }

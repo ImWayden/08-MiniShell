@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 04:35:18 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 00:58:35 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ void handle_error(const char *msg, const char *file ,t_error errorcode)
 	from = manage_location();
 	exitcode = 0;//a remplacer par la fonction qui choisit quel exit code entrer
 	if(errorcode & ERR_CLOSE || errorcode & ERR_OPEN || errorcode & ERR_ACCESS)
-		printf("minishell : %s : %s : %s", from, file, msg);
+		printf("minishell : %s : %s : %s\n", from, file, msg);
 	else
-		printf("minishell : %s : %s", from, msg);
+		printf("minishell : %s : %s\n", from, msg);
 	cleanhub();
 	exit(exitcode);
 }
