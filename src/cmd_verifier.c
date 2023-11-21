@@ -6,24 +6,24 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 05:40:32 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 10:57:31 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool verify(t_cmd *cmd, char *path, int i, int k)
+char *verify(t_cmd *cmd, char *path, int i, int k)
 {
 	char *tmp;
 	char *tmp2;
 
 	if (access(cmd->cmd, X_OK) == 0)
-		return (TRUE);
+		return (cmd->cmd);
 	//printf("path[i] = %c path = %s\n", path[i], path); // debug
-	while (path[i])
+	while (path && path[i])
 	{
 		k = i;
-		while (path[i] && path[i] != ':')
+		while (path && path[i] && path[i] != ':')
 			i++;
 		if (i != k)
 		{
@@ -34,12 +34,12 @@ bool verify(t_cmd *cmd, char *path, int i, int k)
 			tmp = ft_strjoin(tmp2, cmd->cmd);
 			free(tmp2);
 			if (access(tmp, X_OK) == 0)
-				return (free(cmd->cmd), cmd->cmd = tmp, TRUE);
+				return (tmp);
 			free(tmp);
 			i++;
 		}
 	}
-	return (FALSE);
+	return (ft_strdup(""));
 }
 
 int verify_commands(t_cmd *cmds)
@@ -52,8 +52,11 @@ int verify_commands(t_cmd *cmds)
 	nb_cmd = cmds->nb_cmd;
 	while (i < nb_cmd)
 	{
-		if (!cmds[i].cmd || !verify(&cmds[i], 
-				p_find_node_by_name(sget_env(NOP), "PATH"), 0, 0))
+		cmd = cmds[i].cmd;
+		cmds[i].cmd = verify(&cmds[i], p_find_node_by_name(sget_env(NOP), "PATH"), 0, 0);
+		if(cmd != cmds[i].cmd)
+			free(cmd);
+		if (!cmds[i].cmd || !cmds[i].cmd[0])
 		{
 			printf("omfg\n");
 			handle_error(ERR_MSG_CMD_NOT, cmds[i].cmd, ERR_CMD_NOT);

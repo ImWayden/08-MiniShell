@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:24:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 00:15:10 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 10:51:06 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void clean_cmds(void)
 	cmds = sget_cmd_tab();
 	while(cmds && cmds->nb_cmd > i)
 	{
+		p_free((void **)&cmds[i].cmd);
 		p_free((void **)&cmds[i].args);
 		p_free((void **)&cmds[i].here_doc);
 		i++;

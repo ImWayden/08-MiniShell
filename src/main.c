@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 04:49:56 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 08:59:42 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ void print_cmd(t_cmd *cmd) {
 	current = cmd[0];
 	int i = 0;
 	int nb_cmd = cmd[0].nb_cmd;
-	while(i < nb_cmd)
-	{
+
 		printf("Commande: %s\n", current.cmd);
 		printf("Arguments:\n");
 		char **arg = current.args;
@@ -47,7 +46,6 @@ void print_cmd(t_cmd *cmd) {
 		i++;
 		if(i < nb_cmd)
 			current = cmd[i];
-	}
 		// Vous pouvez également appeler récursivement print_cmd pour afficher la structure suivante
 }
 
@@ -143,11 +141,6 @@ int main(int argc, char *argv[], char **envp)
 		waitpid(child_pid, &status, 0);
 		exit_code = WEXITSTATUS(status);
 		printf("DEBUG : exit code = %d\n", exit_code);
-		if(exit_code == 2)
-		{
-			printf("ctrl+D detected, quitting");
-			//exit(0);
-		}
 		p_free((void **)&input);
 		sget_init(0, REFRESHALL);
 	}

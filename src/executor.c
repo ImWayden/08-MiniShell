@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 05:55:15 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 09:47:52 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ bool is_builtin(char *cmd)
 		return (FALSE);
 }
 
-
 static void	setup_outs(int *in, int *out, t_cmd *cmd, int pipe_fd[2])
 {
 	if (cmd->output)
@@ -57,12 +56,12 @@ static void	setup_outs(int *in, int *out, t_cmd *cmd, int pipe_fd[2])
 		*out = p_open(cmd->concat, O_CREAT | O_WRONLY | O_APPEND, 0666);
 		p_close(pipe_fd[1], "pipe");
 	}
-	else
+	else if(!cmd->first)
 		*out = pipe_fd[1];
 	if(out && *out)
 	{	
 		p_dup2(*out, STDOUT_FILENO, "outs");
-		p_close(*out, "outfile");
+		//p_close(*out, "outfile");
 		p_close(pipe_fd[0], "pipe");
 	}
 }	
@@ -84,9 +83,8 @@ static void	setup_ins(int *in, int *out, t_cmd *cmd, int pipe_fd[2])
 		p_close(here_doc[1], "pipe here_doc");
 		p_close(pipe_fd[0], "pipe");
 	}
-	else
+	else if(!cmd->last)
 		*in = pipe_fd[0];
-
 	p_dup2(*in, STDIN_FILENO, "in");
 	//p_close(*in, "input file");
 	printf("here");
@@ -97,6 +95,8 @@ static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2])
 	int in;
 	int out;
 	
+	in = STDIN_FILENO;
+	out = STDOUT_FILENO;
 	setup_ins(&in, &out, cmd, pipe_fd); //problème de redirection en cas de premier et dernier executable a executer
 	setup_outs(&in, &out, cmd, pipe_fd);
 	if (cmd->is_builtin == 2)// shoudl have been set in command verifier

@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "(gdb) Launch",
             "type": "cppdbg",
@@ -33,13 +34,47 @@
 					"start": true
 				},
 				{
-					"description": "Enable follow-fork-mode parent",
+                    "description": "Run with tracing child processes",
+                    "text": "set follow-fork-mode child",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+		{
+            "name": "Valgrind Memory Check",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "valgrind",
+            "args": ["--leak-check=full", "${workspaceFolder}//debug_minishell"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                },
+				{
+					"description": "Enable follow-fork-mode child",
 					"text": "-exec-run",
 					"ignoreFailures": true,
 					"start": true
-				}
+				},
+				{
+                    "description": "Run with tracing child processes",
+                    "text": "set follow-fork-mode child",
+                    "ignoreFailures": true
+                }
             ]
-        },
+        }
         // {
         //     "type": "by-gdb",
         //     "request": "launch",

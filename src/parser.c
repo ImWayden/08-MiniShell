@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 05:47:32 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 10:48:44 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ t_token **parser(t_cmd *cmd, t_token **tokens)
 			token = parser_handle_special(token, cmd);
 		token = token->next;
 	}
-	cmd->cmd = cmd->args[0];
+	cmd->cmd = ft_strdup(cmd->args[0]);
 	if (token && token->type == TK_PIPE && !token->next)
 		handle_error(ERR_MSG_PIPE, NULL, ERR_PIPE);
 	if(token && token->next)
@@ -239,12 +239,14 @@ t_cmd *sget_cmd_tab(void)
 		nb_cmd = get_nb_cmd(token_list);
 		correct_tokenlist(token_list);
 		cmd = (t_cmd *)p_malloc(sizeof(t_cmd) * (nb_cmd));
-		cmd->nb_cmd = nb_cmd;
 		while (++i < nb_cmd)
 		{
 			ft_memset(&cmd[i], 0, sizeof(t_cmd) - sizeof(cmd->nb_cmd));
+			cmd[i].nb_cmd = nb_cmd;
 			token_list = parser(&cmd[i], token_list);
 		}
+		cmd[0].first = 1;
+		cmd[i-1].last = 1;
 	}
 	return (cmd);
 }
