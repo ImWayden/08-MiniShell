@@ -6,7 +6,7 @@
 #    By: wayden <wayden@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/30 16:41:34 by wayden            #+#    #+#              #
-#    Updated: 2023/11/21 03:58:10 by wayden           ###   ########.fr        #
+#    Updated: 2023/11/22 12:01:18 by wayden           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ FILES = main
 
 FILES_DEBUG = env_setup builtins cleaning utils lst_to_tab lexer singletons \
 				parser expander error_handler protected_functions main cmd_verifier \
-				executor
+				executor serialize
 
 DIR = ./src/
 

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 09:00:09 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 12:00:13 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,20 @@
 # define ERR_CMD_NOT 0x4000
 # define ERR_DUP2 0x8000
 
+# define BUILTINS_EXEC 0x01
+# define BUILTINS_NOT_EXEC 0x02
+# define BUILTINS_EXEC_BACK 0x04
+# define BUILTINS_CD 0x08
+# define BUILTINS_PWD 0x10
+# define BUILTINS_ECHO 0x20
+# define BUILTINS_ENV 0x40
+# define BUILTINS_EXIT 0x80
+# define BUILTINS_EXPORT 0x100
+# define BUILTINS_UNSET 0x200
+
+# define RETURN_EXECBACK 789
+
+
 # define ERR_MSG_ENV "env chained list setup"
 # define ERR_MSG_ENV2 "env tab setup"
 # define ERR_MSG_TOKEN "tokenisateur"
@@ -117,7 +131,8 @@ typedef enum e_init
 	CMD,
 	ENV,
 	ENV_TAB,
-	INPUT
+	INPUT,
+	SCMD
 } t_init;
 
 typedef struct s_token t_token;
@@ -170,11 +185,18 @@ struct s_cmd
 	char *output;
 	char *here_doc;
 	char *concat;
-	bool is_builtin;
+	int is_builtin;
 	int	first;
 	int last;
 	int	nb_cmd; //peut potentiellement etre séparé dans une struct state séparer
 };
+
+typedef struct s_scmd
+{
+	char *cmd;
+	char **args;
+	int is_builtin;
+}	t_scmd;
 
 typedef struct s_minishell_args t_mshellargs;
 
@@ -212,6 +234,7 @@ char *sget_input();
 t_token **sget_token();
 t_cmd *sget_cmd_tab(void);
 int	*sget_exitcode(void);
+t_scmd *sget_scmd(void);
 /*
 ** cleaning functions
 */
@@ -219,6 +242,7 @@ void clean_env(void);
 void clean_tokens(void);
 void clean_cmds(void);
 void clean_all(void);
+void cleanhub();
 /*
 ** Utils
 */
@@ -229,6 +253,11 @@ char *ft_strncpy(char *s1, char *s2, int n);
 */
 void builtin_export(char *str);
 void builtin_env(t_env *env);
+void builtin_exit(void);
+void builtin_cd(const char *path);
+void builtin_pwd(void);
+void builtin_echo(char **strs, int flag_n);
+void builtin_unset(char *name);
 /*
 **	Error manager
 */
@@ -248,4 +277,8 @@ void p_free(void **ptr);
 int main_executor(t_cmd *cmds, char **envp);
 int verify_commands(t_cmd *cmds);
 void print_cmd(t_cmd *cmd);
+char **insert_args_in_tab(char **tab, char *str);
+void serialize(t_cmd *cmd);
+void handle_builtins2(void);
+
 #endif

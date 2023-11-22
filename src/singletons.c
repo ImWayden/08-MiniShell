@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:35:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 00:50:35 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 10:58:15 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char *sget_input(void)
 
 bool sget_init(t_init index, int set)
 {
-	static bool init_tab[5] = {FALSE, FALSE, FALSE, FALSE, FALSE};
+	static bool init_tab[6] = {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE};
 	int			i;
 
 	i = 0;
@@ -36,7 +36,7 @@ bool sget_init(t_init index, int set)
 	else if (set == SET)
 		init_tab[index] = TRUE;
 	else if (set == REFRESHALL)
-		ft_memset(&init_tab,FALSE,sizeof(bool) * 5);
+		ft_memset(&init_tab,FALSE,sizeof(bool) * 6);
 	return (init_tab[index]);
 }
 

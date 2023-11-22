@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 00:58:35 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 11:59:27 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ char *manage_location()
 	flag = *sget_location_flag(0);
 	if(flag & ERR_ENV)
 		msg = ERR_MSG_ENV;
-	// if(flag & ERR_ENV2)
-	// 	(void)((free(sget_env_tab(NOP)), 1) && (msg = ERR_MSG_ENV2, 1));
 	if(flag & ERR_TOKEN)
 		msg = ERR_MSG_TOKEN;
 	if(flag & ERR_PARSER)
@@ -52,8 +50,6 @@ void cleanhub()
 	if(flag & ERR_PARSER)
 		clean_cmds();
 }
-
-
 
 void handle_error(const char *msg, const char *file ,t_error errorcode)
 {
