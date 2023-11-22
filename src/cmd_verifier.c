@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 10:57:31 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/21 20:50:08 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ char *verify(t_cmd *cmd, char *path, int i, int k)
 			if (access(tmp, X_OK) == 0)
 				return (tmp);
 			free(tmp);
-			i++;
+			if(path[i])
+				i++;
 		}
 	}
 	return (ft_strdup(""));
@@ -57,10 +58,7 @@ int verify_commands(t_cmd *cmds)
 		if(cmd != cmds[i].cmd)
 			free(cmd);
 		if (!cmds[i].cmd || !cmds[i].cmd[0])
-		{
-			printf("omfg\n");
 			handle_error(ERR_MSG_CMD_NOT, cmds[i].cmd, ERR_CMD_NOT);
-		}
 		i++;
 	}
 }

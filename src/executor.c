@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 09:47:52 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 03:48:42 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,51 +44,46 @@ bool is_builtin(char *cmd)
 		return (FALSE);
 }
 
-static void	setup_outs(int *in, int *out, t_cmd *cmd, int pipe_fd[2])
-{
-	if (cmd->output)
-	{
-		*out = p_open(cmd->output, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-		p_close(pipe_fd[1], "pipe");
-	}
-	else if (cmd->concat)
-	{
-		*out = p_open(cmd->concat, O_CREAT | O_WRONLY | O_APPEND, 0666);
-		p_close(pipe_fd[1], "pipe");
-	}
-	else if(!cmd->first)
-		*out = pipe_fd[1];
-	if(out && *out)
-	{	
-		p_dup2(*out, STDOUT_FILENO, "outs");
-		//p_close(*out, "outfile");
-		p_close(pipe_fd[0], "pipe");
-	}
-}	
-
-static void	setup_ins(int *in, int *out, t_cmd *cmd, int pipe_fd[2])
+static void	setup_ins(int in,t_cmd *cmd, int pipe_fd[2])
 {
 	int here_doc[2];
-
+	t_cmd *cmd2;
+	
+	cmd2 = &cmd[1];
 	if (cmd->input)
-	{
-		*in = p_open(cmd->input, O_RDONLY, 0666);
-		p_close(pipe_fd[0], "pipe");
-	}
+		in = p_open(cmd->input, O_RDONLY, 0666);
 	else if(cmd->here_doc)
 	{
 		pipe(here_doc);
-		write(here_doc[1], &cmd->here_doc, ft_strlen(cmd->here_doc));
-		*in = here_doc[0];
+		write(here_doc[1], cmd->here_doc, ft_strlen(cmd->here_doc));
+		p_dup2(here_doc[0], STDIN_FILENO, "in");
 		p_close(here_doc[1], "pipe here_doc");
-		p_close(pipe_fd[0], "pipe");
 	}
-	else if(!cmd->last)
-		*in = pipe_fd[0];
-	p_dup2(*in, STDIN_FILENO, "in");
-	//p_close(*in, "input file");
-	printf("here");
+	if(in != STDIN_FILENO && (cmd->first == 1 
+		|| (cmd->first == 0 && in != pipe_fd[0])))
+		p_dup2(in, STDIN_FILENO, "in");
+	if(cmd->first == 1 || cmd->last == 1)
+		p_close(pipe_fd[0], "closed reading pipe on first process");
 }
+
+static void	setup_outs(int out, t_cmd *cmd, int pipe_fd[2])
+{
+	if (cmd->output)
+	{
+		out = p_open(cmd->output, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+		p_close(pipe_fd[1], "pipe 1");
+	}
+	else if (cmd->concat)
+	{
+		out = p_open(cmd->concat, O_CREAT | O_WRONLY | O_APPEND, 0666);
+		p_close(pipe_fd[1], "pipe 2");
+	}
+	else if(cmd->last == 0)
+		out = pipe_fd[1];
+	if(out != STDOUT_FILENO)
+		p_dup2(out, STDOUT_FILENO, "outs");
+	p_close(pipe_fd[1], "pipe 3");
+}	
 
 static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2])
 {
@@ -97,8 +92,8 @@ static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2])
 	
 	in = STDIN_FILENO;
 	out = STDOUT_FILENO;
-	setup_ins(&in, &out, cmd, pipe_fd); //problème de redirection en cas de premier et dernier executable a executer
-	setup_outs(&in, &out, cmd, pipe_fd);
+	setup_ins(in, cmd, pipe_fd); //problème de redirection en cas de premier et dernier executable a executer
+	setup_outs(out, cmd, pipe_fd);
 	if (cmd->is_builtin == 2)// shoudl have been set in command verifier
 		exit(2);//change with error code to indicate a non exec builtin + need to close the pipe_fd perhaps ?
 	else if(cmd->is_builtin == 1)
@@ -123,6 +118,7 @@ int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 	{
 		pipe(pipe_fd);
 		pid = fork();
+		//printf("process = %d\n  pipe_fd[0] = %d\n  pipe_fd[1] = %d\n",*i, pipe_fd[0], pipe_fd[1]); //debug
 		if (!pid)
 			launch_process(&cmd[*i], pipe_fd, envp);
 		p_dup2(pipe_fd[0], STDIN_FILENO, "main");

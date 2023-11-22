@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 04:39:18 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 01:01:45 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 03:03:14 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void p_free(void **ptr)
         free(*ptr);
         *ptr = NULL;
     } else {
-		printf("DEBUG : Tentative de double free détectée.\n");// a suppr actuellemnt util uniquement pour check si ca arrive
+		//printf("DEBUG : Tentative de double free détectée.\n");// a suppr actuellemnt util uniquement pour check si ca arrive
         // Gestion de l'erreur (double free détecté)
         //handle_error("Tentative de double free détectée.", NULL, ERR_DOUBLE_FREE);
 	}
