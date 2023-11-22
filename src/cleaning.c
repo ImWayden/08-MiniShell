@@ -6,18 +6,32 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:24:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/21 10:51:06 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 19:27:37 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void clean_scmd(void)
+{
+	t_scmd *cmd;
+	int i;
+
+	i = -1;
+	cmd = sget_scmd();
+	p_free((void **)&cmd->cmd);
+	while (cmd->args && cmd->args[++i])
+		p_free((void **)&cmd->args[i]);
+	p_free((void **)&cmd->args);
+	p_free((void **)&cmd);
+}
+
 void clean_env(void)
 {
-	t_env	*env;
-	t_env	*temp;
-	char	**env_tab;
-	
+	t_env *env;
+	t_env *temp;
+	char **env_tab;
+
 	env = *sget_env(NULL);
 	while (env != NULL)
 	{
@@ -47,12 +61,12 @@ void clean_tokens(void)
 
 void clean_cmds(void)
 {
-	t_cmd	*cmds;
-	int		i;
+	t_cmd *cmds;
+	int i;
 
 	i = 0;
 	cmds = sget_cmd_tab();
-	while(cmds && cmds->nb_cmd > i)
+	while (cmds && cmds->nb_cmd > i)
 	{
 		p_free((void **)&cmds[i].cmd);
 		p_free((void **)&cmds[i].args);
@@ -69,5 +83,6 @@ void clean_all(void)
 
 	input = sget_input();
 	clean_env();
-	//p_free((void **)&input);
+	clean_scmd();
+	// p_free((void **)&input);
 }

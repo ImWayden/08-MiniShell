@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 11:42:52 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 19:31:34 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ int command_handler()
 	//display_token_list(*sget_token());
 	sget_location_flag(ERR_TOKEN);
 	sget_cmd_tab();
-	display_token_list(*sget_token());
-	print_cmd(sget_cmd_tab());//debug
+	//display_token_list(*sget_token());
+	//print_cmd(sget_cmd_tab());//debug
 	sget_location_flag(ERR_PARSER);
 	verify_commands(sget_cmd_tab());
 	main_executor(sget_cmd_tab(), sget_env_tab(NOP));
@@ -145,6 +145,7 @@ int main(int argc, char *argv[], char **envp)
 			handle_builtins2();
 		//printf("DEBUG : exit code = %d\n", exit_code);
 		p_free((void **)&input);
+		clean_scmd();
 		sget_init(0, REFRESHALL);
 	}
 	clean_all();

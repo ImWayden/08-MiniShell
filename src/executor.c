@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 11:56:42 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 20:28:37 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,13 @@ void handle_builtins2(void)
 	t_scmd *cmd;
 	
 	cmd = sget_scmd();
+	sget_location_flag(ERR_SCMD);
 	if(cmd->is_builtin & BUILTINS_CD)
-		builtin_cd(cmd->cmd);
+		builtin_cd(cmd);
 	else if(cmd->is_builtin & BUILTINS_EXPORT)
-		builtin_export(cmd->cmd);//replace with t_scmd
+		builtin_export(cmd);//replace with t_scmd
 	else if(cmd->is_builtin & BUILTINS_UNSET)
-		builtin_unset(cmd->cmd);//replace with t_scmd
+		builtin_unset(cmd);//replace with t_scmd
 	else if(cmd->is_builtin & BUILTINS_EXIT)
 		builtin_exit();
 }
@@ -101,21 +102,27 @@ static void	setup_ins(int in,t_cmd *cmd, int pipe_fd[2])
 
 static void	setup_outs(int out, t_cmd *cmd, int pipe_fd[2])
 {
+	int f;
+
+	f = 0;
 	if (cmd->output)
 	{
 		out = p_open(cmd->output, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 		p_close(pipe_fd[1], "pipe 1");
+		f++;
 	}
 	else if (cmd->concat)
 	{
 		out = p_open(cmd->concat, O_CREAT | O_WRONLY | O_APPEND, 0666);
 		p_close(pipe_fd[1], "pipe 2");
+		f++;
 	}
 	else if(cmd->last == 0)
 		out = pipe_fd[1];
 	if(out != STDOUT_FILENO)
 		p_dup2(out, STDOUT_FILENO, "outs");
-	p_close(pipe_fd[1], "pipe 3");
+	if(!f)
+		p_close(pipe_fd[1], "pipe 3");
 }	
 
 static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2])
@@ -158,9 +165,11 @@ int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 		*i += 1;
 	}
 	p_close(0, "stdin");
-	if(i == 1)
+	//printf("%d",*i); //debug
+	if(*i == 1)
 	{
 		waitpid(pid, &status, 0);
+		//printf("%d", WEXITSTATUS(status));//debug
 		return (WEXITSTATUS(status));		
 	}
 	return (0);

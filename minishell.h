@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 12:00:13 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 19:39:47 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,19 @@
 # define ERR_ENV2 0b011
 # define ERR_TOKEN 0b0111
 # define ERR_PARSER 0b01111
-# define ERR_CLOSE 0x10
-# define ERR_OPEN 0x20
-# define ERR_MALLOC 0x40
-# define ERR_REDIR_IN 0x80
-# define ERR_REDIR_OUT 0x100
-# define ERR_HEREDOC 0x200
-# define ERR_CONCAT 0x400
-# define ERR_ACCESS 0x800
-# define ERR_PIPE 0x1000
-# define ERR_READL 0x2000
-# define ERR_CMD_NOT 0x4000
-# define ERR_DUP2 0x8000
+# define ERR_SCMD 0b011111
+# define ERR_CLOSE 0x100
+# define ERR_OPEN 0x200
+# define ERR_MALLOC 0x400
+# define ERR_REDIR_IN 0x800
+# define ERR_REDIR_OUT 0x1000
+# define ERR_HEREDOC 0x2000
+# define ERR_CONCAT 0x4000
+# define ERR_ACCESS 0x8000
+# define ERR_PIPE 0x10000
+# define ERR_READL 0x20000
+# define ERR_CMD_NOT 0x40000
+# define ERR_DUP2 0x80000
 
 # define BUILTINS_EXEC 0x01
 # define BUILTINS_NOT_EXEC 0x02
@@ -75,13 +76,14 @@
 # define BUILTINS_EXPORT 0x100
 # define BUILTINS_UNSET 0x200
 
-# define RETURN_EXECBACK 789
+# define RETURN_EXECBACK 89
 
 
 # define ERR_MSG_ENV "env chained list setup"
 # define ERR_MSG_ENV2 "env tab setup"
 # define ERR_MSG_TOKEN "tokenisateur"
 # define ERR_MSG_PARSER "parser"
+# define ERR_MSG_SCMD "scmd"
 # define ERR_MSG_MALLOC "malloc"
 # define ERR_MSG_OPEN	"open : can't open file"
 # define ERR_MSG_CLOSE	"close : can't close file"
@@ -241,6 +243,7 @@ t_scmd *sget_scmd(void);
 void clean_env(void);
 void clean_tokens(void);
 void clean_cmds(void);
+void clean_scmd(void);
 void clean_all(void);
 void cleanhub();
 /*
@@ -251,13 +254,13 @@ char *ft_strncpy(char *s1, char *s2, int n);
 /*
 ** Builtins
 */
-void builtin_export(char *str);
+void builtin_export(t_scmd *cmd);
 void builtin_env(t_env *env);
 void builtin_exit(void);
-void builtin_cd(const char *path);
+void builtin_cd(t_scmd *cmd);
 void builtin_pwd(void);
 void builtin_echo(char **strs, int flag_n);
-void builtin_unset(char *name);
+void builtin_unset(t_scmd *cmd);
 /*
 **	Error manager
 */

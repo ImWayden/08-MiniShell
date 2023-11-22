@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 11:59:27 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 19:05:26 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ char *manage_location()
 		msg = ERR_MSG_TOKEN;
 	if(flag & ERR_PARSER)
 		msg = ERR_MSG_PARSER;
+	if(flag & ERR_SCMD)
+		msg = ERR_MSG_SCMD;
 	return(msg);
 }
 
@@ -49,6 +51,8 @@ void cleanhub()
 		clean_tokens();
 	if(flag & ERR_PARSER)
 		clean_cmds();
+	if(flag & ERR_SCMD)
+		clean_scmd();
 }
 
 void handle_error(const char *msg, const char *file ,t_error errorcode)
