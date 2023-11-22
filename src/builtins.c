@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 20:22:36 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 22:31:01 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void builtin_env(t_env *env)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		env = env->next;
 	}
+	exit(0);
 }
 
 /*

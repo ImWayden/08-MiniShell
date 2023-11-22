@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 20:28:37 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 23:03:25 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,8 @@ static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2])
 		builtin_handler(cmd);//change with error code to indicate a non exec builtin + need to close the pipe_fd perhaps ?
 	else
 		execve(cmd->cmd, cmd->args, env);
+	perror("wtf");
+	exit(EXIT_FAILURE);
 }
 
 void launch_process(t_cmd *cmd, int pipe_fd[2], char **env)
@@ -185,8 +187,7 @@ int main_executor(t_cmd *cmds, char **envp)
 	i = 0;
 	if (executor(pipe_fd, (long int[]){(long int)&i, nb_cmd}, cmds, envp) == RETURN_EXECBACK)
 		exit(RETURN_EXECBACK);
-	if(i > 1)
-		while (i--)
-			wait(NULL);
+	while (i--)
+		wait(NULL);
 	return (0);
 }

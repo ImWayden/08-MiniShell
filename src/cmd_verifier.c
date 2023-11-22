@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 12:02:48 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 23:01:03 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,15 @@
 void is_builtin(t_cmd *cmd)
 {
 	char *name;
-
+	int		exec;
+	
 	name = cmd->cmd;
+	if (cmd->nb_cmd > 1)
+		exec = BUILTINS_NOT_EXEC; // changer la valeur pour indiquer que le builtin ne doit pas etre exec;
+	else
+		exec = BUILTINS_EXEC_BACK;
 	if (!strcmp(name, "cd"))
-		cmd->is_builtin = BUILTINS_CD;
+		cmd->is_builtin = BUILTINS_CD | exec;
 	else if (!strcmp(name, "pwd"))
 		cmd->is_builtin = BUILTINS_EXEC | BUILTINS_PWD;
 	else if (!strcmp(name, "echo"))
@@ -26,15 +31,12 @@ void is_builtin(t_cmd *cmd)
 	else if (!strcmp(name, "env"))
 		cmd->is_builtin = BUILTINS_EXEC | BUILTINS_ENV;
 	else if (!strcmp(name, "exit"))
-		cmd->is_builtin = BUILTINS_EXIT;
+		cmd->is_builtin = BUILTINS_EXIT | exec;
 	else if (!strcmp(name, "export"))
-		cmd->is_builtin = BUILTINS_EXPORT;
+		cmd->is_builtin = BUILTINS_EXPORT | exec;
 	else if (!strcmp(name, "unset"))
-		cmd->is_builtin = BUILTINS_EXPORT;
-	if (cmd->nb_cmd > 1)
-		cmd->is_builtin = cmd->is_builtin | BUILTINS_NOT_EXEC; // changer la valeur pour indiquer que le builtin ne doit pas etre exec;
-	else
-		cmd->is_builtin = cmd->is_builtin | BUILTINS_EXEC_BACK;
+		cmd->is_builtin = BUILTINS_EXPORT | exec;
+
 }
 
 char *verify(t_cmd *cmd, char *path, int i, int k)
