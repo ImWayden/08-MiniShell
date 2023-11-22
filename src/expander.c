@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 02:57:50 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/16 22:51:27 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/22 07:58:32 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,12 @@ void expender(t_token **tokens)
 	while (token)
 	{
 		if (token->type == TK_WORD || token->type == TK_DQUOTE)
+		{
 			expand(token);
+			token->type = TK_WORD;
+		}
+		else if(token->type == TK_SQUOTE)
+			token->type = TK_WORD;		
 		token = token->next;
 	}
 }
