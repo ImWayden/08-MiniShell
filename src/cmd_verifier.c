@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 23:01:03 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/24 08:17:31 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void is_builtin(t_cmd *cmd)
 	else if (!strcmp(name, "export"))
 		cmd->is_builtin = BUILTINS_EXPORT | exec;
 	else if (!strcmp(name, "unset"))
-		cmd->is_builtin = BUILTINS_EXPORT | exec;
+		cmd->is_builtin = BUILTINS_UNSET | exec;
 
 }
 

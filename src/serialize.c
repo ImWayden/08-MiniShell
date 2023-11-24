@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 09:59:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 19:32:19 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/24 04:38:29 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void serialize(t_cmd *cmd)
 	write(file, "\n", 1);
 	while(cmd->args[i] != NULL)
 	{
-		write(file, cmd->args[i], ft_strlen(cmd->args[i]));
+		write(file, cmd->args[i], ft_strlen(cmd->args[i]) + 1);
 		write(file, "\n", 1);
 		i++;
 	}
@@ -59,10 +59,13 @@ t_scmd *unserialize(void)
 	
 	i = 1;
 	cmd = (t_scmd *)malloc(sizeof(t_scmd));
+	cmd->args = NULL;
 	file = open(".serializedcmd", O_CREAT | O_RDWR, 0666);
 	if(file == -1)
-		return(NULL); 
+		return(NULL);
 	cmd->cmd = get_next_line(file);
+	if(!cmd->cmd)
+		return(NULL);
 	line = get_next_line(file);
 	cmd->is_builtin = ft_atoi(line);
 	free(line);
@@ -70,7 +73,7 @@ t_scmd *unserialize(void)
 	cmd->args = NULL;
 	while(line)
 	{
-		//printf("\nline  == %s\n",line); debug
+		//printf("\nline  == %s\n",line); //debug
 		cmd->args = insert_args_in_tab(cmd->args, line);
 		line = get_next_line(file);
 	}

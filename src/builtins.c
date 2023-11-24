@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 22:31:01 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/24 09:32:13 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void builtin_export(t_scmd *cmd)
 	i = -1;
 	while (cmd->args && cmd->args[++i])
 	{
-		cmd->args[i][ft_strlen(cmd->args[i]) - 1] = '\0';
 		j = 0;
 		while (cmd->args[i][j] && cmd->args[i][j] != '=')
 			j++;
@@ -76,7 +75,7 @@ void builtin_unset(t_scmd *cmd)
 
 	i = -1;
 	while (cmd->args[++i])
-		env_remove_if(sget_env(NULL), cmd->args[i], strcmp);
+		env_remove_if(sget_env(NULL), cmd->args[i], strcmp); //need some debugging idk why it does not work with the new export peprhaps because of \n char ? idk
 	refresh_env_tab();
 }
 
@@ -85,16 +84,22 @@ void builtin_unset(t_scmd *cmd)
 **
 **
 */
-void builtin_echo(char **strs, int flag_n)
+void builtin_echo(char **args, int flag_n)
 {
 	int i;
 
-	i = 0;
-	while (strs && strs[i] != NULL)
+	flag_n = 0;
+	i = 1;
+	if (args[1][0] == '-' && args[1][1] == 'n' && ft_strlen(args[1]) == 2)
 	{
-		write(STDOUT_FILENO, strs[i], ft_strlen(strs[i]));
+		flag_n = 1;
 		i++;
-		if (strs[i] != NULL)
+	}
+	while (args && args[i] != NULL)
+	{
+		write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
+		i++;
+		if (args[i] != NULL)
 			write(STDOUT_FILENO, " ", 1);
 	}
 	if (!flag_n)
@@ -102,14 +107,25 @@ void builtin_echo(char **strs, int flag_n)
 }
 
 /*
-** a priori non executable
-** si la commande contient des pipes
+** should work verify if no args or if args is unique and if it's numerical
+** then clean what's malloc and exit with custom or precedent exit code
 **
 */
-void builtin_exit(void)
+void builtin_exit(char **args, int is_builtin)
 {
+	int *exit_code;
+
+	exit_code = sget_exitcode();
+	if(args && args[0] && args[1])
+		handle_error(ERR_MSG_ARGS, "exit", ERR_EXIT);
+	if (args && args[0])
+	{
+		*exit_code = ft_simple_atoi_error(args[0]);
+		if(*exit_code == RETURN_EXIT_NUM_ERR)
+			handle_error(ERR_MSG_ARG_NUM, "exit", ERR_EXIT);
+	}
 	clean_all();
-	exit(0);
+	exit(*exit_code);
 }
 /*
 ** builtin pwd executable dans ligne
@@ -133,13 +149,25 @@ void builtin_pwd(void)
 **
 **
 */
-void builtin_cd(t_scmd *cmd)
+void builtin_cd(char **args)
 {
-	char *path;
-	if (cmd->args && cmd->args[0])
-		path = cmd->args[0];
+	char *str;
+	if(args && args[0] && args[1])
+		handle_error(ERR_MSG_ARGS, NULL, ERR_CD);
+	else if (!args)
+	{
+		str = p_find_node_by_name(sget_env(NULL),"HOME");
+		if (!str && (free(str),1))	
+			handle_error(ERR_MSG_CD_HOME, NULL, ERR_CD);
+	}
+	else if (strcmp(args[0], "-") == 0) //replace with ft_strcmp
+	{
+		str = p_find_node_by_name(sget_env(NULL),"OLDPWD");
+		if (!str && (free(str),1))	
+			handle_error(ERR_MSG_CD_HOME, NULL, ERR_CD);
+	}
 	else
-		path = NULL;
-	if (!path || (path[0] != '/' && path[0] != '.') || cmd->args[1] || (chdir(path) == -1))
-		perror("cd");
+		str = args[0];
+	if(chdir(str) == -1)
+		printf("%s\n", args[0]);
 }

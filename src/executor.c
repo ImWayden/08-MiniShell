@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 23:03:25 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/24 04:13:20 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,30 @@ void handle_builtins2(void)
 	t_scmd *cmd;
 	
 	cmd = sget_scmd();
-	sget_location_flag(ERR_SCMD);
 	if(cmd->is_builtin & BUILTINS_CD)
-		builtin_cd(cmd);
+		builtin_cd(cmd->args);
 	else if(cmd->is_builtin & BUILTINS_EXPORT)
 		builtin_export(cmd);//replace with t_scmd
 	else if(cmd->is_builtin & BUILTINS_UNSET)
 		builtin_unset(cmd);//replace with t_scmd
 	else if(cmd->is_builtin & BUILTINS_EXIT)
-		builtin_exit();
+		builtin_exit(cmd->args, cmd->is_builtin);
+	clean_scmd();
 }
 
 void builtin_handler(t_cmd *cmd)
 {
 	if(cmd->is_builtin & BUILTINS_EXEC)
+	{
 		builtin_executor(cmd);
+		exit(0);
+	}
 	else if(cmd->is_builtin & BUILTINS_NOT_EXEC)
 	{
-		cleanhub();
-		exit(0);//idk the code but 0 zero seems ok
+		serialize(cmd);
+		sget_scmd();
+		handle_builtins2();
+		exit(0);//need to change the exit code depending on sget_exit code
 	}
 	else if(cmd->is_builtin & BUILTINS_EXEC_BACK)
 	{

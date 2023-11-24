@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 04:39:18 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 03:03:14 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/24 04:19:39 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void *p_malloc(size_t size)
 
 void p_free(void **ptr) 
 {
-    if (*ptr != NULL) {
+    if (ptr != NULL && *ptr != NULL) {
         free(*ptr);
         *ptr = NULL;
     } else {

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 19:39:47 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/24 04:17:55 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@
 # define ERR_READL 0x20000
 # define ERR_CMD_NOT 0x40000
 # define ERR_DUP2 0x80000
+# define ERR_CD 0x100000
+# define ERR_EXIT 0x200000
 
 # define BUILTINS_EXEC 0x01
 # define BUILTINS_NOT_EXEC 0x02
@@ -77,7 +79,7 @@
 # define BUILTINS_UNSET 0x200
 
 # define RETURN_EXECBACK 89
-
+# define RETURN_EXIT_NUM_ERR -89
 
 # define ERR_MSG_ENV "env chained list setup"
 # define ERR_MSG_ENV2 "env tab setup"
@@ -97,6 +99,11 @@
 # define ERR_MSG_READL "can\'t read input"
 # define ERR_MSG_CMD_NOT "Command not found"
 # define ERR_MSG_DUP2 "dup can't dup"
+# define ERR_MSG_ARGS "too many arguments \n"
+# define ERR_MSG_CD_HOME "HOME is undefined\n"
+# define ERR_MSG_CD_PWD "OLDPWD is undefined\n"
+# define ERR_MSG_ARG_NUM "numeric argument required"
+
 typedef enum s_refresh
 {
 	NOP,
@@ -251,13 +258,14 @@ void cleanhub();
 */
 int get_nb_cmd(t_token **tokens);
 char *ft_strncpy(char *s1, char *s2, int n);
+int	ft_simple_atoi_error(const char *nptr);
 /*
 ** Builtins
 */
 void builtin_export(t_scmd *cmd);
 void builtin_env(t_env *env);
-void builtin_exit(void);
-void builtin_cd(t_scmd *cmd);
+void builtin_exit(char **args, int is_builtin);
+void builtin_cd(char **args);
 void builtin_pwd(void);
 void builtin_echo(char **strs, int flag_n);
 void builtin_unset(t_scmd *cmd);

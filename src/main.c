@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 19:31:34 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/24 03:37:19 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,26 +49,7 @@ void print_cmd(t_cmd *cmd) {
 		// Vous pouvez également appeler récursivement print_cmd pour afficher la structure suivante
 }
 
-void signal_handler(int signum) {
-    // Le processus enfant termine son exécution
-	if (signum == SIGINT)
-	{
-		printf("\nDEBUG : sigint command test\n");
-		clean_cmds();
-		clean_tokens();
-		clean_env();
-    	exit(2);	
-	}
-	else if (signum == SIGQUIT)
-	{
-		printf("\nDEBUG : sigquit command test\n");
-		clean_cmds();
-		clean_tokens();
-		clean_env();
-    	exit(2);		
-	}
 
-}
 
 void inter_signal_handler(int signum) 
 {
@@ -83,13 +64,7 @@ void inter_signal_handler(int signum)
 
 int command_handler()
 {
-	struct sigaction sa;
-	
-	sigemptyset(&sa.sa_mask);
-	sa.sa_handler = &signal_handler; //idk what i should do here
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	sget_token(SIGQUIT, &sa, NULL);
+
 	//display_token_list(*sget_token());
 	sget_location_flag(ERR_TOKEN);
 	sget_cmd_tab();
@@ -143,9 +118,10 @@ int main(int argc, char *argv[], char **envp)
 		exit_code = WEXITSTATUS(status);
 		if(exit_code == RETURN_EXECBACK)
 			handle_builtins2();
+		else
+			*sget_exitcode() = exit_code; 
 		//printf("DEBUG : exit code = %d\n", exit_code);
 		p_free((void **)&input);
-		clean_scmd();
 		sget_init(0, REFRESHALL);
 	}
 	clean_all();

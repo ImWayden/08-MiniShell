@@ -6,12 +6,12 @@
 #    By: wayden <wayden@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/30 16:41:34 by wayden            #+#    #+#              #
-#    Updated: 2023/11/22 12:01:18 by wayden           ###   ########.fr        #
+#    Updated: 2023/11/24 04:08:26 by wayden           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-DEBUGNAME = debug_minishell
+vDEBUGNAME = debug_minishell
 
 CC = cc
 CFLAGS = -g3 
@@ -36,17 +36,17 @@ $(NAME): $(OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -lreadline
 
-debug : $(NAME)
+valdebug : $(NAME)
 	valgrind ./minishell
 
-$(DEBUGNAME): $(OBJ_DEBUG)
-	$(CC) $(CFLAGS) $(OBJ_DEBUG) -o $(DEBUGNAME) -lreadline -L. -lft
+$(vDEBUGNAME): $(OBJ_DEBUG)
+	$(CC) $(CFLAGS) $(OBJ_DEBUG) -o $(vDEBUGNAME) -lreadline -L. -lft
 
 clean:
 	rm -rf ${OBJ} ${OBJ_DEBUG}
 	
 fclean: clean
-	rm -rf $(NAME) $(DEBUGNAME)
+	rm -rf $(NAME) $(vDEBUGNAME)
 	
 re: fclean all
 .PHONY:

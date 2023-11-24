@@ -6,7 +6,7 @@
     "configurations": [
 
         {
-            "name": "(gdb) Launch",
+            "name": "(gdb) subprocess",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}//debug_minishell",
@@ -40,19 +40,12 @@
                 }
             ]
         },
-		{
-			"name": "Attach to Subprocess 1",
-			"type": "cppdbg",
-			"request": "attach",
-			"program": "${workspaceFolder}//debug_minishell",
-			"processId": "${command:pickProcess}"
-		},
-		{
-            "name": "Valgrind Memory Check",
+        {
+            "name": "(gdb) main process",
             "type": "cppdbg",
             "request": "launch",
-            "program": "valgrind",
-            "args": ["--leak-check=full", "${workspaceFolder}//debug_minishell"],
+            "program": "${workspaceFolder}//debug_minishell",
+            "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
@@ -68,20 +61,9 @@
                     "description": "Set Disassembly Flavor to Intel",
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
-                },
-				{
-					"description": "Enable follow-fork-mode child",
-					"text": "-exec-run",
-					"ignoreFailures": true,
-					"start": true
-				},
-				{
-                    "description": "Run with tracing child processes",
-                    "text": "set follow-fork-mode child",
-                    "ignoreFailures": true
                 }
             ]
-        }
+        },
         // {
         //     "type": "by-gdb",
         //     "request": "launch",
