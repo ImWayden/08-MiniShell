@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/24 03:19:33 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/25 01:27:12 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,28 @@ void env_delone(t_env *node)
 	}
 }
 
-void env_remove_if(t_env **begin_list, char *name, int (*cmp)())
+void	env_remove_if(t_env **begin_list, char *name, int (*cmp)())
 {
-	t_env *cur = *begin_list;
+	t_env	*remove;
+	t_env	*current;
 
-	if (begin_list == NULL || *begin_list == NULL)
-		return;
-
-	if (!cmp(cur->name, name))
+	current = *begin_list;
+	while (current && current->next)
 	{
-		*begin_list = cur->next;
-		env_delone(cur);
-		env_remove_if(begin_list, name, cmp);
+		if ((*cmp)(current->next->name, name) == 0)
+		{
+			remove = current->next;
+			current->next = current->next->next;
+			free(remove);
+		}
+		current = current->next;
 	}
-	cur = *begin_list;
-	env_remove_if(&cur->next, name, cmp);
+	current = *begin_list;
+	if (current && (*cmp)(current->name, name) == 0)
+	{
+		*begin_list = current->next;
+		free(current);
+	}
 }
 
 static t_env *env_last(t_env *env)
@@ -65,6 +72,7 @@ t_env *env_new(char *str)
 
 	i = 0;
 	new_var = (t_env *)p_malloc(sizeof(t_env));
+	ft_bzero(new_var, sizeof(t_env));
 	if (!new_var)
 		return (NULL);
 	while (str[i] && str[i] != '=')

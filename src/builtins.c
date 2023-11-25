@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/24 09:32:13 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/25 02:05:28 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void builtin_export(t_scmd *cmd)
 	{
 		j = 0;
 		while (cmd->args[i][j] && cmd->args[i][j] != '=')
-			j++;
+			j++;	
 		content = ft_substr(cmd->args[i], 0, j);
 		env = find_node_by_name(sget_env(NULL), content);
 		free(content);
@@ -75,7 +75,7 @@ void builtin_unset(t_scmd *cmd)
 
 	i = -1;
 	while (cmd->args[++i])
-		env_remove_if(sget_env(NULL), cmd->args[i], strcmp); //need some debugging idk why it does not work with the new export peprhaps because of \n char ? idk
+		env_remove_if(sget_env(NULL), cmd->args[i], strcmp);
 	refresh_env_tab();
 }
 

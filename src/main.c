@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/24 03:37:19 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/25 03:15:51 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ void inter_signal_handler(int signum)
 		rl_on_new_line();
 		rl_redisplay();
 	}
+	if (signum == SIGQUIT)
+	{
+	}
 }
 
 int command_handler()
@@ -76,7 +79,7 @@ int command_handler()
 	clean_env();
 	clean_tokens();
 	clean_cmds();
-	exit(EXIT_SUCCESS);
+	exit(*sget_exitcode());
 }
 
 void init_vars(char **envp)
@@ -97,6 +100,7 @@ int main(int argc, char *argv[], char **envp)
 	int status;
 	struct sigaction sa;
 	
+	rl_catch_signals = 0;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = &inter_signal_handler;
 	sa.sa_flags = SA_RESTART;
@@ -117,14 +121,14 @@ int main(int argc, char *argv[], char **envp)
 		waitpid(child_pid, &status, 0);
 		exit_code = WEXITSTATUS(status);
 		if(exit_code == RETURN_EXECBACK)
-			handle_builtins2();
+			handle_builtins2(NULL);
 		else
 			*sget_exitcode() = exit_code; 
-		//printf("DEBUG : exit code = %d\n", exit_code);
+		printf("DEBUG : exit code = %d\n", *sget_exitcode());
 		p_free((void **)&input);
 		sget_init(0, REFRESHALL);
 	}
 	clean_all();
-	//rl_clear_history();
+	rl_clear_history();
 	return 0;
 }

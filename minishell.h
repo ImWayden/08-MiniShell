@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/24 04:17:55 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/25 02:59:19 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ char *sget_input();
 t_token **sget_token();
 t_cmd *sget_cmd_tab(void);
 int	*sget_exitcode(void);
-t_scmd *sget_scmd(void);
+t_scmd *sget_scmd(char *name);
 /*
 ** cleaning functions
 */
@@ -289,7 +289,7 @@ int main_executor(t_cmd *cmds, char **envp);
 int verify_commands(t_cmd *cmds);
 void print_cmd(t_cmd *cmd);
 char **insert_args_in_tab(char **tab, char *str);
-void serialize(t_cmd *cmd);
-void handle_builtins2(void);
+void serialize(t_cmd *cmd, char *name);
+void handle_builtins2(char *name);
 
 #endif

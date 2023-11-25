@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/24 04:13:20 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/25 03:04:26 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ void builtin_executor(t_cmd *cmd)
 	exit(0);
 }
 
-void handle_builtins2(void)
+void handle_builtins2(char *name)
 {
 	t_scmd *cmd;
 	
-	cmd = sget_scmd();
+	cmd = sget_scmd(name);
 	if(cmd->is_builtin & BUILTINS_CD)
 		builtin_cd(cmd->args);
 	else if(cmd->is_builtin & BUILTINS_EXPORT)
@@ -61,8 +61,10 @@ void handle_builtins2(void)
 	clean_scmd();
 }
 
-void builtin_handler(t_cmd *cmd)
+void builtin_handler(t_cmd *cmd, int n)
 {
+	char *str;
+	char *itoa;
 	if(cmd->is_builtin & BUILTINS_EXEC)
 	{
 		builtin_executor(cmd);
@@ -70,14 +72,16 @@ void builtin_handler(t_cmd *cmd)
 	}
 	else if(cmd->is_builtin & BUILTINS_NOT_EXEC)
 	{
-		serialize(cmd);
-		sget_scmd();
-		handle_builtins2();
+		itoa = ft_itoa(n);
+		str = ft_strjoin("cmd", itoa);
+		free(itoa);
+		serialize(cmd, str);
+		handle_builtins2(str);
 		exit(0);//need to change the exit code depending on sget_exit code
 	}
 	else if(cmd->is_builtin & BUILTINS_EXEC_BACK)
 	{
-		serialize(cmd);
+		serialize(cmd, "cmd");
 		cleanhub();
 		exit(RETURN_EXECBACK);
 	}
@@ -130,7 +134,7 @@ static void	setup_outs(int out, t_cmd *cmd, int pipe_fd[2])
 		p_close(pipe_fd[1], "pipe 3");
 }	
 
-static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2])
+static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2], int n)
 {
 	int in;
 	int out;
@@ -140,16 +144,16 @@ static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2])
 	setup_ins(in, cmd, pipe_fd); //problème de redirection en cas de premier et dernier executable a executer
 	setup_outs(out, cmd, pipe_fd);
 	if (cmd->is_builtin)// shoudl have been set in command verifier
-		builtin_handler(cmd);//change with error code to indicate a non exec builtin + need to close the pipe_fd perhaps ?
+		builtin_handler(cmd, n);//change with error code to indicate a non exec builtin + need to close the pipe_fd perhaps ?
 	else
 		execve(cmd->cmd, cmd->args, env);
 	perror("wtf");
 	exit(EXIT_FAILURE);
 }
 
-void launch_process(t_cmd *cmd, int pipe_fd[2], char **env)
+void launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
 {
-	exec_process(cmd,env,pipe_fd);
+	exec_process(cmd,env,pipe_fd, n);
 }
 
 int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
@@ -157,6 +161,7 @@ int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 	int pid;
 	int *i;
 	int status;
+	int exit_code;
 	
 	i = (int *)i_argc[0];
 	while (*i < i_argc[1])
@@ -165,7 +170,7 @@ int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 		pid = fork();
 		//printf("process = %d\n  pipe_fd[0] = %d\n  pipe_fd[1] = %d\n",*i, pipe_fd[0], pipe_fd[1]); //debug
 		if (!pid)
-			launch_process(&cmd[*i], pipe_fd, envp);
+			launch_process(&cmd[*i], pipe_fd, envp, *i);
 		p_dup2(pipe_fd[0], STDIN_FILENO, "main");
 		p_close(pipe_fd[0], "pipe");
 		p_close(pipe_fd[1], "pipe");
@@ -173,13 +178,11 @@ int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 	}
 	p_close(0, "stdin");
 	//printf("%d",*i); //debug
-	if(*i == 1)
-	{
-		waitpid(pid, &status, 0);
-		//printf("%d", WEXITSTATUS(status));//debug
-		return (WEXITSTATUS(status));		
-	}
-	return (0);
+
+	waitpid(pid, &status, 0);
+	//printf("%d", WEXITSTATUS(status));//debug
+	exit_code = WEXITSTATUS(status);
+	return (WEXITSTATUS(status));;
 }
 
 int main_executor(t_cmd *cmds, char **envp)
@@ -190,9 +193,10 @@ int main_executor(t_cmd *cmds, char **envp)
 
 	nb_cmd = cmds->nb_cmd;
 	i = 0;
-	if (executor(pipe_fd, (long int[]){(long int)&i, nb_cmd}, cmds, envp) == RETURN_EXECBACK)
+	*sget_exitcode() = executor(pipe_fd, (long int[]){(long int)&i, nb_cmd}, cmds, envp);
+	if (*sget_exitcode() == RETURN_EXECBACK)
 		exit(RETURN_EXECBACK);
 	while (i--)
 		wait(NULL);
-	return (0);
+	return (*sget_exitcode());
 }

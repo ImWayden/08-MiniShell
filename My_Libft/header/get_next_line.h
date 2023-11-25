@@ -3,43 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: therodri <therodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/21 07:48:32 by therodri          #+#    #+#             */
-/*   Updated: 2022/12/10 23:34:20 by therodri         ###   ########.fr       */
+/*   Created: 2021/10/19 11:15:27 by jdecorte          #+#    #+#             */
+/*   Updated: 2023/11/25 00:56:14 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# include "libft.h"
-# include <fcntl.h>
-# include <stddef.h>
-# include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
+# include <sys/types.h>
+# include <sys/uio.h>
 # include <unistd.h>
+# include "libft.h"
 
-/*
-# ifdef BUFFER_SIZE
-#  undef BUFFER_SIZE
-#  define BUFFER_SIZE 1000000
-# endif
-*/
+# define BUFFER_SIZE 3
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 5
-# endif
+char	*get_next_line(int fd);
 
-char		*get_next_line(int fd);
-
-typedef struct s_line
-{
-	char	*line;
-	int		end;
-	int		i;
-	int		j;
-	int		len;
-
-}			t_line;
 #endif
