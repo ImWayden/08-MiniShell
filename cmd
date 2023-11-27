@@ -1,3 +1,3 @@
-cd
-12
-src
+export
+260
+test=test

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/25 04:18:06 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/27 16:29:50 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,10 +150,6 @@ static void launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
 	exit(127);
 }
 
-void launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
-{
-	exec_process(cmd,env,pipe_fd, n);
-}
 
 int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 {
