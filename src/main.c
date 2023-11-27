@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/25 03:15:51 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/25 04:01:45 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void inter_signal_handler(int signum)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+		*sget_exitcode() = 130;
 	}
 	if (signum == SIGQUIT)
 	{

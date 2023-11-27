@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/25 03:04:26 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/25 04:18:06 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ static void	setup_outs(int out, t_cmd *cmd, int pipe_fd[2])
 		p_close(pipe_fd[1], "pipe 3");
 }	
 
-static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2], int n)
+static void launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
 {
 	int in;
 	int out;
@@ -147,8 +147,7 @@ static void exec_process(t_cmd *cmd, char **env, int pipe_fd[2], int n)
 		builtin_handler(cmd, n);//change with error code to indicate a non exec builtin + need to close the pipe_fd perhaps ?
 	else
 		execve(cmd->cmd, cmd->args, env);
-	perror("wtf");
-	exit(EXIT_FAILURE);
+	exit(127);
 }
 
 void launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
@@ -177,11 +176,7 @@ int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 		*i += 1;
 	}
 	p_close(0, "stdin");
-	//printf("%d",*i); //debug
-
 	waitpid(pid, &status, 0);
-	//printf("%d", WEXITSTATUS(status));//debug
-	exit_code = WEXITSTATUS(status);
 	return (WEXITSTATUS(status));;
 }
 

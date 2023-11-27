@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:24:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/24 04:23:33 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/25 03:59:28 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void clean_scmd(void)
 	int i;
 
 	i = -1;
-	cmd = sget_scmd();
+	cmd = sget_scmd(NULL);
 	if(!cmd)
 		return;
 	p_free((void **)&cmd->cmd);

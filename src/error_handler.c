@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/25 01:49:18 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/25 04:25:14 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,19 @@ void cleanhub()
 		clean_scmd();
 }
 
+t_error change_exitcode(t_error errcode)
+{
+	if(errcode == ERR_ACCESS)
+		return(1);
+}
+
 void handle_error(const char *msg, const char *file ,t_error errorcode)
 {
 	char	*from;
 	t_error				exitcode;
 	
 	from = manage_location();
-	exitcode = 55;//a remplacer par la fonction qui choisit quel exit code entrer
+	exitcode = 127;//a remplacer par la fonction qui choisit quel exit code entrer
 	if(errorcode & ERR_CLOSE || errorcode & ERR_OPEN || errorcode & ERR_ACCESS)
 		printf("minishell : %s : %s : %s\n", from, file, msg);
 	else
