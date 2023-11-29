@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 01:56:39 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 16:24:36 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ t_env *find_node_by_name(t_env **beign_list, const char *name_to_find)
 {
 	t_env *current = *beign_list;
 
-	while (current != NULL)
+	while (current)
 	{
 		if (strcmp(current->name, name_to_find) == 0) // replace by ft_strcmp
 			return current;

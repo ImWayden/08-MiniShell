@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/25 04:01:45 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 16:31:08 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,14 +101,14 @@ int main(int argc, char *argv[], char **envp)
 	int status;
 	struct sigaction sa;
 	
-	rl_catch_signals = 0;
+	rl_catch_signals = 0;//a
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = &inter_signal_handler;
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 	int i;
-
+	
 	i = 0;
 	init_vars(envp);
 	while(1)
