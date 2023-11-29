@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 03:03:40 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 03:22:40 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,13 +146,20 @@ void builtin_unset(t_scmd *cmd)
 void builtin_echo(char **args, int flag_n)
 {
 	int i;
-
+	int j;
+	
 	flag_n = 0;
 	i = 1;
-	if (args[1][0] == '-' && args[1][1] == 'n' && ft_strlen(args[1]) == 2)
+	j = 2;
+	if (args[1][0] == '-' && args[1][1] == 'n')
 	{
-		flag_n = 1;
-		i++;
+		while(args[i][j] == 'n')
+			j++;
+		if(!args[i][j])
+		{
+			flag_n = 1;
+			i++;
+		}
 	}
 	while (args && args[i] != NULL)
 	{

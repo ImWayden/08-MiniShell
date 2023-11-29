@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/27 16:29:50 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 03:05:57 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void builtin_handler(t_cmd *cmd, int n)
 		free(itoa);
 		serialize(cmd, str);
 		handle_builtins2(str);
-		exit(0);//need to change the exit code depending on sget_exit code
+		exit(*sget_exitcode());//need to change the exit code depending on sget_exit code
 	}
 	else if(cmd->is_builtin & BUILTINS_EXEC_BACK)
 	{
