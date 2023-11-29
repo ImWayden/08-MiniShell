@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 16:26:44 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 17:07:30 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,13 @@ void handle_error(const char *msg, const char *file ,t_error errorcode)
 	
 	from = manage_location();
 	exitcode = 127;//a remplacer par la fonction qui choisit quel exit code entrer
+	if(*sget_exitcode() == RETURN_EXECBACK)
+	{
+		ft_putstr_fd((char *)msg,STDERR_FILENO);
+		ft_putchar_fd('\n',STDERR_FILENO);
+		*sget_exitcode() = 1;
+		return;
+	}
 	if(errorcode & ERR_CLOSE || errorcode & ERR_OPEN || errorcode & ERR_ACCESS)
 		printf("minishell : %s : %s : %s\n", from, file, msg);
 	else
