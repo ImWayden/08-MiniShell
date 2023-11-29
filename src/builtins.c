@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 03:22:40 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 03:27:47 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void builtin_unset(t_scmd *cmd)
 **
 **
 */
-void builtin_echo(char **args, int flag_n)
+void	builtin_echo(char **args, int flag_n)
 {
 	int i;
 	int j;

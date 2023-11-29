@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 03:05:57 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 03:52:28 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,7 @@ static void	setup_ins(int in,t_cmd *cmd, int pipe_fd[2])
 	if(in != STDIN_FILENO && (cmd->first == 1 
 		|| (cmd->first == 0 && in != pipe_fd[0])))
 		p_dup2(in, STDIN_FILENO, "in");
-	if(cmd->first == 1 || cmd->last == 1)
-		p_close(pipe_fd[0], "closed reading pipe on first process");
+	p_close(pipe_fd[0], "closed reading pipe on first process");
 }
 
 static void	setup_outs(int out, t_cmd *cmd, int pipe_fd[2])
