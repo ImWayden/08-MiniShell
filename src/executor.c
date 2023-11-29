@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 03:52:28 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 04:22:10 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,13 @@ void p_close(int fd, char *file)
 void p_dup2(int fd, int fd2, char *debug)
 {
 	int dp;
-	
+
 	dp = dup2(fd, fd2);
 	if(dp == -1)
 	{
 		printf("%s\n", debug);
 		handle_error(ERR_MSG_DUP2, NULL, ERR_DUP2);
 	}
-
 }
 void builtin_executor(t_cmd *cmd)
 {
@@ -40,7 +39,7 @@ void builtin_executor(t_cmd *cmd)
 	else if(cmd->is_builtin & BUILTINS_ENV)
 		builtin_env(*sget_env(NULL));
 	else if(cmd->is_builtin & BUILTINS_ECHO)
-		builtin_echo(cmd->args, 0); //remplacer par cmd probablement comme ca on ne se retrouve pas emmerder
+		builtin_echo(cmd->args, 0);
 	cleanhub();
 	exit(0);
 }
@@ -77,7 +76,7 @@ void builtin_handler(t_cmd *cmd, int n)
 		free(itoa);
 		serialize(cmd, str);
 		handle_builtins2(str);
-		exit(*sget_exitcode());//need to change the exit code depending on sget_exit code
+		exit(*sget_exitcode());
 	}
 	else if(cmd->is_builtin & BUILTINS_EXEC_BACK)
 	{
@@ -137,13 +136,13 @@ static void launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
 {
 	int in;
 	int out;
-	
+
 	in = STDIN_FILENO;
 	out = STDOUT_FILENO;
-	setup_ins(in, cmd, pipe_fd); //problème de redirection en cas de premier et dernier executable a executer
+	setup_ins(in, cmd, pipe_fd);
 	setup_outs(out, cmd, pipe_fd);
-	if (cmd->is_builtin)// shoudl have been set in command verifier
-		builtin_handler(cmd, n);//change with error code to indicate a non exec builtin + need to close the pipe_fd perhaps ?
+	if (cmd->is_builtin)
+		builtin_handler(cmd, n);
 	else
 		execve(cmd->cmd, cmd->args, env);
 	exit(127);
@@ -156,13 +155,12 @@ int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 	int *i;
 	int status;
 	int exit_code;
-	
+
 	i = (int *)i_argc[0];
 	while (*i < i_argc[1])
 	{
 		pipe(pipe_fd);
 		pid = fork();
-		//printf("process = %d\n  pipe_fd[0] = %d\n  pipe_fd[1] = %d\n",*i, pipe_fd[0], pipe_fd[1]); //debug
 		if (!pid)
 			launch_process(&cmd[*i], pipe_fd, envp, *i);
 		p_dup2(pipe_fd[0], STDIN_FILENO, "main");
