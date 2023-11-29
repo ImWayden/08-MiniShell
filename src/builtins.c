@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 16:30:43 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 16:57:17 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,8 +223,18 @@ void builtin_cd(char **args)
 	else if (!args)
 	{
 		str = p_find_node_by_name(sget_env(NULL),"HOME");
-		if (!str[0] && (free(str),1))	
-			handle_error(ERR_MSG_CD_HOME, NULL, ERR_CD);
+		if (!str[0] && (free(str),1))
+		{
+			if(*sget_exitcode() == RETURN_EXECBACK)
+			{
+				ft_putstr_fd("minishell : cd : "ERR_MSG_CD_HOME,STDERR_FILENO);
+				ft_putchar_fd('\n',STDERR_FILENO);
+				*sget_exitcode() = 1;
+				return;
+			}
+			else
+				handle_error(ERR_MSG_CD_HOME, NULL, ERR_CD);
+		}
 	}
 	else if (strcmp(args[0], "-") == 0) //replace with ft_strcmp
 	{

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 16:31:08 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 16:40:15 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,9 @@ int main(int argc, char *argv[], char **envp)
 		if (!child_pid)
 			command_handler();
 		waitpid(child_pid, &status, 0);
-		exit_code = WEXITSTATUS(status);
-		if(exit_code == RETURN_EXECBACK)
+		*sget_exitcode() = WEXITSTATUS(status);
+		if(*sget_exitcode() == RETURN_EXECBACK)
 			handle_builtins2(NULL);
-		else
-			*sget_exitcode() = exit_code; 
 		printf("DEBUG : exit code = %d\n", *sget_exitcode());
 		p_free((void **)&input);
 		sget_init(0, REFRESHALL);
