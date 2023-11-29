@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/25 02:59:19 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 01:31:57 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ struct s_env
 	char *name;
 	char *content;
 	char *full;
+	bool isok;
 	t_env *next;
 };
 

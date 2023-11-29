@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/25 02:05:28 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 03:03:40 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,45 +21,104 @@ void builtin_env(t_env *env)
 {
 	while (env != NULL)
 	{
-		ft_putstr_fd(env->name, STDOUT_FILENO);
-		ft_putchar_fd('=', STDOUT_FILENO);
-		ft_putstr_fd(env->content, STDOUT_FILENO);
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		if(env->isok == TRUE)
+		{
+			ft_putstr_fd(env->name, STDOUT_FILENO);
+			ft_putchar_fd('=', STDOUT_FILENO);
+			ft_putstr_fd(env->content, STDOUT_FILENO);
+			ft_putchar_fd('\n', STDOUT_FILENO);
+		}
 		env = env->next;
 	}
 	exit(0);
 }
 
+void print_export_env(char c)
+{
+	t_env *env;
+
+	env = *sget_env(NULL);
+	while (env != NULL)
+	{
+		if(env->name[0] == c)
+			ft_putstr_fd("declare -x ",STDOUT_FILENO);
+		if(env->isok == TRUE && env->name[0] == c)
+		{
+			ft_putstr_fd(env->name, STDOUT_FILENO);
+			ft_putchar_fd('=', STDOUT_FILENO);
+			ft_putchar_fd('\"', STDOUT_FILENO);
+			ft_putstr_fd(env->content, STDOUT_FILENO);
+			ft_putchar_fd('\"', STDOUT_FILENO);
+			ft_putchar_fd('\n', STDOUT_FILENO);
+		}
+		if(env->isok == FALSE && env->name[0] == c)
+		{
+			ft_putstr_fd(env->name, STDOUT_FILENO);
+			ft_putchar_fd('\n', STDOUT_FILENO);
+		}
+		env = env->next;
+	}
+}
 /*
 **
 ** 	fonctionne a priori peut etre beosin de plus de tests
 **  ne fonctionne pas dans les commande piped
 **
 */
+void export_utils2(char *args, int j, t_env *env)
+{
+	char *content;
+	
+	content = ft_strdup(&args[j + 1]);
+	free(env->content);
+	env->content = content;
+	free(env->full);
+	env->full = ft_strdup(args);
+}
+
+void export_utils1(char *args, int j, t_env *env)
+{
+	char *content;
+
+	while (args[j] && args[j] != '=')
+		j++;	
+	content = ft_substr(args, 0, j);
+	env = find_node_by_name(sget_env(NULL), content);
+	free(content);
+	if (env && args[j])
+		export_utils2(args, j, env);
+	else if(ft_isalpha(args[0]))
+		env_add_back(sget_env(NULL), env_new(args));
+	else
+	{
+		ft_putstr_fd("bash: export: not a valid identifier\n", STDERR_FILENO);
+		*sget_exitcode() = 1;
+	}
+}
+
 void builtin_export(t_scmd *cmd)
 {
 	int i;
-	int j;
-	char *content;
 	t_env *env;
+	char	c;
 
 	i = -1;
 	while (cmd->args && cmd->args[++i])
+		export_utils1(cmd->args[i], 0, env);
+	if (!cmd->args)
 	{
-		j = 0;
-		while (cmd->args[i][j] && cmd->args[i][j] != '=')
-			j++;	
-		content = ft_substr(cmd->args[i], 0, j);
-		env = find_node_by_name(sget_env(NULL), content);
-		free(content);
-		if (env && cmd->args[i][j])
+		c = 'A';
+		while(c <= 'Z')
 		{
-			content = ft_strdup(&cmd->args[i][j + 1]);
-			free(env->content);
-			env->content = content;
+			print_export_env(c);
+			c++;
 		}
-		else
-			env_add_back(sget_env(NULL), env_new(cmd->args[i]));
+		c = 'a';
+		while(c <= 'z')
+		{
+			print_export_env(c);
+			c++;
+		}
 	}
 	refresh_env_tab();
 }
@@ -74,8 +133,8 @@ void builtin_unset(t_scmd *cmd)
 	int i;
 
 	i = -1;
-	while (cmd->args[++i])
-		env_remove_if(sget_env(NULL), cmd->args[i], strcmp);
+	while (cmd->args && cmd->args[++i])
+		env_remove_if(sget_env(NULL), cmd->args[i], strcmp); //need some debugging idk why it does not work with the new export peprhaps because of \n char ? idk
 	refresh_env_tab();
 }
 

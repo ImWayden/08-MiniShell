@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/25 01:27:12 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/29 01:56:39 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,12 @@ t_env *env_new(char *str)
 	new_var->name = (char *)p_malloc(sizeof(char) * (i + 1));
 	ft_strncpy(new_var->name, str, i);
 	if (str[i])
+	{
 		new_var->content = ft_strdup(&str[i + 1]);
+		new_var->isok = TRUE;
+	}
 	else
-		return (env_delone(new_var), NULL);
+		new_var->content = ft_strdup(&str[i + 1]);
 	new_var->next = NULL;
 	new_var->full = ft_strdup(str);
 	return (new_var);
