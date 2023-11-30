@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:14:56 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 13:10:58 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@
 # define ERR_DUP2 0x80000
 # define ERR_CD 0x100000
 # define ERR_EXIT 0x200000
+# define ERR_HEREDOC_INTERRUPT 0x400000
 
 # define BUILTINS_EXEC 0x01
 # define BUILTINS_NOT_EXEC 0x02
@@ -141,7 +142,8 @@ typedef enum e_init
 	ENV,
 	ENV_TAB,
 	INPUT,
-	SCMD
+	SCMD,
+	SIGNAL
 } t_init;
 
 typedef struct s_token t_token;

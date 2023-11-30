@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:23:46 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 13:04:56 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void merge_quotes(t_token **tokens)
 	t_token *token;
 
 	token = *tokens;
-	while (token->next)
+	while (token && token->next)
 	{
 		if ((token->type >= TK_SQUOTE && token->type <= TK_WORD) 
 			&& (token->next->type >= TK_SQUOTE && token->next->type <= TK_WORD))
@@ -128,18 +128,20 @@ t_token *parser_handle_heredoc(t_token *token, t_cmd *cmd)
 	delimiter = token->next->content;
 	s.str = expand(readline("here_doc >"));
 	cmd->here_doc = ft_strdup(s.str);
-	while(strcmp(delimiter, s.str) != 0)//replace with my ft_strcmp
+	while(s.str && strcmp(delimiter, s.str) != 0)//replace with my ft_strcmp
 	{
 		s.part1 = cmd->here_doc;
 		cmd->here_doc = ft_strjoin(cmd->here_doc, "\n");
 		(void)((free(s.part1),1) && (free(s.str),1));
 		s.str = expand(readline("here_doc >"));
-		if(strcmp(delimiter, s.str) == 0)
+		if(!s.str || strcmp(delimiter, s.str) == 0)
 			break;
 		s.part1 = cmd->here_doc;
 		cmd->here_doc = ft_strjoin(cmd->here_doc, s.str);
 		free(s.part1);
 	}
+	if(!s.str)
+		ft_putchar_fd('\n',STDOUT_FILENO);
 	free(s.str);
 	cmd->input = NULL; 
 	token = token->next;
@@ -234,6 +236,8 @@ t_cmd *sget_cmd_tab(void)
 	{
 		i = -1;
 		token_list = sget_token();
+		if(!*token_list)
+			return (NULL);
 		nb_cmd = get_nb_cmd(token_list);
 		correct_tokenlist(token_list);
 		cmd = (t_cmd *)p_malloc(sizeof(t_cmd) * (nb_cmd));

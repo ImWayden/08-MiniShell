@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 02:57:50 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:10:42 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:57:03 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ char *expand(char *content)
 	int i;
 
 	i = 0;
+	if(!content)
+		return (NULL);
 	while (content[i])
 	{
 		if (content[i] == '$' && content[i + 1])

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:14:15 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 14:23:00 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,11 @@ void print_cmd(t_cmd *cmd) {
 void inter_signal_handler(int signum) 
 {
 	if (signum == SIGINT)
-	{
+	{	
+		// printf("%d\n", getpid());
+		// fflush(stdout);
 		ft_putstr_fd("\n", 2);
-		rl_replace_line("", 0);
+		rl_replace_line("", 1);
 		rl_on_new_line();
 		rl_redisplay();
 		*sget_exitcode() = 130;
@@ -70,6 +72,15 @@ int command_handler()
 {
 
 	//display_token_list(*sget_token());
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	//printf("%d\n", getpid());
+	fflush(stdout);
+	if(!*sget_token())
+	{
+		clean_tokens();
+		exit(0);
+	}	
 	sget_location_flag(ERR_TOKEN);
 	sget_cmd_tab();
 	//display_token_list(*sget_token());
@@ -88,24 +99,18 @@ void init_vars(char **envp)
 	sget_init(0, REFRESH);
 	sget_env(envp);
 	sget_env_tab(NOP);
+	sget_scmd(NULL);
 	sget_location_flag(ERR_ENV);
 }
-
-
 
 int main(int argc, char *argv[], char **envp)
 {
 	pid_t child_pid;
 	char *input;
 	int status;
-	struct sigaction sa;
 	
-	rl_catch_signals = 0;//a
-	sigemptyset(&sa.sa_mask);
-	sa.sa_handler = &inter_signal_handler;
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	signal(SIGINT, inter_signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 	(void)argc;
 	(void)argv;
 	init_vars(envp);
@@ -123,6 +128,7 @@ int main(int argc, char *argv[], char **envp)
 			handle_builtins2(NULL);
 		printf("DEBUG : exit code = %d\n", *sget_exitcode());
 		p_free((void **)&input);
+		clean_scmd();
 		sget_init(0, REFRESHALL);
 	}
 	clean_all();

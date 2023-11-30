@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 09:59:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:16:00 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:49:43 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_scmd *unserialize(char *name)
 	char *line;
 	int file;
 
-	cmd = (t_scmd *)malloc(sizeof(t_scmd));
+	cmd = (t_scmd *)p_malloc(sizeof(t_scmd));
 	cmd->args = NULL;
 	file = open(name, O_CREAT | O_RDWR, 0666);
 	if(file == -1)
@@ -80,14 +80,18 @@ t_scmd *unserialize(char *name)
 
 t_scmd *sget_scmd(char *name)
 {
-	static t_scmd *cmd;	
-
+	static t_scmd	*cmd;	
+	
 	if(!sget_init(SCMD, NOP) && sget_init(SCMD, SET))
 	{	
 		if(name)
 			cmd = unserialize(name);
 		else
-			cmd = unserialize(ft_strdup("cmd"));
+		{
+			name = ft_strdup("cmd");
+			cmd = unserialize(name);
+			free(name);
+		}
 		if(!cmd)
 			return(NULL);
 		//afficher_scmd(cmd);
