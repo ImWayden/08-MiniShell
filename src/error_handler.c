@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:10:56 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 16:34:32 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ t_error change_exitcode(t_error errcode)
 {
 	if(errcode == ERR_ACCESS)
 		return(1);
+	else if(errcode == ERR_CD)
+		return(1);
+	else if (errcode == ERR_EXIT)
+		return (2);
+	else
+		return(127);
 	return(0);
 }
 
@@ -68,7 +74,7 @@ void handle_error(const char *msg, const char *file ,t_error errorcode)
 	t_error				exitcode;
 	
 	from = manage_location();
-	exitcode = 127;//a remplacer par la fonction qui choisit quel exit code entrer
+	exitcode = change_exitcode(errorcode);//a remplacer par la fonction qui choisit quel exit code entrer
 	if(*sget_exitcode() == RETURN_EXECBACK)
 	{
 		ft_putstr_fd((char *)msg,STDERR_FILENO);

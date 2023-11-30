@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 15:00:52 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 17:08:20 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,34 @@ void input_signal_handler(int signum)
 	}
 }
 
+void child_signal_handler(int signum) 
+{
+	if (signum == SIGINT)
+	{	
+		clean_all();
+		clean_tokens();
+		clean_cmds();
+		*sget_exitcode() = 130;
+		exit(*sget_exitcode());
+	}
+	if (signum == SIGQUIT)
+	{
+		clean_all();
+		clean_tokens();
+		clean_cmds();
+		*sget_exitcode() = 131;
+		exit(*sget_exitcode());
+	}
+}
+
+
+
 int command_handler()
 {
 
 	//display_token_list(*sget_token());
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, child_signal_handler);
+	signal(SIGQUIT, child_signal_handler);
 	//printf("%d\n", getpid());
 	fflush(stdout);
 	if(!*sget_token())
@@ -100,7 +122,7 @@ int command_handler()
 	sget_location_flag(ERR_PARSER);
 	verify_commands(sget_cmd_tab());
 	main_executor(sget_cmd_tab(), sget_env_tab(NOP));
-	clean_env();
+	clean_all();
 	clean_tokens();
 	clean_cmds();
 	exit(*sget_exitcode());
@@ -138,6 +160,7 @@ int main(int argc, char *argv[], char **envp)
 		signal(SIGQUIT, wait_signal_handler);
 		waitpid(child_pid, &status, 0);
 		signal(SIGINT, input_signal_handler);
+		signal(SIGQUIT, input_signal_handler);
 		if(*sget_exitcode() == RETURN_SIGINT)
 			*sget_exitcode() = -RETURN_SIGINT;
 		else if (*sget_exitcode() == RETURN_SIGQUIT)
@@ -146,9 +169,9 @@ int main(int argc, char *argv[], char **envp)
 			*sget_exitcode() = WEXITSTATUS(status);
 		if(*sget_exitcode() == RETURN_EXECBACK)
 			handle_builtins2(NULL);
+		clean_scmd();
 		printf("DEBUG : exit code = %d\n", *sget_exitcode());
 		p_free((void **)&input);
-		clean_scmd();
 		sget_init(0, REFRESHALL);
 	}
 	clean_all();

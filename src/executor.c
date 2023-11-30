@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:15:40 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 17:09:51 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void handle_builtins2(char *name)
 		builtin_unset(cmd);//replace with t_scmd
 	else if(cmd->is_builtin & BUILTINS_EXIT)
 		builtin_exit(cmd->args);
-	clean_scmd();
 }
 
 void builtin_handler(t_cmd *cmd, int n)
@@ -159,7 +158,11 @@ int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 		pipe(pipe_fd);
 		pid = fork();
 		if (!pid)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			launch_process(&cmd[*i], pipe_fd, envp, *i);
+		}
 		p_dup2(pipe_fd[0], STDIN_FILENO, "main");
 		p_close(pipe_fd[0], "pipe");
 		p_close(pipe_fd[1], "pipe");
@@ -180,7 +183,12 @@ int main_executor(t_cmd *cmds, char **envp)
 	i = 0;
 	*sget_exitcode() = executor(pipe_fd, (long int[]){(long int)&i, nb_cmd}, cmds, envp);
 	if (*sget_exitcode() == RETURN_EXECBACK)
+	{
+		clean_all();
+		clean_tokens();
+		clean_cmds();
 		exit(RETURN_EXECBACK);
+	}
 	while (i--)
 		wait(NULL);
 	return (*sget_exitcode());

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 14:58:21 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 15:24:30 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@
 # define ERR_MSG_CMD_NOT "Command not found"
 # define ERR_MSG_DUP2 "dup can't dup"
 # define ERR_MSG_ARGS "too many arguments"
+# define ERR_MSG_CD "error chdir"
 # define ERR_MSG_CD_HOME "HOME is undefined"
 # define ERR_MSG_CD_PWD "OLDPWD is undefined"
 # define ERR_MSG_ARG_NUM "numeric argument required"

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:05:03 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 16:27:34 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void builtin_env(t_env *env)
 		}
 		env = env->next;
 	}
+	clean_all();
 	exit(0);
 }
 
@@ -184,12 +185,15 @@ void builtin_exit(char **args)
 
 	exit_code = sget_exitcode();
 	if(args && args[0] && args[1])
-		handle_error(ERR_MSG_ARGS, "exit", ERR_EXIT);
+		return (handle_error(ERR_MSG_ARGS, "exit", ERR_EXIT),(void)0);
 	if (args && args[0])
 	{
 		*exit_code = ft_simple_atoi_error(args[0]);
 		if(*exit_code == RETURN_EXIT_NUM_ERR)
+		{
+			*sget_exitcode() = 2;
 			handle_error(ERR_MSG_ARG_NUM, "exit", ERR_EXIT);
+		}
 	}
 	clean_all();
 	exit(*exit_code);
@@ -236,5 +240,7 @@ void builtin_cd(char **args)
 	else
 		str = args[0];
 	if(chdir(str) == -1)
-		printf("%s\n", args[0]);
+		return (handle_error(ERR_MSG_CD, NULL, ERR_CD),(void)0);
+	else
+		*sget_exitcode() = 0;
 }
