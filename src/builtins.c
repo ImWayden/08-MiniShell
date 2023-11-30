@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 17:08:40 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:05:03 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void builtin_export(t_scmd *cmd)
 	char	c;
 
 	i = -1;
+	env = NULL;
 	while (cmd->args && cmd->args[++i])
 		export_utils1(cmd->args[i], 0, env);
 	if (!cmd->args)
@@ -177,7 +178,7 @@ void	builtin_echo(char **args, int flag_n)
 ** then clean what's malloc and exit with custom or precedent exit code
 **
 */
-void builtin_exit(char **args, int is_builtin)
+void builtin_exit(char **args)
 {
 	int *exit_code;
 

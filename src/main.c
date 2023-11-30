@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 16:40:15 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:14:15 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int main(int argc, char *argv[], char **envp)
 {
 	pid_t child_pid;
 	char *input;
-	int exit_code;
 	int status;
 	struct sigaction sa;
 	
@@ -107,9 +106,8 @@ int main(int argc, char *argv[], char **envp)
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
-	int i;
-	
-	i = 0;
+	(void)argc;
+	(void)argv;
 	init_vars(envp);
 	while(1)
 	{

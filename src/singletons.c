@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:35:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/22 10:58:15 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:09:18 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ char *sget_input(void)
 bool sget_init(t_init index, int set)
 {
 	static bool init_tab[6] = {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE};
-	int			i;
 
-	i = 0;
 	if (set == REFRESH)
 		init_tab[index] = FALSE;
 	else if (set == SET)
@@ -42,10 +40,11 @@ bool sget_init(t_init index, int set)
 
 t_token sget_tk_spe(int i)
 {
-	static const t_token	tokens[8] = {{"<<", 2, TK_HEREDOC},\
-	{">>", 2, TK_CONCAT}, {"<", 1, TK_REDIR_ENT}, {">", 1, TK_REDIR_EXT},\
-		{" ", 1, TK_SPACE}, {"|", 1, TK_PIPE}, {"\'", 1, TK_SQUOTE},\
-		{"\"", 1, TK_DQUOTE}};
+	static const t_token	tokens[8] = {{"<<", 2, TK_HEREDOC,NULL},\
+	{">>", 2, TK_CONCAT,NULL}, {"<", 1, TK_REDIR_ENT,NULL},\
+	{">", 1, TK_REDIR_EXT,NULL}, {" ", 1, TK_SPACE, NULL},\
+	{"|", 1, TK_PIPE, NULL}, {"\'", 1, TK_SQUOTE,NULL},\
+	{"\"", 1, TK_DQUOTE,NULL}};
 	return(tokens[i]);
 }
 

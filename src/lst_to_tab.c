@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/05 01:05:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 02:22:03 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:06:10 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ char **sget_env_tab(t_refresh refresh)
 void refresh_env_tab(void)
 {
 	char	**env_tab;
-	t_env	**env;
 
 	env_tab = sget_env_tab(NOP);
 	free(env_tab);

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/24 08:17:31 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:14:32 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char *verify(t_cmd *cmd, char *path, int i, int k)
 	return (ft_strdup(""));
 }
 
-int verify_commands(t_cmd *cmds)
+void verify_commands(t_cmd *cmds)
 {
 	int i;
 	int nb_cmd;

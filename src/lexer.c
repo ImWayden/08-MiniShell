@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 22:56:43 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/15 02:25:19 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:06:52 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ bool is_quote(int *index, char *str, t_token_type *token)
 			return (*token = TK_DQUOTE, *index = i, TRUE);
 	}
 	else
-		return FALSE;
+		return (FALSE);
+	return (FALSE);
 }
 
 bool handle_token(int *index, char *str, t_token_type *token, int i)
@@ -88,12 +89,10 @@ bool handle_token(int *index, char *str, t_token_type *token, int i)
 
 bool is_token(t_token **tk_lst, int *start, int *index, t_token_type *token)
 {
-	t_token_type prev;
 	t_token tokens;
 	char *str;
 	int i;
 
-	prev = *token;
 	i = -1;
 	str = sget_input();
 	while (++i < 8)

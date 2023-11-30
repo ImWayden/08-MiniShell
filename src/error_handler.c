@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 17:07:30 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:10:56 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_error change_exitcode(t_error errcode)
 {
 	if(errcode == ERR_ACCESS)
 		return(1);
+	return(0);
 }
 
 void handle_error(const char *msg, const char *file ,t_error errorcode)

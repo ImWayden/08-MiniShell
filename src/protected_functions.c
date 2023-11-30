@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 04:39:18 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 16:29:20 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:11:07 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int p_open(const char *file, int flags, mode_t rights)
 
 int p_access(const char *file, int flags)
 {
-	int ret;
-
 	if(flags & F_OK && access(file, F_OK) == -1)
 		handle_error(ERR_MSG_ACCESS_EXIST, file, ERR_ACCESS);
 	if(flags & W_OK && access(file, W_OK) == -1)

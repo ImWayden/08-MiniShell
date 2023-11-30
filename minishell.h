@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 16:32:03 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:14:56 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,7 +265,7 @@ int	ft_simple_atoi_error(const char *nptr);
 */
 void builtin_export(t_scmd *cmd);
 void builtin_env(t_env *env);
-void builtin_exit(char **args, int is_builtin);
+void builtin_exit(char **args);
 void builtin_cd(char **args);
 void builtin_pwd(void);
 void builtin_echo(char **strs, int flag_n);
@@ -287,10 +287,13 @@ void p_free(void **ptr);
 ** executor
 */
 int main_executor(t_cmd *cmds, char **envp);
-int verify_commands(t_cmd *cmds);
+void verify_commands(t_cmd *cmds);
 void print_cmd(t_cmd *cmd);
 char **insert_args_in_tab(char **tab, char *str);
 void serialize(t_cmd *cmd, char *name);
 void handle_builtins2(char *name);
-
+/*
+expand
+*/
+char *expand(char *content);
 #endif

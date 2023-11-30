@@ -6,7 +6,7 @@
 #    By: wayden <wayden@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/30 16:41:34 by wayden            #+#    #+#              #
-#    Updated: 2023/11/24 04:08:26 by wayden           ###   ########.fr        #
+#    Updated: 2023/11/30 05:02:28 by wayden           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 vDEBUGNAME = debug_minishell
 
 CC = cc
-CFLAGS = -g3 
+CFLAGS = -g3 -Wall -Werror -Wextra
 
 FILES = main
 

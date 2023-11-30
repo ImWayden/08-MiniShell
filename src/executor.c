@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 04:22:10 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:15:40 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void handle_builtins2(char *name)
 	else if(cmd->is_builtin & BUILTINS_UNSET)
 		builtin_unset(cmd);//replace with t_scmd
 	else if(cmd->is_builtin & BUILTINS_EXIT)
-		builtin_exit(cmd->args, cmd->is_builtin);
+		builtin_exit(cmd->args);
 	clean_scmd();
 }
 
@@ -89,9 +89,7 @@ void builtin_handler(t_cmd *cmd, int n)
 static void	setup_ins(int in,t_cmd *cmd, int pipe_fd[2])
 {
 	int here_doc[2];
-	t_cmd *cmd2;
-	
-	cmd2 = &cmd[1];
+
 	if (cmd->input)
 		in = p_open(cmd->input, O_RDONLY, 0666);
 	else if(cmd->here_doc)
@@ -154,7 +152,6 @@ int executor(int pipe_fd[2], long int i_argc[2], t_cmd *cmd, char **envp)
 	int pid;
 	int *i;
 	int status;
-	int exit_code;
 
 	i = (int *)i_argc[0];
 	while (*i < i_argc[1])

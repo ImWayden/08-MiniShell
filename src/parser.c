@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/25 00:37:15 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:23:46 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char **insert_args_in_tab(char **tab, char *str)
 void token_merge(t_token *token, t_token *next)
 {
 	char *str;
-	size_t size;
 
 	if (token->type == TK_SPACE)
 	{
@@ -127,22 +126,22 @@ t_token *parser_handle_heredoc(t_token *token, t_cmd *cmd)
 	if (!token->next || token->next->type != TK_WORD)
 		handle_error(ERR_MSG_HEREDOC, NULL, ERR_HEREDOC);
 	delimiter = token->next->content;
-	//printf("delimiter  = %s",delimiter); //debug
-	s.str = readline("here_doc >");
+	s.str = expand(readline("here_doc >"));
 	cmd->here_doc = ft_strdup(s.str);
 	while(strcmp(delimiter, s.str) != 0)//replace with my ft_strcmp
 	{
 		s.part1 = cmd->here_doc;
 		cmd->here_doc = ft_strjoin(cmd->here_doc, "\n");
-		free(s.part1);
-		free(s.str);
-		s.str = readline("here_doc >");
+		(void)((free(s.part1),1) && (free(s.str),1));
+		s.str = expand(readline("here_doc >"));
+		if(strcmp(delimiter, s.str) == 0)
+			break;
 		s.part1 = cmd->here_doc;
 		cmd->here_doc = ft_strjoin(cmd->here_doc, s.str);
 		free(s.part1);
 	}
 	free(s.str);
-	cmd->input = NULL;
+	cmd->input = NULL; 
 	token = token->next;
 	return (token);
 }
@@ -177,11 +176,9 @@ t_token *parser_handle_special(t_token *token, t_cmd *cmd)
 
 t_token **parser(t_cmd *cmd, t_token **tokens)
 {
-	bool has_cmd_been_found;
 	static t_token *token;
 
 	token = *tokens;
-	has_cmd_been_found = FALSE;
 	if (token && token->type == TK_PIPE)
 		token = token->next;
 	while (token && token->type != TK_PIPE)
@@ -229,7 +226,7 @@ void correct_tokenlist(t_token **token_list)
 t_cmd *sget_cmd_tab(void)
 {
 	static t_cmd *cmd;
-	size_t i;
+	int i;
 	t_token **token_list;
 	int nb_cmd;
 

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:20:19 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/24 09:28:42 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 05:05:54 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char *var_interpreter(char *str)
 		env = env->next;
 	if (env)
 		return (env->content);
+	return (NULL);
 }
 
 int	ft_simple_atoi_error(const char *nptr)
