@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 13:10:58 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 14:58:21 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@
 # define BUILTINS_UNSET 0x200
 
 # define RETURN_EXECBACK 89
+# define RETURN_SIGINT -130
+# define RETURN_SIGQUIT -131
 # define RETURN_EXIT_NUM_ERR -89
 
 # define ERR_MSG_ENV "env chained list setup"

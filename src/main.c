@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 14:28:30 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 15:00:52 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,19 @@ void print_cmd(t_cmd *cmd) {
 
 
 
-void inter_signal_handler(int signum) 
+void wait_signal_handler(int signum) 
+{
+	if (signum == SIGINT)
+	{	
+		*sget_exitcode() = RETURN_SIGINT;
+	}
+	if (signum == SIGQUIT)
+	{
+		*sget_exitcode() = RETURN_SIGQUIT;
+	}
+}
+
+void input_signal_handler(int signum) 
 {
 	if (signum == SIGINT)
 	{	
@@ -109,7 +121,7 @@ int main(int argc, char *argv[], char **envp)
 	char *input;
 	int status;
 	
-	signal(SIGINT, inter_signal_handler);
+	signal(SIGINT, input_signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	(void)argc;
 	(void)argv;
@@ -122,10 +134,16 @@ int main(int argc, char *argv[], char **envp)
 		child_pid = fork();
 		if (!child_pid)
 			command_handler();
-		signal(SIGINT, SIG_IGN);
+		signal(SIGINT, wait_signal_handler);
+		signal(SIGQUIT, wait_signal_handler);
 		waitpid(child_pid, &status, 0);
-		signal(SIGINT, inter_signal_handler);
-		*sget_exitcode() = WEXITSTATUS(status);
+		signal(SIGINT, input_signal_handler);
+		if(*sget_exitcode() == RETURN_SIGINT)
+			*sget_exitcode() = -RETURN_SIGINT;
+		else if (*sget_exitcode() == RETURN_SIGQUIT)
+			*sget_exitcode() = -RETURN_SIGQUIT;
+		else
+			*sget_exitcode() = WEXITSTATUS(status);
 		if(*sget_exitcode() == RETURN_EXECBACK)
 			handle_builtins2(NULL);
 		printf("DEBUG : exit code = %d\n", *sget_exitcode());
