@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:40:05 by wayden           ###   ########.fr       */
+/*   Updated: 2023/11/30 17:46:26 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ void is_builtin(t_cmd *cmd)
 	char *name;
 	int		exec;
 	
-	name = cmd->cmd;
+	if(!cmd->cmd)
+		return;
+	name = cmd->cmd;	
 	if (cmd->nb_cmd > 1)
 		exec = BUILTINS_NOT_EXEC; // changer la valeur pour indiquer que le builtin ne doit pas etre exec;
 	else

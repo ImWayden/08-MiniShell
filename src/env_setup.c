@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 21:52:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/29 16:24:36 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/18 19:20:41 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,9 @@ t_env **sget_env(char **envp)
 	return &env;
 }
 
-t_env *find_node_by_name(t_env **beign_list, const char *name_to_find)
+t_env *find_node_by_name(t_env **begin_list, const char *name_to_find)
 {
-	t_env *current = *beign_list;
+	t_env *current = *begin_list;
 
 	while (current)
 	{

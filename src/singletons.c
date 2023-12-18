@@ -6,21 +6,30 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:35:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 05:09:18 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/18 18:54:53 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *sget_input(void)
+char *sget_input(char *str)
 {
-	static char *input = "cmd arg1 < redir_in > redir_out | test";
+	static char *input;
 	// printf("%d",(!sget_init(INPUT, NOP)));
 	// printf("%d", sget_init(INPUT, SET));
 	if(!sget_init(INPUT, NOP) && sget_init(INPUT, SET))
 	{
-		input = readline(RED "minishell:>" RESET);
-		add_history(input);
+		if(str)
+		{
+			if(input && *input)
+				free(input);
+			input = str;
+		}
+		else
+		{
+			input = readline(RED "minishell:>" RESET);
+			add_history(input);
+		}
 	}
 	return (input);
 }

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 16:34:32 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/18 19:09:08 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,13 @@ void cleanhub()
 
 t_error change_exitcode(t_error errcode)
 {
-	if(errcode == ERR_ACCESS)
+	if (errcode == ERR_NOCOMMAND)
+		return(0);
+	else if(errcode == ERR_ACCESS)
 		return(1);
 	else if(errcode == ERR_CD)
 		return(1);
-	else if (errcode == ERR_EXIT)
+	else if (errcode == ERR_EXIT || errcode == ERR_PIPE)
 		return (2);
 	else
 		return(127);
@@ -84,7 +86,7 @@ void handle_error(const char *msg, const char *file ,t_error errorcode)
 	}
 	if(errorcode & ERR_CLOSE || errorcode & ERR_OPEN || errorcode & ERR_ACCESS)
 		printf("minishell : %s : %s : %s\n", from, file, msg);
-	else
+	else if(!(errorcode & ERR_NOCOMMAND))
 		printf("minishell : %s : %s\n", from, msg);
 	cleanhub();
 	exit(exitcode);

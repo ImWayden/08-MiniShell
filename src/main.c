@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 17:08:20 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/18 19:26:15 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,15 +109,20 @@ int command_handler()
 	signal(SIGINT, child_signal_handler);
 	signal(SIGQUIT, child_signal_handler);
 	//printf("%d\n", getpid());
-	fflush(stdout);
+	// fflush(stdout);
 	if(!*sget_token())
 	{
+		clean_all();
 		clean_tokens();
 		exit(0);
-	}	
+	}
+	// printf("-------------- token list before -----------------\n");
+	// display_token_list(*sget_token());
+	correct_tokenlist(sget_token(),get_nb_cmd(sget_token()));
 	sget_location_flag(ERR_TOKEN);
+	// printf("-------------- token list after -----------------\n");
+	// display_token_list(*sget_token());
 	sget_cmd_tab();
-	//display_token_list(*sget_token());
 	//print_cmd(sget_cmd_tab());//debug
 	sget_location_flag(ERR_PARSER);
 	verify_commands(sget_cmd_tab());
@@ -150,23 +155,14 @@ int main(int argc, char *argv[], char **envp)
 	init_vars(envp);
 	while(1)
 	{
-		input = sget_input();
+		input = sget_input(NULL);
 		if(!input)
 			break;
 		child_pid = fork();
 		if (!child_pid)
 			command_handler();
-		signal(SIGINT, wait_signal_handler);
-		signal(SIGQUIT, wait_signal_handler);
 		waitpid(child_pid, &status, 0);
-		signal(SIGINT, input_signal_handler);
-		signal(SIGQUIT, input_signal_handler);
-		if(*sget_exitcode() == RETURN_SIGINT)
-			*sget_exitcode() = -RETURN_SIGINT;
-		else if (*sget_exitcode() == RETURN_SIGQUIT)
-			*sget_exitcode() = -RETURN_SIGQUIT;
-		else
-			*sget_exitcode() = WEXITSTATUS(status);
+		*sget_exitcode() = WEXITSTATUS(status);
 		if(*sget_exitcode() == RETURN_EXECBACK)
 			handle_builtins2(NULL);
 		clean_scmd();

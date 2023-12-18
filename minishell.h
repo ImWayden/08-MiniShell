@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/11/30 15:24:30 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/18 18:54:23 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@
 # define ERR_CD 0x100000
 # define ERR_EXIT 0x200000
 # define ERR_HEREDOC_INTERRUPT 0x400000
+# define ERR_NOCOMMAND 0x800000
 
 # define BUILTINS_EXEC 0x01
 # define BUILTINS_NOT_EXEC 0x02
@@ -99,6 +100,7 @@
 # define ERR_MSG_ACCESS "permission denied"
 # define ERR_MSG_ACCESS_EXIST "file does not exist"
 # define ERR_MSG_PIPE "error near \'|\'"
+# define ERR_MSG_PIPE2 "error no command detected"
 # define ERR_MSG_READL "can\'t read input"
 # define ERR_MSG_CMD_NOT "Command not found"
 # define ERR_MSG_DUP2 "dup can't dup"
@@ -245,7 +247,7 @@ void handle_space(t_token **tokens);
 ** singletons
 */
 t_token sget_tk_spe(int i);
-char *sget_input();
+char *sget_input(char *str);
 t_token **sget_token();
 t_cmd *sget_cmd_tab(void);
 int	*sget_exitcode(void);
@@ -301,4 +303,6 @@ void handle_builtins2(char *name);
 expand
 */
 char *expand(char *content);
+void correct_tokenlist(t_token **token_list, int nb_cmd);
+void verify_voidcommands(t_token **token_list, int nb_cmd);
 #endif
