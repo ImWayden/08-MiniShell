@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: therodri <therodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 01:59:17 by therodri          #+#    #+#             */
-/*   Updated: 2022/12/10 22:43:38 by therodri         ###   ########.fr       */
+/*   Updated: 2023/12/27 05:26:32 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	**ft_split(const char *str, char c)
 	{
 		res[0] = NULL;
 		return (res);
-	}	
+	}
 	res[count] = NULL;
 	if (!ft_str_to_tab((char *)str, c, res))
 		return (freetab(res, count - 1));

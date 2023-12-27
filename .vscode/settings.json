@@ -5,6 +5,8 @@
 		"unistd.h": "c",
 		"stdbool.h": "c",
 		"stdlib.h": "c",
-		"typeinfo": "c"
+		"typeinfo": "c",
+		"libft.h": "c",
+		"garbage_collector.h": "c"
 	}
 }

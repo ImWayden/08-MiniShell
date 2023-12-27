@@ -6,36 +6,37 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/18 18:54:23 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/27 05:52:34 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>				   // Pour printf
-# include <stdlib.h>				   // Pour malloc, free, exit
-# include <unistd.h>				   // Pour write, access, close, fork, execve, getpid
-# include <readline/readline.h>	   // Pour readline
-# include <readline/history.h>	   // Pour rl_clear_history, rl_on_new_line, rl_replace_line, rl_redisplay, add_history
-# include <signal.h>				   // Pour signal, sigaction, sigemptyset, sigaddset, kill
-# include <sys/types.h>			   // Pour wait, waitpid, wait3, wait4, stat, lstat, fstat
-# include <sys/stat.h>			   // Pour stat, lstat, fstat
-# include <sys/wait.h>			   // Pour wait, waitpid, wait3, wait4
-# include <string.h>				   // Pour strerror
-# include <errno.h>				   // Pour perror
-# include <fcntl.h>				   // Pour open, close
-# include <dirent.h>				   // Pour opendir, readdir, closedir
-# include <termios.h>			   // Pour tcsetattr, tcgetattr
-# include <curses.h>				   // Pour tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
-# include <sys/ioctl.h>			   // Pour ioctl
-# include <pwd.h>				   // Pour getpwuid
-# include <unistd.h>				   // Pour getcwd, chdir
-# include <sys/types.h>			   // Pour getcwd, chdir
-# include <string.h>				   // Pour getcwd, chdir
-# include <stdlib.h>				   // Pour getenv
-# include <fcntl.h>				   // Pour dup, dup2, pipe
-# include "My_Libft/header/libft.h" //libft_functions
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+# include <string.h>
+# include <errno.h>
+# include <fcntl.h>
+# include <dirent.h>
+# include <termios.h>
+# include <curses.h>
+# include <sys/ioctl.h>
+# include <pwd.h>
+# include <unistd.h>
+# include <sys/types.h>
+# include <string.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include "My_Libft/header/libft.h"
+# include "./src/garbage_collector/garbage_collector.h"
 
 # define _XOPEN_SOURCE 700
 # define RESET "\033[0m"
@@ -91,8 +92,8 @@
 # define ERR_MSG_PARSER "parser"
 # define ERR_MSG_SCMD "scmd"
 # define ERR_MSG_MALLOC "malloc"
-# define ERR_MSG_OPEN	"open : can't open file"
-# define ERR_MSG_CLOSE	"close : can't close file"
+# define ERR_MSG_OPEN "open : can't open file"
+# define ERR_MSG_CLOSE "close : can't close file"
 # define ERR_MSG_REDIR_IN "error next to \'<\'"
 # define ERR_MSG_REDIR_OUT "error next to \'>\'"
 # define ERR_MSG_HEREDOC "syntax error near unexpected token \'<<\'"
@@ -110,20 +111,20 @@
 # define ERR_MSG_CD_PWD "OLDPWD is undefined"
 # define ERR_MSG_ARG_NUM "numeric argument required"
 
+typedef int						t_error;
+typedef struct s_token			t_token;
+typedef struct s_env			t_env;
+typedef struct s_cmd			t_cmd;
+typedef struct s_minishell_args	t_mshellargs;
+
 typedef enum s_refresh
 {
 	NOP,
 	REFRESH,
 	SET,
 	REFRESHALL
-} t_refresh;
+}	t_refresh;
 
-// typedef struct s_utils
-// {
-// 	t_env **env;
-// 	char **env_ptr;
-// 	size_t env_size;
-// } t_utils;
 typedef enum e_token_type
 {
 	TK_HEREDOC,
@@ -136,9 +137,7 @@ typedef enum e_token_type
 	TK_DQUOTE,
 	TK_WORD,
 	TK_NOTOKEN
-} t_token_type;
-
-typedef int t_error;
+}	t_token_type;
 
 typedef enum e_init
 {
@@ -149,160 +148,176 @@ typedef enum e_init
 	INPUT,
 	SCMD,
 	SIGNAL
-} t_init;
-
-typedef struct s_token t_token;
+}	t_init;
 
 struct s_token
 {
-	char *content;
-	size_t size;
-	t_token_type type;
-	t_token *next;
+	char			*content;
+	size_t			size;
+	t_token_type	type;
+	t_token			*next;
 };
-
-typedef struct s_env t_env;
 
 struct s_env
 {
-	char *name;
-	char *content;
-	char *full;
-	bool isok;
-	t_env *next;
+	char	*name;
+	char	*content;
+	char	*full;
+	bool	isok;
+	t_env	*next;
 };
 
 typedef struct s_concat
 {
-	char *str;
-	char *part1;
-	char *part2;
-	char *part3;
-	char *tmp;
+	char	*str;
+	char	*part1;
+	char	*part2;
+	char	*part3;
+	char	*tmp;
 
-} t_concat;
-
+}	t_concat;
 
 typedef struct s_errorscode
 {
 	const char	*from;
 	const char	*msg;
 	t_error		code;
-	
+
 }	t_errorcode;
-
-
-typedef struct s_cmd t_cmd;
 
 struct s_cmd
 {
-	char *cmd;
-	char **args;
-	char *input;
-	char *output;
-	char *here_doc;
-	char *concat;
-	int is_builtin;
-	int	first;
-	int last;
-	int	nb_cmd; //peut potentiellement etre séparé dans une struct state séparer
+	char	*cmd;
+	char	**args;
+	char	*input;
+	char	*output;
+	char	*here_doc;
+	char	*concat;
+	int		is_builtin;
+	int		first;
+	int		last;
+	int		in;
+	int		out;
+	int		nb_cmd;
 };
 
 typedef struct s_scmd
 {
-	char *cmd;
-	char **args;
-	int is_builtin;
+	char	*cmd;
+	char	**args;
+	int		is_builtin;
 }	t_scmd;
-
-typedef struct s_minishell_args t_mshellargs;
 
 struct s_minishell_args
 {
-	char *name;
-	t_mshellargs *next;
+	char			*name;
+	t_mshellargs	*next;
 };
 
 /*
 ** env related function
 */
-t_env **sget_env(char **envp);
-t_env *env_new(char *str);
-void env_add_back(t_env **env, t_env *new);
-void env_delone(t_env *var);
-char **sget_env_tab(t_refresh refresh);
-void env_remove_if(t_env **begin_list, char *name, int (*cmp)());
-void refresh_env_tab(void);
-t_env *find_node_by_name(t_env **beign_list, const char *name_to_find);
+t_env	**sget_env(char **envp);
+t_env	*env_new(char *str);
+void	env_add_back(t_env **env, t_env *new);
+void	env_delone(t_env *var);
+char	**sget_env_tab(t_refresh refresh);
+void	env_remove_if(t_env **begin_list, char *name, int (*cmp)());
+void	refresh_env_tab(void);
+t_env	*find_node_by_name(t_env **beign_list, const char *name_to_find);
 /*
 ** token related function
 */
-bool sget_init(t_init index, int set);
-void display_token_list(t_token *token_list);
-void token_delone(t_token *node);
-void expender(t_token **tokens);
-void clean_quote(t_token **tokens);
-void handle_space(t_token **tokens);
+bool	sget_init(t_init index, int set);
+void	display_token_list(t_token *token_list);
+void	token_delone(t_token *node);
+void	expender(t_token **tokens);
+void	clean_quote(t_token **tokens);
+void	handle_space(t_token **tokens);
 /*
 ** singletons
 */
-t_token sget_tk_spe(int i);
-char *sget_input(char *str);
-t_token **sget_token();
-t_cmd *sget_cmd_tab(void);
-int	*sget_exitcode(void);
-t_scmd *sget_scmd(char *name);
+t_token	sget_tk_spe(int i);
+char	*sget_input(char *str);
+t_token	**sget_token(void);
+t_cmd	*sget_cmd_tab(void);
+int		*sget_exitcode(void);
+t_scmd	*sget_scmd(char *name);
+char	*sget_abspath(void);
+/*
+** lexer
+*/
+t_token	*token_new(char *str, int i, int k, t_token_type token);
+void	token_add_back(t_token **token, t_token *new);
+bool	is_quote(int *index, char *str, t_token_type *token);
 /*
 ** cleaning functions
 */
-void clean_env(void);
-void clean_tokens(void);
-void clean_cmds(void);
-void clean_scmd(void);
-void clean_all(void);
-void cleanhub();
+void	clean_env(void);
+void	clean_tokens(void);
+void	clean_cmds(void);
+void	clean_scmd(void);
+void	clean_all(void);
+void	cleanhub(void);
+/*
+**parser handlers
+*/
+t_token	*parser_handle_redir_in(t_token *token, t_cmd *cmd);
+t_token	*parser_handle_redir_out(t_token *token, t_cmd *cmd);
+t_token	*parser_handle_heredoc(t_token *token, t_cmd *cmd);
+t_token	*parser_handle_concat(t_token *token, t_cmd *cmd);
+t_token	*parser_handle_special(t_token *token, t_cmd *cmd);
+/*
+** Parser
+*/
+void	handle_unclosed_pipe(void);
 /*
 ** Utils
 */
-int get_nb_cmd(t_token **tokens);
-char *ft_strncpy(char *s1, char *s2, int n);
-int	ft_simple_atoi_error(const char *nptr);
+int		get_nb_cmd(t_token **tokens);
+char	*ft_strncpy(char *s1, char *s2, int n);
+int		ft_simple_atoi_error(const char *nptr);
 /*
 ** Builtins
 */
-void builtin_export(t_scmd *cmd);
-void builtin_env(t_env *env);
-void builtin_exit(char **args);
-void builtin_cd(char **args);
-void builtin_pwd(void);
-void builtin_echo(char **strs, int flag_n);
-void builtin_unset(t_scmd *cmd);
+void	builtin_export(t_scmd *cmd);
+void	builtin_env(t_env *env);
+void	builtin_exit(char **args);
+void	builtin_cd(char **args);
+void	builtin_pwd(void);
+void	builtin_echo(char **strs, int flag_n);
+void	builtin_unset(t_scmd *cmd);
 /*
 **	Error manager
 */
-t_error *sget_location_flag(t_error replace);
-void handle_error(const char *msg, const char *file ,t_error errorcode);
+t_error	*sget_location_flag(t_error replace);
+void	handle_error(const char *msg, const char *file, t_error errorcode);
 /*
 **	protected functions
 */
 char	*p_find_node_by_name(t_env **beign_list, const char *name_to_find);
-int p_open(const char *file, int flags, mode_t test);
-int p_access(const char *file, int flags);
-void *p_malloc(size_t size);
-void p_free(void **ptr);
+int		p_open(const char *file, int flags, mode_t test);
+int		p_access(const char *file, int flags);
+void	*p_malloc(size_t size, bool is_tmp);
+void	p_free(void **ptr);
+void	p_dup2(int fd, int fd2, char *debug);
+void	p_close(int fd, char *file);
 /*
 ** executor
 */
-int main_executor(t_cmd *cmds, char **envp);
-void verify_commands(t_cmd *cmds);
-void print_cmd(t_cmd *cmd);
-char **insert_args_in_tab(char **tab, char *str);
-void serialize(t_cmd *cmd, char *name);
-void handle_builtins2(char *name);
+int		main_executor(t_cmd *cmds, char **envp);
+void	verify_commands(t_cmd *cmds);
+void	print_cmd(t_cmd *cmd);
+char	**insert_args_in_tab(char **tab, char *str);
+void	serialize(t_cmd *cmd, char *name);
+void	handle_builtins2(char *name);
+void	builtin_handler(t_cmd *cmd, int n);
 /*
-expand
+** expand
 */
-char *expand(char *content);
-void correct_tokenlist(t_token **token_list, int nb_cmd);
-void verify_voidcommands(t_token **token_list, int nb_cmd);
+char	*expand(char *content);
+void	correct_tokenlist(t_token **token_list, int nb_cmd);
+void	verify_voidcommands(t_token **token_list, int nb_cmd);
+void	child_signal_handler(int signum);
+void	input_signal_handler(int signum);
 #endif
