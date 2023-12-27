@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 05:52:34 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 00:17:05 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ struct s_cmd
 	int		last;
 	int		in;
 	int		out;
+	int		found;
 	int		nb_cmd;
 };
 

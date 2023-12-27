@@ -6,7 +6,7 @@
 #    By: wayden <wayden@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 20:56:08 by therodri          #+#    #+#              #
-#    Updated: 2023/11/25 00:54:22 by wayden           ###   ########.fr        #
+#    Updated: 2023/12/28 00:39:02 by wayden           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ MEMFILES = ft_bzero ft_memchr ft_memcpy ft_memmove ft_memset ft_memcmp ft_calloc
 PRINTFILES = ft_putnbr_fd ft_putstr_fd ft_putchar_fd ft_putendl_fd
 STRFILES = ft_split ft_strchr ft_strdup ft_striteri ft_strjoin ft_strlcat\
 	ft_strlen ft_strmapi ft_strncmp ft_strnstr ft_strrchr ft_strtrim ft_substr\
-	ft_tolower ft_toupper ft_strlcpy 	
+	ft_tolower ft_toupper ft_strlcpy ft_strcmp	
 LSTFILES = ft_lstlast ft_lstdelone ft_lstadd_back ft_lstsize ft_lstnew ft_lstadd_front\
 	ft_lstclear ft_lstiter ft_lstmap
 FTGNLFILES = get_next_line

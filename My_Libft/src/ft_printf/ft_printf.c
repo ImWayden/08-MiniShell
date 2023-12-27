@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: therodri <therodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 23:02:10 by therodri          #+#    #+#             */
-/*   Updated: 2022/12/10 22:47:10 by therodri         ###   ########.fr       */
+/*   Updated: 2023/12/28 00:43:48 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,21 +87,21 @@ void	ft_init_bal(const char *str, t_args *args)
 	ft_init_args
 	recupere les arguments dans le type correspondant a la balise
 	puis check si le pointeur est nul ou si l'entier est negatif et renvois 
-	tout en unsigned long long int (defined MEM) 
+	tout en unsigned long long int (defined t_mem) 
 	parceque c'est la taille la plus grande et ca permet de tout stocker 
 	de l'adresse de pointeur au int simple afin de pouvoir de le recast plus tard
 	si besoin ou simplement tout imprimer
 */
-MEM	ft_init_args(va_list argslist, t_args *args, int *total_count)
+t_mem	ft_init_args(va_list argslist, t_args *args, int *total_count)
 {
 	if (args->type == 'd' || args->type == 'i' || args->type == 'c')
 		return (ft_pf_abs(va_arg(argslist, int), args));
 	else if (args->type == 's')
-		return ((MEM)va_arg(argslist, char *));
+		return ((t_mem)va_arg(argslist, char *));
 	else if (args->type == 'u' || args->type == 'x' || args->type == 'X')
-		return ((MEM)va_arg(argslist, unsigned int));
+		return ((t_mem)va_arg(argslist, unsigned int));
 	else if (args->type == 'p')
-		return (ft_pf_check_null(va_arg(argslist, MEM), args));
+		return (ft_pf_check_null(va_arg(argslist, t_mem), args));
 	else
 		*total_count += write(1, "%", 1);
 	return (0);
@@ -115,7 +115,7 @@ MEM	ft_init_args(va_list argslist, t_args *args, int *total_count)
 	ensuite lancer les fonction pour print les champs sign et number
 	et si le flags - est present imprimer le marging
 */
-void	ft_convert_hub(MEM arguments, t_args *args, int *total_count)
+void	ft_convert_hub(t_mem arguments, t_args *args, int *total_count)
 {
 	ft_sign_field(args, arguments);
 	ft_count_hub(arguments, args);

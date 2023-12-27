@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 05:44:16 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 00:41:42 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	**insert_args_in_tab(char **tab, char *str)
 	char	**new_array;
 
 	size = 0;
-	//printf("str = %s\n",str);//debug
 	if (!tab || !*tab)
 	{
 		new_array = (char **)p_malloc(sizeof(char *) * 2, 0);

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 04:05:40 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 05:42:26 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 00:41:26 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_env	*find_node_by_name(t_env **begin_list, const char *name_to_find)
 	current = *begin_list;
 	while (current)
 	{
-		if (strcmp(current->name, name_to_find) == 0) // replace by ft_strcmp
+		if (ft_strcmp(current->name, name_to_find) == 0)
 			return (current);
 		current = current->next;
 	}

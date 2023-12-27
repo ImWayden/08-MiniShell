@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pf_print.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: therodri <therodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 04:27:34 by therodri          #+#    #+#             */
-/*   Updated: 2022/12/10 06:06:22 by therodri         ###   ########.fr       */
+/*   Updated: 2023/12/28 00:43:44 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 		ou si le flags 0 est trouve sans precison alors ce sera jusqu'a
 		 la valeur du field min 
 */
-void	ft_print_sign(t_args *args, int *total_count, MEM arguments)
+void	ft_print_sign(t_args *args, int *total_count, t_mem arguments)
 {
 	if (args->type == 's')
 		return ;
@@ -49,7 +49,7 @@ ft_putnbr_base
 	print un nombre en base 10 ou 16 en focntion de du converteur
 	trouve precedement
 */
-void	ft_putnbr_base_f(MEM n, t_args *args, int *total_count)
+void	ft_putnbr_base_f(t_mem n, t_args *args, int *total_count)
 {
 	if (args->type == 'p' && args->flags[7])
 	{
@@ -73,7 +73,7 @@ void	ft_putnbr_base_f(MEM n, t_args *args, int *total_count)
 	et inferieur a 6(la taille necessaire pour ecrire (null)) car 
 	il n'aura rien a imprimer.	
 */
-void	ft_putstr_f(MEM va_args, t_args *args, int *total_count)
+void	ft_putstr_f(t_mem va_args, t_args *args, int *total_count)
 {
 	char	*str;
 	int		c;
@@ -107,7 +107,7 @@ void	ft_putstr_f(MEM va_args, t_args *args, int *total_count)
 	et la precision null fonctionne bien uniaquement parceque le flag precision
 	ne fonctionne pas avec les pointeur;
 */
-void	ft_print(MEM arguments, t_args *args, int *total_count)
+void	ft_print(t_mem arguments, t_args *args, int *total_count)
 {
 	if (args->pre_z && arguments == 0)
 		return ;

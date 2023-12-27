@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pf_count.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: therodri <therodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 04:42:58 by therodri          #+#    #+#             */
-/*   Updated: 2022/12/10 06:06:27 by therodri         ###   ########.fr       */
+/*   Updated: 2023/12/28 00:43:40 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ ft_sign_field
 	set les valeur des base et leur string correspondante pour pouvoir
 	utiliser putnbr_base_c et f juste apres
 */
-void	ft_sign_field(t_args *args, MEM arguments)
+void	ft_sign_field(t_args *args, t_mem arguments)
 {
 	if (args->flags[0] && args->flags[2])
 		args->flags[0] = 0;
@@ -54,7 +54,7 @@ void	ft_sign_field(t_args *args, MEM arguments)
 	flags[6] permet d'empecher de compter plusieur fois le caractere negatif
 	en recurence
 */
-void	ft_putnbr_base_c(MEM n, t_args *args)
+void	ft_putnbr_base_c(t_mem n, t_args *args)
 {
 	if ((args->type == 'd' || args->type == 'i') && args->flags[7]
 		&& !args->flags[6])
@@ -86,7 +86,7 @@ ft_putstr_c
 	se trouve dans la conditon du while qui s'arretera si jamais la str 
 	est plus longue que la precison si jamais le flag correspondant est present
 */
-void	ft_putstr_c(MEM va_args, t_args *args)
+void	ft_putstr_c(t_mem va_args, t_args *args)
 {
 	char	*str;
 	int		n;
@@ -119,7 +119,7 @@ void	ft_putstr_c(MEM va_args, t_args *args)
 	si jamais il n'y a pas de flag precision ou que la presion est nul 
 	alors seul le field min sera modifier
  */
-void	ft_count_hub(MEM arguments, t_args *args)
+void	ft_count_hub(t_mem arguments, t_args *args)
 {
 	if (args->conv > 1)
 		ft_putnbr_base_c(arguments, args);

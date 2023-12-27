@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 05:37:39 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 00:36:37 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void	builtin_cd(char **args)
 		if (!str[0])
 			return (handle_error(ERR_MSG_CD_HOME, NULL, ERR_CD), (void)0);
 	}
-	else if (strcmp(args[0], "-") == 0) // strcmp
+	else if (ft_strcmp(args[0], "-") == 0)
 	{
 		str = p_find_node_by_name(sget_env(NULL), "OLDPWD");
 		if (!str[0])

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 05:41:22 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 00:25:41 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ static void	launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
 	out = STDOUT_FILENO;
 	cmd->in = setup_ins(in, cmd, pipe_fd);
 	cmd->out = setup_outs(out, cmd, pipe_fd);
-	if (cmd->is_builtin)
+	if (!cmd->found)
+		handle_error(ERR_MSG_CMD_NOT, cmd->cmd, ERR_CMD_NOT);
+	else if (cmd->is_builtin)
 		builtin_handler(cmd, n);
 	else
 		execve(cmd->cmd, cmd->args, env);

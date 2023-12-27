@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 03:57:39 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 05:38:59 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 00:37:05 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,6 @@ void	builtin_unset(t_scmd *cmd)
 
 	i = -1;
 	while (cmd->args && cmd->args[++i])
-		env_remove_if(sget_env(NULL), cmd->args[i], strcmp); //strcmp
+		env_remove_if(sget_env(NULL), cmd->args[i], ft_strcmp);
 	refresh_env_tab();
 }

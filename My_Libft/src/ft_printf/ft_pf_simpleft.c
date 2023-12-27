@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pf_simpleft.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: therodri <therodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 03:28:42 by therodri          #+#    #+#             */
-/*   Updated: 2022/12/10 06:05:45 by therodri         ###   ########.fr       */
+/*   Updated: 2023/12/28 00:43:46 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	ft_strchr_index(const char *s, int c)
 	return (9);
 }
 
-MEM	ft_pf_check_null(MEM n, t_args *args)
+t_mem	ft_pf_check_null(t_mem n, t_args *args)
 {
 	if (args->type == 'p' && n == 0)
 		args->flags[7] = 1;
@@ -32,7 +32,7 @@ MEM	ft_pf_check_null(MEM n, t_args *args)
 	return (n);
 }
 
-MEM	ft_pf_abs(long int argslist, t_args *args)
+t_mem	ft_pf_abs(long int argslist, t_args *args)
 {
 	if (argslist < 0 && args->type != 'c')
 	{
