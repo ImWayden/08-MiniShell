@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 01:37:43 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 04:38:35 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ char	*determine_type(t_cmd *cmd, char *path)
 	if (stat(path, &file_stat) == 0)
 	{
 		if (S_ISDIR(file_stat.st_mode))
-			cmd->type = 1;
+			cmd->type = TYPE_DIR;
 		else if ((file_stat.st_mode & S_IXUSR) != 0)
-			cmd->type = 2;
+			cmd->type = TYPE_EXEC;
 		else
-			cmd->type = 3;
+			cmd->type = TYPE_UNKNOWN;
 	}
 	else
 		printf("wth bruh\n");
@@ -63,7 +63,9 @@ char	*verify(t_cmd *cmd, char *path, int i, int k)
 	char		*tmp;
 	char		*tmp2;
 
-	cmd->type = 0;
+	cmd->type = TYPE_NOTCMD;
+	if (cmd->cmd && !cmd->cmd[0])
+		cmd->type = TYPE_NOCMD;
 	if (access(cmd->cmd, X_OK) == 0)
 		return (determine_type(cmd, cmd->cmd));
 	while (cmd->cmd && cmd->cmd[0] && path && path[i])
@@ -98,6 +100,8 @@ void	verify_commands(t_cmd *cmds)
 		if (!cmds[i].is_builtin)
 			cmds[i].cmd = verify(&cmds[i], \
 				p_find_node_by_name(sget_env(NULL), "PATH"), 0, 0);
+		else
+			cmds[i].type = TYPE_BUILTIN;
 		i++;
 	}
 }

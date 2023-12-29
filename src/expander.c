@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 02:57:50 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/28 04:11:17 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 05:47:46 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,12 @@ char	*expand_exitcode(int *index, char *content)
 	s.part1 = ft_substr_gc(s.str, 0, i, 1);
 	i++;
 	s.part3 = ft_substr_gc(s.str, i + 1, ft_strlen(s.str) - i + 1, 1);
-	s.part2 = ft_itoa_gc(*sget_exitcode(), 1);
+	if (s.str[i] == '?')
+		s.part2 = ft_itoa_gc(*sget_exitcode(), 1);
+	else if (s.str[i] == '0')
+		s.part2 = ft_strdup_gc("minishell", 1);
+	else
+		s.part2 = ft_strdup_gc("", 1);
 	s.tmp = ft_strjoin_gc(s.part1, s.part2, 1);
 	content = ft_strjoin_gc(s.tmp, s.part3, 1);
 	return (content);
@@ -66,10 +71,12 @@ char	*expand(char *content)
 	{
 		if (content[i] == '$' && content[i + 1])
 		{
-			if (ft_isalnum(content[i + 1]))
+			if (ft_isalpha(content[i + 1]))
 				content = expand_var(&i, content);
-			else if (content[i + 1] == '?')
+			else if (ft_isdigit(content[i + 1]) || content[i + 1] == '?')
 				content = expand_exitcode(&i, content);
+			else
+				i++;
 		}
 		else if (content[i])
 			i++;
@@ -87,6 +94,16 @@ void	expender(t_token **tokens)
 		if (token->type == TK_WORD || token->type == TK_DQUOTE)
 		{
 			token->content = expand(token->content);
+			if (token->type == TK_WORD && token->next \
+				&& (token->next->type == TK_DQUOTE \
+					|| token->next->type == TK_SQUOTE) \
+				&& token->content \
+				&& token->content[ft_strlen(token->content) - 1] == '$')
+			{
+				token->content = \
+					ft_substr_gc(token->content, 0, \
+						ft_strlen(token->content) - 1, 1);
+			}
 			token->type = TK_WORD;
 		}
 		else if (token->type == TK_SQUOTE)

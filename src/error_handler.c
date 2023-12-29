@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 01:29:52 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 04:52:10 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,12 @@ t_error	change_exitcode(t_error errcode)
 		return (1);
 	else if (errcode == ERR_CD)
 		return (1);
-	else if (errcode == ERR_EXIT || errcode == ERR_PIPE \
-		|| errcode == ERR_CONCAT || errcode == ERR_HEREDOC \
-		|| errcode == ERR_REDIR_IN || errcode == ERR_REDIR_OUT)
-		return (2);
 	else if (errcode == ERR_ISDIR)
 		return (126);
-	else
+	else if (errcode == ERR_CMD_NOT)
 		return (127);
+	else
+		return (2);
 	return (0);
 }
 
@@ -78,6 +76,7 @@ void	handle_error(const char *msg, const char *file, t_error errorcode)
 	t_error	exitcode;
 
 	from = manage_location();
+	dup2(STDERR_FILENO, STDOUT_FILENO);
 	exitcode = change_exitcode(errorcode);
 	if (*sget_exitcode() == RETURN_EXECBACK)
 	{
@@ -86,10 +85,13 @@ void	handle_error(const char *msg, const char *file, t_error errorcode)
 		*sget_exitcode() = 1;
 		return ;
 	}
-	if (errorcode & ERR_CLOSE || errorcode & ERR_OPEN || errorcode & ERR_ACCESS || errorcode & ERR_CMD_NOT || errorcode & ERR_ISDIR)
+	if (errorcode & ERR_CLOSE || errorcode & ERR_OPEN || errorcode & ERR_ACCESS \
+		|| errorcode & ERR_CMD_NOT || errorcode & ERR_ISDIR)
 		printf("minishell : %s : %s : %s\n", from, file, msg);
 	else if (!(errorcode & ERR_NOCOMMAND))
 		printf("minishell : %s : %s\n", from, msg);
 	free_all_garbage();
+	close(STDERR_FILENO);
+	close(STDOUT_FILENO);
 	exit(exitcode);
 }

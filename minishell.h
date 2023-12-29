@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/28 03:18:40 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 05:14:13 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ typedef struct s_env			t_env;
 typedef struct s_cmd			t_cmd;
 typedef struct s_minishell_args	t_mshellargs;
 
-typedef enum s_refresh
+typedef enum e_refresh
 {
 	NOP,
 	REFRESH,
@@ -151,6 +151,16 @@ typedef enum e_init
 	SCMD,
 	SIGNAL
 }	t_init;
+
+typedef enum e_cmd_type
+{
+	TYPE_NOTCMD,
+	TYPE_BUILTIN,
+	TYPE_DIR,
+	TYPE_NOCMD,
+	TYPE_EXEC,
+	TYPE_UNKNOWN
+} t_cmd_type;
 
 struct s_token
 {
@@ -314,8 +324,9 @@ void	verify_commands(t_cmd *cmds);
 void	print_cmd(t_cmd *cmd);
 char	**insert_args_in_tab(char **tab, char *str);
 void	serialize(t_cmd *cmd, char *name);
-void	handle_builtins2(char *name);
+void	handle_builtins2(char *name, t_cmd *cmds);
 void	builtin_handler(t_cmd *cmd, int n);
+void	close_things(t_cmd *cmd);
 /*
 ** expand
 */

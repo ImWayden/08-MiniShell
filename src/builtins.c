@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 01:50:14 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 06:23:54 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	builtin_echo(char **args, int flag_n)
 	flag_n = 0;
 	i = 1;
 	j = 2;
-	if (args && args[1] && args[1][0] == '-' && args[1][1] == 'n')
+	while (args && args[i] && args[i][0] == '-' && args[i][1] == 'n')
 	{
 		while (args[i][j] == 'n')
 			j++;
@@ -54,6 +54,8 @@ void	builtin_echo(char **args, int flag_n)
 			flag_n = 1;
 			i++;
 		}
+		else
+			break ;
 	}
 	while (args && args[i] != NULL)
 	{
@@ -111,11 +113,11 @@ working directory does not exist.\n");
 		else
 			perror("getcwd");
 		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
 		free_all_garbage();
 		exit(EXIT_FAILURE);
 	}
 	printf("%s\n", cwd);
+	close(STDIN_FILENO);
 }
 
 /*

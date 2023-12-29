@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 01:42:19 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 06:23:47 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,15 @@ static int	setup_outs(int out, t_cmd *cmd, int pipe_fd[2])
 	return (out);
 }
 
+void	close_things(t_cmd *cmd)
+{
+	if (!cmd)
+		return ;
+	close(cmd->out);
+	close(cmd->in);
+	close(STDIN_FILENO);
+}
+
 static void	launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
 {
 	int	in;
@@ -68,14 +77,17 @@ static void	launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
 	out = STDOUT_FILENO;
 	cmd->in = setup_ins(in, cmd, pipe_fd);
 	cmd->out = setup_outs(out, cmd, pipe_fd);
-	if (cmd->is_builtin)
+	if (cmd->type == TYPE_BUILTIN)
 		builtin_handler(cmd, n);
-	else if (cmd->type == 0)
+	if (cmd->type == TYPE_NOTCMD)
 		handle_error(ERR_MSG_CMD_NOT, cmd->cmd, ERR_CMD_NOT);
-	else if (cmd->type == 1)
+	if (cmd->type == TYPE_DIR)
 		handle_error(ERR_MSG_ISDIR, cmd->cmd, ERR_ISDIR);
-	else
+	if (cmd->type == TYPE_NOCMD)
+		handle_error(NULL, NULL, ERR_NOCOMMAND);
+	if (cmd->type == TYPE_EXEC)
 		execve(cmd->cmd, cmd->args, env);
+	//close_things(cmd);
 	free_all_garbage();
 	exit(127);
 }

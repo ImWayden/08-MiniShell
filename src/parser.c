@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/28 03:37:56 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 06:13:11 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,32 +64,6 @@ t_token	**parser(t_cmd *cmd, t_token **tokens)
 	if (token && token->next)
 		token = token->next;
 	return (&token);
-}
-
-void	verify_voidcommands(t_token **token_list, int nb_cmd)
-{
-	t_token		*token;
-	static int	i;
-	int			is_valid;
-
-	i = 0;
-	i++;
-	is_valid = 0;
-	token = *token_list;
-	while (token)
-	{
-		if (token->type == TK_WORD)
-			is_valid = 1;
-		if (token->type == TK_PIPE && !is_valid)
-			handle_error(ERR_MSG_PIPE, NULL, ERR_PIPE);
-		else if (token->type == TK_PIPE && is_valid)
-			is_valid = 0;
-		token = token->next;
-	}
-	if (!is_valid && nb_cmd > 1)
-		handle_unclosed_pipe();
-	if (!is_valid && nb_cmd == 1)
-		handle_error(NULL, NULL, ERR_NOCOMMAND);
 }
 
 void	handle_unclosed_pipe(void)

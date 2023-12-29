@@ -6,11 +6,20 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/05 01:05:28 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/26 18:41:13 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 06:10:49 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	validity_checker(int is_valid, char *content)
+{
+	if (!is_valid)
+		return (1);
+	if (content && content[0])
+		return (3);
+	return (is_valid);
+}
 
 char	**env_to_tab(t_env **lst)
 {
