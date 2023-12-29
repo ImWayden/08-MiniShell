@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 04:58:57 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 03:38:59 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
-
-/*
-**
-** testing parts
-**
-*/
-// void	print_cmd(t_cmd *cmd)
-// {
-// 	if (cmd == NULL)
-// 	{
-// 		printf("Structure de commande NULL\n");
-// 		return ;
-// 	}
-// 	t_cmd current;
-// 	current = cmd[0];
-// 	int i = 0;
-// 	int nb_cmd = cmd[0].nb_cmd;
-// 		printf("Commande: %s\n", current.cmd);
-// 		printf("Arguments:\n");
-// 		char **arg = current.args;
-// 		while (arg && *arg != NULL) {
-// 			printf("  %s\n", *arg);
-// 			arg++;
-// 		}
-// 		printf("Entrée: %s\n", current.input);
-// 		printf("Sortie: %s\n", current.output);
-// 		printf("Here_doc: %s\n", current.here_doc);
-// 		printf("Concat: %s\n", current.concat);
-// 		printf("Builtin: %d\n", current.is_builtin);
-// 		i++;
-// 		if(i < nb_cmd)
-// 			current = cmd[i];
-//
-// }
 
 int	command_handler(void)
 {

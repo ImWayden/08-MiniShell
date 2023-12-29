@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 16:35:47 by olcoste           #+#    #+#             */
-/*   Updated: 2023/12/27 05:28:21 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 00:55:49 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_strjoin_gc(char const *s1, char const *s2, bool is_tmp)
 char	*ft_strdup_gc(const char *s, bool is_tmp)
 {
 	char	*res;
-
+	
 	res = ft_strdup(s);
 	add_garbage(res, is_tmp);
 	return (res);

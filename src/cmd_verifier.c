@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/28 00:21:22 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 01:37:43 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,33 @@ void	is_builtin(t_cmd *cmd)
 		cmd->is_builtin = BUILTINS_UNSET | exec;
 }
 
+char	*determine_type(t_cmd *cmd, char *path)
+{
+	struct stat	file_stat;
+
+	if (stat(path, &file_stat) == 0)
+	{
+		if (S_ISDIR(file_stat.st_mode))
+			cmd->type = 1;
+		else if ((file_stat.st_mode & S_IXUSR) != 0)
+			cmd->type = 2;
+		else
+			cmd->type = 3;
+	}
+	else
+		printf("wth bruh\n");
+	return (path);
+}
+
 char	*verify(t_cmd *cmd, char *path, int i, int k)
 {
-	char	*tmp;
-	char	*tmp2;
+	char		*tmp;
+	char		*tmp2;
 
+	cmd->type = 0;
 	if (access(cmd->cmd, X_OK) == 0)
-		return (cmd->cmd);
-	while (path && path[i])
+		return (determine_type(cmd, cmd->cmd));
+	while (cmd->cmd && cmd->cmd[0] && path && path[i])
 	{
 		k = i;
 		while (path && path[i] && path[i] != ':')
@@ -58,12 +77,12 @@ char	*verify(t_cmd *cmd, char *path, int i, int k)
 			tmp2 = ft_strjoin_gc(tmp, "/", 1);
 			tmp = ft_strjoin_gc(tmp2, cmd->cmd, 1);
 			if (access(tmp, X_OK) == 0)
-				return (tmp);
+				return (determine_type(cmd, tmp));
 			if (path[i])
 				i++;
 		}
 	}
-	return (ft_strdup_gc("", 1));
+	return (cmd->cmd);
 }
 
 void	verify_commands(t_cmd *cmds)
@@ -79,10 +98,6 @@ void	verify_commands(t_cmd *cmds)
 		if (!cmds[i].is_builtin)
 			cmds[i].cmd = verify(&cmds[i], \
 				p_find_node_by_name(sget_env(NULL), "PATH"), 0, 0);
-		if (!cmds[i].cmd || !cmds[i].cmd[0])
-			cmds[i].found = 0;
-		else
-			cmds[i].found = 1;
 		i++;
 	}
 }

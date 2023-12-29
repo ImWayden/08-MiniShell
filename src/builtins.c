@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/28 00:36:37 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 01:50:14 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	builtin_echo(char **args, int flag_n)
 	flag_n = 0;
 	i = 1;
 	j = 2;
-	if (args[1][0] == '-' && args[1][1] == 'n')
+	if (args && args[1] && args[1][0] == '-' && args[1][1] == 'n')
 	{
 		while (args[i][j] == 'n')
 			j++;

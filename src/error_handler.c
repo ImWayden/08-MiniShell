@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/28 00:27:54 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 01:29:52 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,12 @@ t_error	change_exitcode(t_error errcode)
 		return (1);
 	else if (errcode == ERR_CD)
 		return (1);
-	else if (errcode == ERR_EXIT || errcode == ERR_PIPE)
+	else if (errcode == ERR_EXIT || errcode == ERR_PIPE \
+		|| errcode == ERR_CONCAT || errcode == ERR_HEREDOC \
+		|| errcode == ERR_REDIR_IN || errcode == ERR_REDIR_OUT)
 		return (2);
+	else if (errcode == ERR_ISDIR)
+		return (126);
 	else
 		return (127);
 	return (0);
@@ -82,7 +86,7 @@ void	handle_error(const char *msg, const char *file, t_error errorcode)
 		*sget_exitcode() = 1;
 		return ;
 	}
-	if (errorcode & ERR_CLOSE || errorcode & ERR_OPEN || errorcode & ERR_ACCESS)
+	if (errorcode & ERR_CLOSE || errorcode & ERR_OPEN || errorcode & ERR_ACCESS || errorcode & ERR_CMD_NOT || errorcode & ERR_ISDIR)
 		printf("minishell : %s : %s : %s\n", from, file, msg);
 	else if (!(errorcode & ERR_NOCOMMAND))
 		printf("minishell : %s : %s\n", from, msg);

@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/28 00:41:42 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 03:37:56 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ t_cmd	*sget_cmd_tab(void)
 		cmd = (t_cmd *)p_malloc(sizeof(t_cmd) * (nb_cmd), 0);
 		while (++i < nb_cmd)
 		{
-			ft_memset(&cmd[i], 0, sizeof(t_cmd) - sizeof(cmd->nb_cmd));
+			ft_memset(&cmd[i], 0, sizeof(t_cmd));
 			cmd[i].nb_cmd = nb_cmd;
 			token_list = parser(&cmd[i], token_list);
 		}

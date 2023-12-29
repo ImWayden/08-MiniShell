@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:24:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 05:43:02 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 02:40:32 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ void	clean_cmds(void)
 
 void	clean_all(void)
 {
+	char	*input;
+
+	input = sget_input(NULL);
+	if (input && *input)
+		free(input);
 	clean_env();
 	clean_scmd();
 }

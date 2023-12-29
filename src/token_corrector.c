@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 04:31:10 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 05:35:48 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/28 04:14:24 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ void	verify_redir(t_token **token_list)
 	t_token	*token;
 
 	token = *token_list;
-	while (token->next)
+	while (token)
 	{
-		if (token->next->type != TK_WORD)
+		if (!token->next || token->next->type != TK_WORD)
 		{
 			if (token->type == TK_CONCAT)
 				handle_error(ERR_MSG_CONCAT, NULL, ERR_CONCAT);
@@ -89,10 +89,10 @@ void	verify_redir(t_token **token_list)
 
 void	correct_tokenlist(t_token **token_list, int nb_cmd)
 {
-	verify_voidcommands(token_list, nb_cmd);
 	clean_quote(token_list);
 	expender(token_list);
 	merge_quotes(token_list);
 	remove_spaces(token_list);
 	verify_redir(token_list);
+	verify_voidcommands(token_list, nb_cmd);
 }

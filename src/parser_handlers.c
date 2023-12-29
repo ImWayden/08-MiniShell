@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 04:29:33 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/28 00:40:14 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/29 00:54:54 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_token	*parser_handle_heredoc(t_token *token, t_cmd *cmd)
 		s.part1 = cmd->here_doc;
 		cmd->here_doc = ft_strjoin_gc(cmd->here_doc, "\n", 1);
 		s.str = expand(readline("here_doc >"));
-		if (!s.str || strcmp(delimiter, s.str) == 0)
+		if (!s.str || ft_strcmp(delimiter, s.str) == 0)
 			break ;
 		s.part1 = cmd->here_doc;
 		cmd->here_doc = ft_strjoin_gc(cmd->here_doc, s.str, 1);
