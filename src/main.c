@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 05:13:59 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 19:53:08 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	init_vars(char **envp)
 	sget_init(0, REFRESH);
 	sget_env(envp);
 	sget_env_tab(NOP);
-	sget_scmd(NULL);
 	sget_location_flag(ERR_ENV);
 }
 

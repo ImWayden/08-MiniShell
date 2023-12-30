@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 05:14:13 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 19:28:28 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,4 +340,5 @@ void	input_signal_handler(int signum);
 */
 void	display_token_list(t_token *token_list);
 void	print_cmd(t_cmd *cmd);
+void print_scmd(t_scmd *cmd_struct);
 #endif

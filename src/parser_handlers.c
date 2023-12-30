@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 04:29:33 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 00:54:54 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 18:37:56 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ t_token	*parser_handle_heredoc(t_token *token, t_cmd *cmd)
 		handle_error(ERR_MSG_HEREDOC, NULL, ERR_HEREDOC);
 	delimiter = token->next->content;
 	s.str = expand(readline("here_doc >"));
-	cmd->here_doc = ft_strdup_gc(s.str, 1);
+	if (ft_strcmp(delimiter, s.str) == 0)
+		cmd->here_doc = ft_strdup_gc("", 1);
+	else
+		cmd->here_doc = ft_strdup_gc(s.str, 1);
 	while (s.str && ft_strcmp(delimiter, s.str) != 0)
 	{
 		s.part1 = cmd->here_doc;
@@ -61,8 +64,7 @@ t_token	*parser_handle_heredoc(t_token *token, t_cmd *cmd)
 	if (!s.str)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	cmd->input = NULL;
-	token = token->next;
-	return (token);
+	return (token->next);
 }
 
 t_token	*parser_handle_concat(t_token *token, t_cmd *cmd)

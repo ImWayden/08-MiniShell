@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:20:19 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/27 05:38:23 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 19:16:53 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,26 @@ char	*var_interpreter(char *str)
 int	ft_simple_atoi_error(const char *nptr)
 {
 	int				i;
+	int				signe;
 	unsigned int	res;
 
+	signe = 1;
 	i = 0;
 	res = 0;
-	while (nptr[i] >= '0' && nptr[i] <= '9')
+	if ((nptr[i] == '-' || nptr[i] == '+') && ft_isdigit(nptr[i + 1]))
+	{
+		if (nptr[i] == '-')
+			signe = -signe;
+		i++;
+	}
+	while (ft_isdigit(nptr[i]))
 	{
 		res = res * 10 + nptr[i] - 48;
 		i++;
 	}
 	if (i == 0)
 		return (RETURN_EXIT_NUM_ERR);
-	return (res);
+	return (res * signe);
 }
 
 int	get_nb_cmd(t_token **tokens)

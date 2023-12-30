@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 01:46:04 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/28 01:47:38 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 19:28:08 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,27 @@ void print_cmd(t_cmd *cmd) {
 		if(i < nb_cmd)
 			current = cmd[i];
 		// Vous pouvez également appeler récursivement print_cmd pour afficher la structure suivante
+}
+/*
+** print scmd
+*/
+void print_scmd(t_scmd *cmd_struct) {
+    if (cmd_struct == NULL) {
+        printf("Structure non initialisée.\n");
+        return;
+    }
+
+    printf("Commande : %s\n", cmd_struct->cmd);
+
+    printf("Arguments : ");
+    char **args = cmd_struct->args;
+    while (*args != NULL) {
+        printf("%s ", *args);
+        args++;
+    }
+    printf("\n");
+
+    printf("Is_builtin : %d\n", cmd_struct->is_builtin);
 }
 
 const char *token_type_to_string(t_token_type type)
