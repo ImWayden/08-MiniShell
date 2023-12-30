@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 19:18:06 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 21:28:49 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,22 @@ void	builtin_echo(char **args, int flag_n)
 void	builtin_exit(char **args)
 {
 	int	*exit_code;
-
+	int tmp;
 	exit_code = sget_exitcode();
-	if (args && args[0] && args[1])
-		return (handle_error(ERR_MSG_ARGS, "exit", ERR_EXIT), (void)0);
+
 	if (args && args[0])
 	{
-		*exit_code = ft_simple_atoi_error(args[0]);
-		if (*exit_code == RETURN_EXIT_NUM_ERR)
+		tmp = ft_simple_atoi_error(args[0]);
+		if (tmp == RETURN_EXIT_NUM_ERR)
 		{
 			*sget_exitcode() = 2;
-			handle_error(ERR_MSG_ARG_NUM, "exit", ERR_EXIT);
+			handle_error(ERR_MSG_ARG_LET, "exit", ERR_EXIT_LET);
 		}
+		else if (!(args && args[0] && args[1]) && *exit_code == RETURN_EXECBACK)
+			*exit_code = tmp;
 	}
+	if (args && args[0] && args[1])
+		return (handle_error(ERR_MSG_ARGS_NUM, "exit", ERR_EXIT_NUM), (void)0);
 	clean_all();
 	free_all_garbage();
 	exit(*exit_code);
@@ -130,7 +133,7 @@ void	builtin_cd(char **args)
 	char	*str;
 
 	if (args && args[0] && args[1])
-		handle_error(ERR_MSG_ARGS, NULL, ERR_CD);
+		handle_error(ERR_MSG_ARGS_NUM, NULL, ERR_CD);
 	else if (!args)
 	{
 		str = p_find_node_by_name(sget_env(NULL), "HOME");
@@ -146,7 +149,7 @@ void	builtin_cd(char **args)
 	else
 		str = args[0];
 	if (chdir(str) == -1)
-		return (handle_error(ERR_MSG_CD, NULL, ERR_CD), (void)0);
+		return (handle_error(ERR_MSG_CD, str, ERR_CD), (void)0);
 	else
 		*sget_exitcode() = 0;
 }

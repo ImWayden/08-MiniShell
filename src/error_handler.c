@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 04:52:10 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 21:30:09 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_error	change_exitcode(t_error errcode)
 {
 	if (errcode == ERR_NOCOMMAND)
 		return (0);
-	else if (errcode == ERR_ACCESS)
+	else if (errcode == ERR_ACCESS || errcode == ERR_EXIT_NUM)
 		return (1);
 	else if (errcode == ERR_CD)
 		return (1);
@@ -80,6 +80,9 @@ void	handle_error(const char *msg, const char *file, t_error errorcode)
 	exitcode = change_exitcode(errorcode);
 	if (*sget_exitcode() == RETURN_EXECBACK)
 	{
+		ft_putstr_fd("minishell :", STDERR_FILENO);
+		if (file && file[0])
+			ft_putstr_fd(ft_strjoin_gc((char *)file, " : ", 1), STDERR_FILENO);
 		ft_putstr_fd((char *)msg, STDERR_FILENO);
 		ft_putchar_fd('\n', STDERR_FILENO);
 		*sget_exitcode() = 1;

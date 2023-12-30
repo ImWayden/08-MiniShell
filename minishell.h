@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 19:28:28 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 21:25:26 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,11 @@
 # define ERR_CMD_NOT 0x40000
 # define ERR_DUP2 0x80000
 # define ERR_CD 0x100000
-# define ERR_EXIT 0x200000
+# define ERR_EXIT_LET 0x200000
 # define ERR_HEREDOC_INTERRUPT 0x400000
 # define ERR_NOCOMMAND 0x800000
 # define ERR_ISDIR 0x1000000
+# define ERR_EXIT_NUM 0x2000000
 
 # define BUILTINS_EXEC 0x01
 # define BUILTINS_NOT_EXEC 0x02
@@ -80,7 +81,7 @@
 # define BUILTINS_ENV 0x40
 # define BUILTINS_EXIT 0x80
 # define BUILTINS_EXPORT 0x100
-# define BUILTINS_UNSET 0x200
+# define BUILTINS_UNSET 0x200 
 
 # define RETURN_EXECBACK 89
 # define RETURN_SIGINT -130
@@ -106,11 +107,11 @@
 # define ERR_MSG_READL "can\'t read input"
 # define ERR_MSG_CMD_NOT "Command not found"
 # define ERR_MSG_DUP2 "dup can't dup"
-# define ERR_MSG_ARGS "too many arguments"
-# define ERR_MSG_CD "error chdir"
+# define ERR_MSG_ARGS_NUM "too many arguments"
+# define ERR_MSG_CD "error no such file or directory"
 # define ERR_MSG_CD_HOME "HOME is undefined"
 # define ERR_MSG_CD_PWD "OLDPWD is undefined"
-# define ERR_MSG_ARG_NUM "numeric argument required"
+# define ERR_MSG_ARG_LET "numeric argument required"
 # define ERR_MSG_ISDIR "Is a directory"
 
 typedef int						t_error;

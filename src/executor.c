@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 19:52:35 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 20:46:30 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ int	main_executor(t_cmd *cmds, char **envp)
 		clean_tokens();
 		clean_cmds();
 		free_all_garbage();
-		printf("here");//debug
 		exit(RETURN_EXECBACK);
 	}
 	while (i--)
