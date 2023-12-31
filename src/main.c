@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 19:53:08 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 01:08:42 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 int	command_handler(void)
 {
+	rl_clear_history();
 	signal(SIGINT, child_signal_handler);
 	signal(SIGQUIT, child_signal_handler);
 	if (!*sget_token())
@@ -61,13 +62,16 @@ void	main_loop(void)
 	pid_t	child_pid;
 	int		status;
 
+	sget_pipe_g_exit(PIPE_CREATE);
 	child_pid = fork();
 	if (!child_pid)
 		command_handler();
+	sget_pipe_g_exit(PIPE_READ | PIPE_CLOSE);
 	waitpid(child_pid, &status, 0);
 	*sget_exitcode() = WEXITSTATUS(status);
-	if (*sget_exitcode() == RETURN_EXECBACK)
+	if (*sget_g_exit() == RETURN_EXECBACK)
 		handle_builtins2(NULL, NULL);
+	*sget_g_exit() = 0;
 	clean_scmd();
 	sget_init(0, REFRESHALL);
 	free_tmp_garbage();

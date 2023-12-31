@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 21:28:49 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 01:14:47 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,8 @@ void	builtin_echo(char **args, int flag_n)
 	{
 		while (args[i][j] == 'n')
 			j++;
-		if (!args[i][j])
-		{
+		if (!args[i][j] && ++i)
 			flag_n = 1;
-			i++;
-		}
 		else
 			break ;
 	}
@@ -77,17 +74,19 @@ void	builtin_exit(char **args)
 {
 	int	*exit_code;
 	int tmp;
-	exit_code = sget_exitcode();
+	int error;
 
+	error = 0;
+	exit_code = sget_exitcode();
 	if (args && args[0])
 	{
-		tmp = ft_simple_atoi_error(args[0]);
-		if (tmp == RETURN_EXIT_NUM_ERR)
+		tmp = ft_simple_atoi_error(args[0], &error);
+		if (error)
 		{
 			*sget_exitcode() = 2;
 			handle_error(ERR_MSG_ARG_LET, "exit", ERR_EXIT_LET);
 		}
-		else if (!(args && args[0] && args[1]) && *exit_code == RETURN_EXECBACK)
+		else if (!(args && args[0] && args[1]))
 			*exit_code = tmp;
 	}
 	if (args && args[0] && args[1])
@@ -133,7 +132,7 @@ void	builtin_cd(char **args)
 	char	*str;
 
 	if (args && args[0] && args[1])
-		handle_error(ERR_MSG_ARGS_NUM, NULL, ERR_CD);
+		return ((void)handle_error(ERR_MSG_ARGS_NUM, NULL, ERR_CD));
 	else if (!args)
 	{
 		str = p_find_node_by_name(sget_env(NULL), "HOME");

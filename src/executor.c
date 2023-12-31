@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 20:46:30 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 01:04:02 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static void	launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
 	out = STDOUT_FILENO;
 	cmd->in = setup_ins(in, cmd, pipe_fd);
 	cmd->out = setup_outs(out, cmd, pipe_fd);
+	sget_pipe_g_exit(PIPE_WRITE | PIPE_CLOSE);
 	if (cmd->type == TYPE_BUILTIN)
 		builtin_handler(cmd, n);
 	if (cmd->type == TYPE_NOTCMD)
@@ -87,7 +88,9 @@ static void	launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)
 		handle_error(NULL, NULL, ERR_NOCOMMAND);
 	if (cmd->type == TYPE_EXEC)
 		execve(cmd->cmd, cmd->args, env);
-	//close_things(cmd);
+	close_things(cmd);
+	free_all_garbage();
+	rl_clear_history();
 	free_all_garbage();
 	exit(127);
 }
@@ -129,15 +132,9 @@ int	main_executor(t_cmd *cmds, char **envp)
 	i = 0;
 	*sget_exitcode() = \
 	executor(pipe_fd, (long int []){(long int)&i, nb_cmd}, cmds, envp);
-	if (*sget_exitcode() == RETURN_EXECBACK)
-	{
-		clean_all();
-		clean_tokens();
-		clean_cmds();
-		free_all_garbage();
-		exit(RETURN_EXECBACK);
-	}
+	sget_pipe_g_exit(PIPE_WRITE | PIPE_CLOSE);
 	while (i--)
 		wait(NULL);
+	rl_clear_history();
 	return (*sget_exitcode());
 }

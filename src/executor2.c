@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 04:08:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 06:22:18 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 01:07:09 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	builtin_executor(t_cmd *cmd)
 		builtin_env(*sget_env(NULL));
 	else if (cmd->is_builtin & BUILTINS_ECHO)
 		builtin_echo(cmd->args, 0);
-	//close_things(cmd);
+	close_things(cmd);
 	cleanhub();
 	free_all_garbage();
 	exit(0);
@@ -60,7 +60,7 @@ void	handle_builtins2(char *name, t_cmd *cmds)
 		builtin_unset(cmd);
 	else if (cmd->is_builtin & BUILTINS_EXIT)
 		builtin_exit(cmd->args);
-	//close_things(cmds);
+	close_things(cmds);
 }
 
 void	builtin_handler(t_cmd *cmd, int n)
@@ -78,7 +78,7 @@ void	builtin_handler(t_cmd *cmd, int n)
 	{
 		itoa = ft_itoa_gc(n, 1);
 		str = ft_strjoin_gc("cmd", itoa, 1);
-		(void)(serialize(cmd, str));
+		serialize(cmd, str);
 		handle_builtins2(str, cmd);
 		free_all_garbage();
 		exit(*sget_exitcode());
@@ -88,6 +88,6 @@ void	builtin_handler(t_cmd *cmd, int n)
 		serialize(cmd, "cmd");
 		cleanhub();
 		free_all_garbage();
-		exit(RETURN_EXECBACK);
+		exit(*sget_exitcode());
 	}
 }

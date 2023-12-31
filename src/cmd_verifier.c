@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 18:55:47 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 00:36:33 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,11 @@ void	verify_commands(t_cmd *cmds)
 			cmds[i].cmd = verify(&cmds[i], \
 				p_find_node_by_name(sget_env(NULL), "PATH"), 0, 0);
 		else
+		{
+			if (cmds[i].is_builtin & BUILTINS_EXEC_BACK)
+				*sget_g_exit() = RETURN_EXECBACK;
 			cmds[i].type = TYPE_BUILTIN;
+		}
 		i++;
 	}
 }

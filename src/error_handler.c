@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 03:56:12 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 21:30:09 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 01:16:59 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,8 @@ void	handle_error(const char *msg, const char *file, t_error errorcode)
 	t_error	exitcode;
 
 	from = manage_location();
-	dup2(STDERR_FILENO, STDOUT_FILENO);
 	exitcode = change_exitcode(errorcode);
-	if (*sget_exitcode() == RETURN_EXECBACK)
+	if (*sget_g_exit() == RETURN_EXECBACK)
 	{
 		ft_putstr_fd("minishell :", STDERR_FILENO);
 		if (file && file[0])
@@ -88,13 +87,14 @@ void	handle_error(const char *msg, const char *file, t_error errorcode)
 		*sget_exitcode() = 1;
 		return ;
 	}
+	dup2(STDERR_FILENO, STDOUT_FILENO);
 	if (errorcode & ERR_CLOSE || errorcode & ERR_OPEN || errorcode & ERR_ACCESS \
 		|| errorcode & ERR_CMD_NOT || errorcode & ERR_ISDIR)
 		printf("minishell : %s : %s : %s\n", from, file, msg);
 	else if (!(errorcode & ERR_NOCOMMAND))
 		printf("minishell : %s : %s\n", from, msg);
+	rl_clear_history();
 	free_all_garbage();
-	close(STDERR_FILENO);
-	close(STDOUT_FILENO);
+	(void)((close(STDERR_FILENO), 1) && (close(STDOUT_FILENO), 1));
 	exit(exitcode);
 }

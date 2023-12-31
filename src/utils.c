@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:20:19 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 19:16:53 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/30 23:39:30 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*var_interpreter(char *str)
 	return (NULL);
 }
 
-int	ft_simple_atoi_error(const char *nptr)
+int	ft_simple_atoi_error(const char *nptr, int *error)
 {
 	int				i;
 	int				signe;
@@ -61,7 +61,7 @@ int	ft_simple_atoi_error(const char *nptr)
 		i++;
 	}
 	if (i == 0)
-		return (RETURN_EXIT_NUM_ERR);
+		*error = 1;
 	return (res * signe);
 }
 

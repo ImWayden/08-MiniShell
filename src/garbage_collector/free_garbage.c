@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 14:42:39 by olcoste           #+#    #+#             */
-/*   Updated: 2023/12/27 05:34:29 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 01:00:49 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	free_all_garbage(void)
 	t_garbage	*head;
 
 	head = get_head_garbage();
+	sget_pipe_g_exit(PIPE_WRITE | PIPE_CLOSE);
 	ft_lstclear(&(head->tmp_lst), &free);
 	ft_lstclear(&(head->close_lst), &free);
 }

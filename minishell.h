@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 21:25:26 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 00:09:23 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,11 @@
 # define ERR_MSG_CD_PWD "OLDPWD is undefined"
 # define ERR_MSG_ARG_LET "numeric argument required"
 # define ERR_MSG_ISDIR "Is a directory"
+
+# define PIPE_CREATE	0x01
+# define PIPE_CLOSE		0x02
+# define PIPE_READ		0x04
+# define PIPE_WRITE		0x08
 
 typedef int						t_error;
 typedef struct s_token			t_token;
@@ -257,8 +262,11 @@ char	*sget_input(char *str);
 t_token	**sget_token(void);
 t_cmd	*sget_cmd_tab(void);
 int		*sget_exitcode(void);
+int		*sget_g_exit(void);
 t_scmd	*sget_scmd(char *name);
 char	*sget_abspath(void);
+int		*sget_pipe_g_exit(int action);
+int		*sget_pipe_g_exit2(int action);
 /*
 ** lexer
 */
@@ -291,7 +299,7 @@ void	handle_unclosed_pipe(void);
 */
 int		get_nb_cmd(t_token **tokens);
 char	*ft_strncpy(char *s1, char *s2, int n);
-int		ft_simple_atoi_error(const char *nptr);
+int		ft_simple_atoi_error(const char *nptr, int *error);
 /*
 ** Builtins
 */
