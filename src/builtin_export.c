@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 03:57:39 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 16:37:57 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 01:47:18 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,10 @@ void	builtin_unset(t_scmd *cmd)
 	while (cmd->args && cmd->args[++i])
 	{
 		if (!ft_isalpha(cmd->args[i][0]))
+		{
 			printf("\"%s\" is not a valid identifier\n", cmd->args[i]);
+			*sget_exitcode() = 1;
+		}
 		else
 			env_remove_if(sget_env(NULL), cmd->args[i], ft_strcmp);
 	}
