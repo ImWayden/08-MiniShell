@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 04:17:38 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 21:43:59 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 00:02:29 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	wait_signal_handler(int signum)
 	if (signum == SIGINT)
 	{
 		*sget_exitcode() = RETURN_SIGINT;
+		ft_putstr_fd("\n", 2);
 	}
 	if (signum == SIGQUIT)
 	{

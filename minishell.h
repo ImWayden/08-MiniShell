@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/31 00:09:23 by wayden           ###   ########.fr       */
+/*   Updated: 2023/12/31 23:58:35 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ typedef enum e_cmd_type
 	TYPE_DIR,
 	TYPE_NOCMD,
 	TYPE_EXEC,
-	TYPE_UNKNOWN
+	TYPE_UNKNOWN,
 } t_cmd_type;
 
 struct s_token
@@ -290,7 +290,7 @@ t_token	*parser_handle_redir_out(t_token *token, t_cmd *cmd);
 t_token	*parser_handle_heredoc(t_token *token, t_cmd *cmd);
 t_token	*parser_handle_concat(t_token *token, t_cmd *cmd);
 t_token	*parser_handle_special(t_token *token, t_cmd *cmd);
-/*
+/*;
 ** Parser
 */
 void	handle_unclosed_pipe(void);
@@ -350,4 +350,5 @@ void	input_signal_handler(int signum);
 void	display_token_list(t_token *token_list);
 void	print_cmd(t_cmd *cmd);
 void print_scmd(t_scmd *cmd_struct);
+void	wait_signal_handler(int signum);
 #endif
