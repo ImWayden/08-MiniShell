@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2024/01/01 21:43:06 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 22:20:58 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ typedef enum e_cmd_type
 	TYPE_NOCMD,
 	TYPE_EXEC,
 	TYPE_UNKNOWN,
-} t_cmd_type;
+}	t_cmd_type;
 
 struct s_token
 {
@@ -351,7 +351,7 @@ void	input_signal_handler(int signum);
 */
 void	display_token_list(t_token *token_list);
 void	print_cmd(t_cmd *cmd);
-void print_scmd(t_scmd *cmd_struct);
+void	print_scmd(t_scmd *cmd_struct);
 void	wait_signal_handler(int signum);
 void	token_merge(t_token *token, t_token *next);
 #endif

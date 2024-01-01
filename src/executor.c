@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:37:14 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/31 01:04:02 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 22:22:17 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,6 @@ static int	setup_outs(int out, t_cmd *cmd, int pipe_fd[2])
 	if (!f)
 		p_close(pipe_fd[1], "pipe 3");
 	return (out);
-}
-
-void	close_things(t_cmd *cmd)
-{
-	if (!cmd)
-		return ;
-	close(cmd->out);
-	close(cmd->in);
-	close(STDIN_FILENO);
 }
 
 static void	launch_process(t_cmd *cmd, int pipe_fd[2], char **env, int n)

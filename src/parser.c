@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:57:15 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 18:53:40 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 22:20:33 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ char	**insert_args_in_tab(char **tab, char *str)
 t_token	**parser(t_cmd *cmd, t_token **tokens)
 {
 	static t_token	*token;
+
 	token = *tokens;
 	if (token && token->type == TK_PIPE)
 		token = token->next;

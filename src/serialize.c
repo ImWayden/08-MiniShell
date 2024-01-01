@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 09:59:29 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/30 19:57:35 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 22:19:56 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ t_scmd	*sget_scmd(char *name)
 		}
 		if (!cmd)
 			return (NULL);
-		//print_scmd(cmd);
 	}
 	return (cmd);
 }

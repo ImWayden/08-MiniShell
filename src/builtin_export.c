@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 03:57:39 by wayden            #+#    #+#             */
-/*   Updated: 2024/01/01 18:35:14 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 22:18:32 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,4 @@ void	builtin_unset(t_scmd *cmd)
 			env_remove_if(sget_env(NULL), cmd->args[i], ft_strcmp);
 	}
 	refresh_env_tab();
-
 }
