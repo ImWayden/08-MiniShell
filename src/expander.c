@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 02:57:50 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 05:47:46 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 22:01:58 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,32 @@ char	*expand(char *content)
 	return (content);
 }
 
+void	correct_type(t_token *token)
+{
+	if (token->type == TK_WORD && token->next \
+		&& (token->next->type == TK_DQUOTE \
+			|| token->next->type == TK_SQUOTE) \
+		&& token->content \
+		&& token->content[ft_strlen(token->content) - 1] == '$')
+	{
+		token->content = \
+			ft_substr_gc(token->content, 0, \
+				ft_strlen(token->content) - 1, 1);
+	}
+	if (!token->content[0])
+	{
+		if (token->type == TK_WORD)
+			token->type = TK_DQUOTE;
+		else if (token->type == TK_DQUOTE)
+		{
+			token->type = TK_WORD;
+			token->was_quote = 1;
+		}
+	}
+	else
+		token->type = TK_WORD;
+}
+
 void	expender(t_token **tokens)
 {
 	t_token	*token;
@@ -94,20 +120,14 @@ void	expender(t_token **tokens)
 		if (token->type == TK_WORD || token->type == TK_DQUOTE)
 		{
 			token->content = expand(token->content);
-			if (token->type == TK_WORD && token->next \
-				&& (token->next->type == TK_DQUOTE \
-					|| token->next->type == TK_SQUOTE) \
-				&& token->content \
-				&& token->content[ft_strlen(token->content) - 1] == '$')
-			{
-				token->content = \
-					ft_substr_gc(token->content, 0, \
-						ft_strlen(token->content) - 1, 1);
-			}
-			token->type = TK_WORD;
+			correct_type(token);
 		}
 		else if (token->type == TK_SQUOTE)
+		{
 			token->type = TK_WORD;
+			if (!token->content[0])
+				token->was_quote = 1;
+		}
 		token = token->next;
 	}
 }

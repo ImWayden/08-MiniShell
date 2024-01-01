@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:36:47 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/31 23:58:04 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 18:18:26 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	main_loop(void)
 	signal(SIGQUIT, wait_signal_handler);
 	waitpid(child_pid, &status, 0);
 	signal(SIGINT, input_signal_handler);
-	signal(SIGQUIT, input_signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 	*sget_exitcode() = WEXITSTATUS(status);
 	if (*sget_g_exit() == RETURN_EXECBACK)
 		handle_builtins2(NULL, NULL);
@@ -99,6 +99,7 @@ int	main(int argc, char *argv[], char **envp)
 			break ;
 		main_loop();
 	}
+	printf("exit\n");
 	clean_all();
 	rl_clear_history();
 	free_all_garbage();

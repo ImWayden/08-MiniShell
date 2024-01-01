@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 00:15:36 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/31 01:14:47 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 18:21:35 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	builtin_echo(char **args, int flag_n)
 void	builtin_exit(char **args)
 {
 	int	*exit_code;
-	int tmp;
-	int error;
+	int	tmp;
+	int	error;
 
 	error = 0;
 	exit_code = sget_exitcode();
@@ -93,6 +93,8 @@ void	builtin_exit(char **args)
 		return (handle_error(ERR_MSG_ARGS_NUM, "exit", ERR_EXIT_NUM), (void)0);
 	clean_all();
 	free_all_garbage();
+	if (*sget_g_exit() == RETURN_EXECBACK)
+		printf("exit\n");
 	exit(*exit_code);
 }
 

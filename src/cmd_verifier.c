@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:39:34 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/31 00:36:33 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 21:55:40 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	*verify(t_cmd *cmd, char *path, int i, int k)
 	if (!cmd->cmd)
 		cmd->type = TYPE_NOCMD;
 	if (cmd->cmd && !cmd->cmd[0])
-		cmd->type = TYPE_NOCMD;
+		cmd->type = TYPE_NOTCMD;
 	if (access(cmd->cmd, X_OK) == 0)
 		return (determine_type(cmd, cmd->cmd));
 	while (cmd->cmd && cmd->cmd[0] && path && path[i])

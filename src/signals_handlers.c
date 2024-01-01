@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 04:17:38 by wayden            #+#    #+#             */
-/*   Updated: 2024/01/01 00:02:29 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 18:26:26 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	child_signal_handler(int signum)
 		clean_all();
 		clean_tokens();
 		clean_cmds();
-		ft_putstr_fd("QUIT (Core Dumped)\n", 2);//idk if it should be here since bash doesn't print it when multiple cmd are given
+		ft_putstr_fd("Quit\n", 2);
 		*sget_exitcode() = 131;
 		free_all_garbage();
 		exit(*sget_exitcode());

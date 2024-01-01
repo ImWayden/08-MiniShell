@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 03:57:39 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/31 01:47:18 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 18:35:14 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ static void	print_export_env(char c)
 
 /*
 **
-** 	fonctionne a priori peut etre beosin de plus de tests
-**  ne fonctionne pas dans les commande piped
+** 	
+**
 **
 */
 static void	export_utils2(char *args, int j, t_env *env)
@@ -54,6 +54,11 @@ static void	export_utils2(char *args, int j, t_env *env)
 	env->full = ft_strdup_gc(args, 0);
 }
 
+/*
+**	export_utils1(char *args, int j, t_env *env)
+**	utility that is responsible for 
+**	adding the variable to the env list
+*/
 static void	export_utils1(char *args, int j, t_env *env)
 {
 	char	*content;
@@ -73,6 +78,12 @@ static void	export_utils1(char *args, int j, t_env *env)
 	}
 }
 
+/*
+**	builtin_export(t_scmd *cmd)
+**	add a variable from the env list
+**	or print the export env in akphabatical order if no args are given
+**	then refresh the env_tab
+*/
 void	builtin_export(t_scmd *cmd)
 {
 	int		i;
@@ -103,9 +114,9 @@ void	builtin_export(t_scmd *cmd)
 }
 
 /*
-**	should work flawlessly	
-**	just besoin de changer strcmp en ft_strcmp
-**	que je n'ai malheureusement pas dans ma libft
+**	builtin_unset(t_scmd *cmd)
+**	remove a variable from the env list
+**	then refresh the env_tab
 */
 void	builtin_unset(t_scmd *cmd)
 {

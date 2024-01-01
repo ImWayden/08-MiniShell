@@ -6,17 +6,17 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 06:12:17 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/29 06:29:02 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 21:54:15 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	validity_checker(int is_valid, char *content)
+static int	validity_checker(int is_valid, char *content, bool was_quote)
 {
 	if (!is_valid)
 		is_valid = 1;
-	if (content && content[0])
+	if ((content && content[0]) || was_quote)
 		is_valid = 3;
 	return (is_valid);
 }
@@ -34,7 +34,7 @@ void	verify_voidcommands(t_token **token_list, int nb_cmd)
 	while (token)
 	{
 		if (token->type == TK_WORD)
-			is_valid = validity_checker(is_valid, token->content);
+			is_valid = validity_checker(is_valid, token->content, token->was_quote);
 		if (token->type == TK_PIPE && !is_valid)
 			handle_error(ERR_MSG_PIPE, NULL, ERR_PIPE);
 		else if (token->type == TK_PIPE && is_valid)

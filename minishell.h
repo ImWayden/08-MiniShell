@@ -6,7 +6,7 @@
 /*   By: wayden <wayden@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 16:38:11 by wayden            #+#    #+#             */
-/*   Updated: 2023/12/31 23:58:35 by wayden           ###   ########.fr       */
+/*   Updated: 2024/01/01 21:43:06 by wayden           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@
 # define BUILTINS_UNSET 0x200 
 
 # define RETURN_EXECBACK 89
-# define RETURN_SIGINT -130
-# define RETURN_SIGQUIT -131
+# define RETURN_SIGINT 130
+# define RETURN_SIGQUIT 131
 # define RETURN_EXIT_NUM_ERR -89
 
 # define ERR_MSG_ENV "env chained list setup"
@@ -143,6 +143,7 @@ typedef enum e_token_type
 	TK_PIPE,
 	TK_SQUOTE,
 	TK_DQUOTE,
+	TK_VOIDQUOTES,
 	TK_WORD,
 	TK_NOTOKEN
 }	t_token_type;
@@ -173,6 +174,7 @@ struct s_token
 	char			*content;
 	size_t			size;
 	t_token_type	type;
+	bool			was_quote;
 	t_token			*next;
 };
 
@@ -351,4 +353,5 @@ void	display_token_list(t_token *token_list);
 void	print_cmd(t_cmd *cmd);
 void print_scmd(t_scmd *cmd_struct);
 void	wait_signal_handler(int signum);
+void	token_merge(t_token *token, t_token *next);
 #endif
